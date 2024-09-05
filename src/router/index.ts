@@ -1,6 +1,6 @@
 export type RouterType = RouterItemType[]
 export interface RouterItemType {
-    element: JSX.Element
+    element: JSX.Element | any
     path: string
-    children: any
+    children?: any
 }

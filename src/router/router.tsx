@@ -1,15 +1,18 @@
 import { RouterType } from './index'
 import React from 'react'
+import Editor from '../pages/edit/index.tsx'
 const router: RouterType = [
     {
         path: '/',
         element: <div>Hello world!</div>,
-        children: null,
     },
     {
         path: '/login',
         element: <div>登陆页面</div>,
-        children: null,
+    },
+    {
+        path: '/edit',
+        element: <Editor></Editor>,
     },
 ]
 
