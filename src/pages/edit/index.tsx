@@ -1,9 +1,15 @@
-import React, { FC } from 'react'
+import React, { FC, useMemo } from 'react'
 import { useAppDispatch, useAppSelector } from '../../stores'
-import { LTextPropsType, OptionalLTextPropsType } from '../../components/LText'
-import { addComponent, ComponentData } from '../../stores/editor'
+import { LTextPropsType } from '../../components/LText'
+import {
+    addComponent,
+    ComponentData,
+    getCurrentElement,
+    setActive,
+} from '../../stores/editor'
 import { ComponentConfType, getComponentConfByType } from '../../components'
 import ComponentList from './component/component-list'
+import EditWrapper from './component/edit-wrapper'
 
 function getComponent(c: ComponentData) {
     const { props, name }: { props: LTextPropsType; name: string } = c
@@ -16,10 +22,14 @@ function getComponent(c: ComponentData) {
 }
 const Editor: FC = () => {
     const { defaultEditorData } = useAppSelector((state) => state.editorSlice)
+    const currentElement = useAppSelector(getCurrentElement)
     const dispatch = useAppDispatch()
     function addItem(props: any) {
-        console.log(123, props)
         dispatch(addComponent(props))
+    }
+    function setActiveClick(id: string) {
+        dispatch(setActive(id))
+        console.log(currentElement)
     }
     return (
         <div className="flex items-center text-center h-[100vh]">
@@ -30,14 +40,31 @@ const Editor: FC = () => {
                 <p>画布渲染</p>
                 <div>
                     {defaultEditorData.components.map((item) => {
-                        return <div key={item.id}>{getComponent(item)}</div>
+                        return (
+                            <EditWrapper
+                                key={item.id}
+                                setActive={setActiveClick}
+                                id={item.id}
+                                active={currentElement?.id === item.id}
+                            >
+                                {{
+                                    content: <div>{getComponent(item)}</div>,
+                                }}
+                            </EditWrapper>
+                        )
                     })}
+
                     {defaultEditorData.components.map((item) => {
                         return <div key={item.id}>{item.props.text}</div>
                     })}
                 </div>
             </div>
-            <div className="flex-1 bg-[yellow] h-[100%]">right</div>
+            <div className="flex-1  h-[100%]">
+                <p>组件属性</p>
+                <div className="">
+                    {currentElement && JSON.stringify(currentElement.props)}
+                </div>
+            </div>
         </div>
     )
 }

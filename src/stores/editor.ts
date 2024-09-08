@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { OptionalLTextPropsType } from '../components/LText'
+import { get } from 'lodash-es'
 
 export interface EditorDataProps {
     // 供中间编辑器渲染的数组
@@ -52,16 +53,26 @@ export const EditorSlice = createSlice({
         defaultEditorData,
     },
     reducers: {
-        addComponent(state, props: OptionalLTextPropsType): void {
+        addComponent(state, props): void {
             const newComponent: ComponentData = {
                 id: Date.now().toString(),
                 name: 'l-text',
-                props,
+                props: props.payload as OptionalLTextPropsType,
             }
             state.defaultEditorData.components.push(newComponent)
         },
+        setActive(state, props) {
+            state.defaultEditorData.currentElement = props.payload
+        },
     },
 })
+// 定义 selector
+export const getCurrentElement = (state: any) => {
+    return state.editorSlice.defaultEditorData.components.find(
+        (item: ComponentData) =>
+            item.id === state.editorSlice.defaultEditorData.currentElement,
+    )
+}
 
-export const { addComponent } = EditorSlice.actions
+export const { addComponent, setActive } = EditorSlice.actions
 export default EditorSlice.reducer
