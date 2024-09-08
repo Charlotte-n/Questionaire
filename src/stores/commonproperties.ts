@@ -7,7 +7,7 @@ export const CommonProperties = {
     url: '',
     //尺寸
     height: '',
-    width: '318px',
+    // width: '318px',
     //边框
     borderStyle: 'none',
     borderColor: '#000',

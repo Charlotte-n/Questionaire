@@ -101,4 +101,17 @@ export default PropsTable
 ```
 
 ## 接着添加更多简单对应关系并且展示
+
 ![alt text](13344717257895972.png)
+
+## 修改属性，画布相应的发生改变
+
+# 测试
+
+## 测试工具
+
+Jest 和 React Testing Library 进行单元测试
+
+1. 单元测试
+2. mock
+3. TDD

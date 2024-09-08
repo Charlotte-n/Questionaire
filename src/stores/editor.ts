@@ -69,9 +69,11 @@ export const EditorSlice = createSlice({
         handleChangeComponent(state, props) {
             state.defaultEditorData.components =
                 state.defaultEditorData.components.map((item) => {
-                    console.log(item)
                     return item.id === props.payload.id
-                        ? { ...item, props: props.payload }
+                        ? {
+                              ...item,
+                              props: { ...item.props, ...props.payload },
+                          }
                         : item
                 })
         },
