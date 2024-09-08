@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { OptionalLTextPropsType } from '../components/LText'
-import { get } from 'lodash-es'
 
 export interface EditorDataProps {
     // 供中间编辑器渲染的数组

@@ -40,3 +40,62 @@
 -   将它的属性以不同类型的表单呈现在右侧
 -   编辑表单中的值，在值更新的同时将数据更新到页面中
     ![alt text](image-3.png)
+    将属性和表单的组件进行映射
+    ![alt text](40368417257804472.png)
+
+react技术解决方案（将属性映射到表单组件中）：
+
+1. 给每一个组件添加一个修改属性的组件，之后获取这个组件。
+2. 定义这个组件，
+
+```js
+import React, { FC, useEffect, useMemo } from 'react'
+import { Form, Input } from 'antd'
+import { LTextPropsType } from './interface'
+
+const PropsComponent: FC<LTextPropsType> = (props) => {
+    const { text } = props
+    const [form] = Form.useForm()
+    useEffect(() => {
+        form.setFieldsValue({ text })
+    }, [text])
+    return (
+        <Form form={form} layout="vertical" initialValues={{ text }}>
+            <Form.Item
+                label="标题内容"
+                name="text"
+                rules={[{ required: true, message: '请输入标题内容' }]}
+            >
+                <Input />
+            </Form.Item>
+        </Form>
+    )
+}
+
+export default PropsComponent
+```
+
+3. 将这个组件展示出来还需要设计一个组件来展示相应的组件
+
+```js
+import React, { FC } from 'react'
+import {
+    ComponentConfType,
+    getComponentConfByType,
+} from '../../../../components'
+import { LTextPropsType } from '../../../../components/LText'
+import { useAppSelector } from '../../../../stores'
+import { getCurrentElement } from '../../../../stores/editor'
+
+const PropsTable: FC<LTextPropsType> = (prop) => {
+    const currentElement = useAppSelector(getCurrentElement)
+    const { props, name } = currentElement
+    const { ChangePropComponent } = getComponentConfByType(
+        name,
+    ) as ComponentConfType
+
+    return <ChangePropComponent {...props}></ChangePropComponent>
+}
+export default PropsTable
+
+```

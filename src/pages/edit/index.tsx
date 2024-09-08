@@ -10,6 +10,7 @@ import {
 import { ComponentConfType, getComponentConfByType } from '../../components'
 import ComponentList from './component/component-list'
 import EditWrapper from './component/edit-wrapper'
+import PropsTable from './component/props-table'
 
 function getComponent(c: ComponentData) {
     const { props, name }: { props: LTextPropsType; name: string } = c
@@ -29,7 +30,6 @@ const Editor: FC = () => {
     }
     function setActiveClick(id: string) {
         dispatch(setActive(id))
-        console.log(currentElement)
     }
     return (
         <div className="flex items-center text-center h-[100vh]">
@@ -53,16 +53,12 @@ const Editor: FC = () => {
                             </EditWrapper>
                         )
                     })}
-
-                    {defaultEditorData.components.map((item) => {
-                        return <div key={item.id}>{item.props.text}</div>
-                    })}
                 </div>
             </div>
             <div className="flex-1  h-[100%]">
                 <p>组件属性</p>
                 <div className="">
-                    {currentElement && JSON.stringify(currentElement.props)}
+                    <PropsTable {...currentElement}></PropsTable>
                 </div>
             </div>
         </div>

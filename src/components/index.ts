@@ -7,6 +7,7 @@ export type ComponentConfType = {
     title: string
     name: string
     Component: FC<ComponentProps>
+    ChangePropComponent: FC<LTextPropsType> //修改属性组件
     defaultProps: ComponentProps
 }
 
