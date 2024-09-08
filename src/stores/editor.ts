@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { OptionalLTextPropsType } from '../components/LText'
 
 export interface EditorDataProps {
     // 供中间编辑器渲染的数组
@@ -22,23 +23,24 @@ export const defaultEditorData: EditorDataProps = {
             props: {
                 text: 'Hello World',
                 fontSize: '20px',
+                color: 'red',
             },
             id: 'version',
-            name: 'text',
+            name: 'l-text',
         },
         {
             props: {
                 text: 'Hello Worldnihao',
             },
             id: 'version1',
-            name: 'text',
+            name: 'l-text',
         },
         {
             props: {
                 text: 'Hello Worldbuhao',
             },
             id: 'version2',
-            name: 'text',
+            name: 'l-text',
         },
     ],
     currentElement: 'version',
@@ -50,12 +52,16 @@ export const EditorSlice = createSlice({
         defaultEditorData,
     },
     reducers: {
-        //添加元素
-        push() {},
-        //删除元素
-        delete() {},
+        addComponent(state, props: OptionalLTextPropsType): void {
+            const newComponent: ComponentData = {
+                id: Date.now().toString(),
+                name: 'l-text',
+                props,
+            }
+            state.defaultEditorData.components.push(newComponent)
+        },
     },
 })
 
-export const { push } = EditorSlice.actions
+export const { addComponent } = EditorSlice.actions
 export default EditorSlice.reducer

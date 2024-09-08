@@ -1,14 +1,28 @@
-import React, { memo, useMemo } from 'react'
-import type { FC, ReactNode } from 'react'
-import { pick } from 'lodash-es'
-import { LTextProps } from './interface'
+import React, { memo, useEffect } from 'react'
+import type { FC } from 'react'
+import { OptionalLTextPropsType } from './interface'
+import {
+    MergeProps,
+    TextProperties,
+    textStylePropName,
+} from '../../stores/commonproperties'
+import useComponentCommon from '../../hooks/useComponentCommon'
 
-const LText: FC<LTextProps> = (props) => {
-    const styleProps = useMemo(() => pick(props, ['fontSize']), [props])
-    const { text } = props
+const LText: FC<OptionalLTextPropsType> = (props) => {
+    const mergeProps = MergeProps(
+        TextProperties,
+        props.payload ? props.payload : props,
+    )
+    const { styleProps } = useComponentCommon(props, textStylePropName)
     return (
         <>
-            <div style={styleProps}>{text}</div>
+            {React.createElement(
+                mergeProps.tag,
+                {
+                    style: styleProps,
+                },
+                mergeProps.text,
+            )}
         </>
     )
 }

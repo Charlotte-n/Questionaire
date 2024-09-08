@@ -1,11 +1,12 @@
 import React, { FC } from 'react'
-import { useAppSelector } from '../../stores'
-import { LTextProps } from '../../components/LText'
-import { ComponentData } from '../../stores/editor'
+import { useAppDispatch, useAppSelector } from '../../stores'
+import { LTextPropsType, OptionalLTextPropsType } from '../../components/LText'
+import { addComponent, ComponentData } from '../../stores/editor'
 import { ComponentConfType, getComponentConfByType } from '../../components'
+import ComponentList from './component/component-list'
 
 function getComponent(c: ComponentData) {
-    const { props, name }: { props: LTextProps; name: string } = c
+    const { props, name }: { props: LTextPropsType; name: string } = c
     const { Component } = getComponentConfByType(name) as ComponentConfType
     return (
         <>
@@ -15,14 +16,21 @@ function getComponent(c: ComponentData) {
 }
 const Editor: FC = () => {
     const { defaultEditorData } = useAppSelector((state) => state.editorSlice)
+    const dispatch = useAppDispatch()
+    function addItem(props: any) {
+        console.log(123, props)
+        dispatch(addComponent(props))
+    }
     return (
         <div className="flex items-center text-center h-[100vh]">
-            <div className="flex-1 bg-[red] h-[100%]">left</div>
-            <div className="w-[700px] h-[100%]">
+            <div className="flex-1  h-[100%]">
+                <ComponentList onItemClick={addItem}></ComponentList>
+            </div>
+            <div className="w-[40vw] h-[100%] bg-[gray]">
                 <p>画布渲染</p>
                 <div>
                     {defaultEditorData.components.map((item) => {
-                        return <div>{getComponent(item)}</div>
+                        return <div key={item.id}>{getComponent(item)}</div>
                     })}
                     {defaultEditorData.components.map((item) => {
                         return <div key={item.id}>{item.props.text}</div>
