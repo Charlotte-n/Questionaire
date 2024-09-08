@@ -13,7 +13,7 @@ export const defaultTemplates = [
     },
     {
         text: '链接内容',
-        fontSize: '#1890ff',
+        fontSize: '14px',
         textDecoration: 'underline',
         tag: 'p',
         id: 3,

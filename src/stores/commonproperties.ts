@@ -8,10 +8,6 @@ export const CommonProperties = {
     //尺寸
     height: '',
     width: '318px',
-    paddingLeft: '0px',
-    paddingRight: '0px',
-    paddingTop: '0px',
-    paddingBottom: '0px',
     //边框
     borderStyle: 'none',
     borderColor: '#000',
@@ -35,7 +31,8 @@ export const TextProperties = {
     fontWeight: 'normal',
     fontStyle: 'normal',
     textDecoration: 'none',
-    backgroundColor: '#fff',
+    padding: '15px',
+    backgroundColor: '',
     color: '#000',
     lineHeight: '1',
     textAlign: 'left',

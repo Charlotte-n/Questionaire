@@ -1,5 +1,5 @@
 import { pick } from 'lodash-es'
-import { act, useMemo } from 'react'
+import { useMemo } from 'react'
 
 const useComponentCommon = <T extends { [key: string]: any }>(
     props: T,

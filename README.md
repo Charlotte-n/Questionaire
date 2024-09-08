@@ -99,3 +99,6 @@ const PropsTable: FC<LTextPropsType> = (prop) => {
 export default PropsTable
 
 ```
+
+## 接着添加更多简单对应关系并且展示
+![alt text](13344717257895972.png)

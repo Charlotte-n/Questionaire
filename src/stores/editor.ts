@@ -63,6 +63,9 @@ export const EditorSlice = createSlice({
         setActive(state, props) {
             state.defaultEditorData.currentElement = props.payload
         },
+        clearSelected(state) {
+            state.defaultEditorData.currentElement = ''
+        },
     },
 })
 // 定义 selector
@@ -73,5 +76,5 @@ export const getCurrentElement = (state: any) => {
     )
 }
 
-export const { addComponent, setActive } = EditorSlice.actions
+export const { addComponent, setActive, clearSelected } = EditorSlice.actions
 export default EditorSlice.reducer
