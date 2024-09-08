@@ -18,6 +18,7 @@
         "@reduxjs/toolkit": "^2.2.7",
         "@types/lodash-es": "^4.17.12",
         "antd": "^5.20.5",
+        "immer": "^10.1.1",
         "lodash-es": "^4.17.21",
         "normalize": "^0.3.1",
         "normalize.css": "^8.0.1",

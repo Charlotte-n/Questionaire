@@ -66,6 +66,15 @@ export const EditorSlice = createSlice({
         clearSelected(state) {
             state.defaultEditorData.currentElement = ''
         },
+        handleChangeComponent(state, props) {
+            state.defaultEditorData.components =
+                state.defaultEditorData.components.map((item) => {
+                    console.log(item)
+                    return item.id === props.payload.id
+                        ? { ...item, props: props.payload }
+                        : item
+                })
+        },
     },
 })
 // 定义 selector
@@ -76,5 +85,6 @@ export const getCurrentElement = (state: any) => {
     )
 }
 
-export const { addComponent, setActive, clearSelected } = EditorSlice.actions
+export const { addComponent, setActive, clearSelected, handleChangeComponent } =
+    EditorSlice.actions
 export default EditorSlice.reducer

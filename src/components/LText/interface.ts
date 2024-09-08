@@ -40,6 +40,7 @@ export interface LTextPropsType extends CommonPropsType {
     color: string
     lineHeight: string
     textAlign: string
+    onChange?: (item: OptionalLTextPropsType) => void
 }
 
 export type OptionalLTextPropsType = Partial<LTextPropsType>

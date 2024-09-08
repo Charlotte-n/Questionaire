@@ -3,7 +3,10 @@ import {
     ComponentConfType,
     getComponentConfByType,
 } from '../../../../components'
-import { LTextPropsType } from '../../../../components/LText'
+import {
+    LTextPropsType,
+    OptionalLTextPropsType,
+} from '../../../../components/LText'
 import { useAppSelector } from '../../../../stores'
 import { getCurrentElement } from '../../../../stores/editor'
 import NoPage from '../no-page'
@@ -16,7 +19,17 @@ const PropsTable: FC<LTextPropsType> = (prop) => {
     const { ChangePropComponent } = getComponentConfByType(
         name,
     ) as ComponentConfType
-    return <ChangePropComponent {...props}></ChangePropComponent>
+
+    function handleOnChange(item: OptionalLTextPropsType & { id: string }) {
+        prop.onChange && prop.onChange(item)
+    }
+    return (
+        <ChangePropComponent
+            {...props}
+            onChange={handleOnChange}
+            id={id}
+        ></ChangePropComponent>
+    )
 }
 
 export default PropsTable

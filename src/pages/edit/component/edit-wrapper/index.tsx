@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, MouseEvent } from 'react'
 interface Props {
     setActive: (event: MouseEvent, id: string) => void
     id: string
@@ -8,10 +8,9 @@ interface Props {
 }
 const EditWrapper: FC<Props> = (props) => {
     const { setActive, id, children, active } = props
-
     return (
         <div
-            onClick={(event) => setActive(event, id)}
+            onClick={(event: MouseEvent) => setActive(event, id)}
             className={
                 active ? 'border-[1px] border-[#1890ff] border-solid' : ''
             }

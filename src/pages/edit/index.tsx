@@ -1,11 +1,12 @@
-import React, { FC } from 'react'
+import React, { FC, MouseEvent } from 'react'
 import { useAppDispatch, useAppSelector } from '../../stores'
-import { LTextPropsType } from '../../components/LText'
+import { LTextPropsType, OptionalLTextPropsType } from '../../components/LText'
 import {
     addComponent,
     clearSelected,
     ComponentData,
     getCurrentElement,
+    handleChangeComponent,
     setActive,
 } from '../../stores/editor'
 import { ComponentConfType, getComponentConfByType } from '../../components'
@@ -15,6 +16,8 @@ import PropsTable from './component/props-table'
 
 function getComponent(c: ComponentData) {
     const { props, name }: { props: LTextPropsType; name: string } = c
+    console.log('wodezhiwei', props)
+
     const { Component } = getComponentConfByType(name) as ComponentConfType
     return (
         <>
@@ -26,6 +29,7 @@ const Editor: FC = () => {
     const { defaultEditorData } = useAppSelector((state) => state.editorSlice)
     const currentElement = useAppSelector(getCurrentElement)
     const dispatch = useAppDispatch()
+
     function addItem(props: any) {
         dispatch(addComponent(props))
     }
@@ -34,9 +38,11 @@ const Editor: FC = () => {
         dispatch(setActive(id))
     }
     function handleCancelSelect() {
-        console.log(123)
-
         dispatch(clearSelected())
+    }
+    function handleChange(item: OptionalLTextPropsType & { id: string }) {
+        console.log(item)
+        dispatch(handleChangeComponent(item))
     }
     return (
         <div className="flex items-center text-center h-[100vh] bg-[#f2f2f5]">
@@ -71,7 +77,10 @@ const Editor: FC = () => {
             <div className="flex-1  h-[100%] flex flex-col py-[20px] px-[20px] bg-[white]">
                 <p>组件属性</p>
                 <div className="mt-[20px]">
-                    <PropsTable {...currentElement}></PropsTable>
+                    <PropsTable
+                        {...currentElement}
+                        onChange={handleChange}
+                    ></PropsTable>
                 </div>
             </div>
         </div>

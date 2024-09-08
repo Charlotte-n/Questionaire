@@ -1,13 +1,13 @@
-import React, { FC, useEffect, useMemo } from 'react'
-import { Form, Input, InputNumber, Radio, Select, Slider } from 'antd'
+import React, { FC, useEffect } from 'react'
+import { Form, InputNumber, Radio, Select, Slider } from 'antd'
 import { LTextPropsType } from './interface'
 import TextArea from 'antd/es/input/TextArea'
 import { MergeProps, TextProperties } from '../../stores/commonproperties'
 import { fontFamilyOptions, textAlignOptions } from './constance'
 
-const PropsComponent: FC<LTextPropsType> = (props) => {
+const PropsComponent: FC<LTextPropsType & { id: string }> = (props) => {
     const mergeProps = MergeProps(TextProperties, props)
-    const { text, fontSize, lineHeight, fontFamily, textAlign } = mergeProps
+    const { text, fontSize, lineHeight, fontFamily, textAlign, id } = mergeProps
     const [form] = Form.useForm()
     useEffect(() => {
         form.setFieldsValue({
@@ -18,11 +18,15 @@ const PropsComponent: FC<LTextPropsType> = (props) => {
             textAlign,
         })
     }, [text, fontSize, lineHeight, fontFamily, textAlign])
+    function handleValuesChange(_, allValues: { [key: string]: any }) {
+        props.onChange && props.onChange(Object.assign(allValues, { id }))
+    }
     return (
         <Form
             form={form}
             layout="horizontal"
             initialValues={{ text, fontSize, lineHeight }}
+            onValuesChange={handleValuesChange}
         >
             <Form.Item
                 label="文本"
