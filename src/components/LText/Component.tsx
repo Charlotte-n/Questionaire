@@ -11,10 +11,6 @@ import useComponentCommon from '../../hooks/useComponentCommon'
 const LText: FC<OptionalLTextPropsType> = (props) => {
     const mergeProps = MergeProps(TextProperties, props)
     const { styleProps } = useComponentCommon(mergeProps, textStylePropName)
-
-    useEffect(() => {
-        console.log(styleProps, 'wode ')
-    })
     return (
         <>
             {React.createElement(
