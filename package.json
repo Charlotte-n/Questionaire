@@ -16,6 +16,7 @@
     },
     "dependencies": {
         "@ant-design/icons": "^5.4.0",
+        "@babel/core": "^7.25.2",
         "@reduxjs/toolkit": "^2.2.7",
         "@testing-library/jest-dom": "^6.5.0",
         "@types/lodash-es": "^4.17.12",
@@ -36,6 +37,7 @@
         "ts-node": "^10.9.2",
         "tsc": "^2.0.4",
         "uuidv4": "^6.2.13",
+        "vite-jest": "^0.1.4",
         "yarn": "^1.22.22"
     },
     "devDependencies": {
