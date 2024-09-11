@@ -33,14 +33,13 @@ const ColorPicker: FC<Props> = (props) => {
                     <input
                         type="color"
                         role="color"
-                        defaultValue={defaultProps.color}
                         value={color}
                         onChange={(e) => onChangeColor(e.target.value)}
                         className="border-none w-[80px] h-[50px]"
                     ></input>
                 </div>
                 <div>
-                    <ul className="grid grid-cols-5 gap-2">
+                    <ul className="grid grid-cols-5 gap-2 picked-color-list">
                         {defaultColors.map((item, index) => {
                             return (
                                 <li

@@ -143,3 +143,47 @@ Jest 和 React Testing Library 进行单元测试
 Mock:
 两种写法
 代码覆盖率
+
+## TDD
+
+就是先写测试用例，再写代码
+
+## jest测试框架
+
+-   断言
+-   异步测试，回调和Promise
+-   mock函数-jest.fn()
+-   mock第三方模块-jest.mock()
+-   mock Timers - jest.useFakeTimers()
+
+## jest testing library
+
+-   渲染:render
+-   获取元素
+-   触发dom事件
+-   异步请求
+-   测试redux
+
+# 开发通用组件
+
+## 开发uploader
+
+-   基本的上传功能
+-   支持上传文件列表
+    -   显示文件名称
+    -   状态
+    -   可删除
+    -   显示上传进度
+    -   有可能有更丰富的显示支持
+-   自定义模板
+    -   支持初始容器自定义
+    -   支持上传完毕之后自定义
+-   支持一系列的生命钩子
+    -   beforeUpload
+    -   onProgress
+    -   onSuccess
+    -   onError
+    -   onChange
+-   拖拽上传
+
+##

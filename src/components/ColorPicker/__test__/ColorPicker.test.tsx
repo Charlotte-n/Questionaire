@@ -1,5 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
+import React, { fireEvent, render, screen } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import ColorPicker from '../index'
 
@@ -56,7 +55,7 @@ describe('ColorPicker component', () => {
         const firstItem = container.querySelector(
             'li:first-child div',
         ) as HTMLDivElement
-        userEvent.click(firstItem)
+        fireEvent.click(firstItem)
         expect(input).toHaveValue(defaultColors[0])
     })
 })

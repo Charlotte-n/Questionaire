@@ -1,17 +1,26 @@
-/** @type {import('ts-jest').JestConfigWithTsJest} **/
-
-/** @type {import('ts-jest').JestConfigWithTsJest} **/
-export default {
-    preset: 'ts-jest/presets/js-with-ts',
-    testEnvironment: 'jsdom',
-    transform: {
-        '^.+.js$': 'babel-jest',
-        '^.+\\.(ts|tsx)$': 'ts-jest',
-    },
+const config = {
+    preset: 'ts-jest',
+    clearMocks: true,
     moduleNameMapper: {
         '^lodash-es$': 'lodash',
     },
-    clearMocks: true,
-    moduleDirectories: ['node_modules', 'src'],
-    transformIgnorePatterns: ['node_modules/(?!(spacetime)/)'],
+    collectCoverage: true,
+    coverageDirectory: 'coverage',
+    transform: {
+        '^.+\\.tsx?$': 'ts-jest',
+    },
+    moduleFileExtensions: [
+        'js',
+        'mjs',
+        'cjs',
+        'jsx',
+        'ts',
+        'tsx',
+        'json',
+        'node',
+    ],
+
+    testEnvironment: 'jsdom',
 }
+
+export default config
