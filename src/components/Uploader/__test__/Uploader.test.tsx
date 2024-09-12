@@ -4,6 +4,7 @@ import {
     fireEvent,
     cleanup,
     renderHook,
+    act,
 } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import Uploader from '../index'
@@ -43,7 +44,9 @@ describe('Uploader component', () => {
             value: files,
             writable: false,
         })
-        await fireEvent.change(fileInput)
+        act(() => {
+            fireEvent.change(fileInput)
+        })
         expect(mockAxios.post).toHaveBeenCalledTimes(1)
         expect(wrapper.querySelector('button span')?.textContent).toBe(
             '上传中...',
@@ -61,7 +64,9 @@ describe('Uploader component', () => {
         )
         mockAxios.post.mockRejectedValueOnce({ fileUploadStatus: 'error' })
         const fileInput = wrapper.querySelector('input') as HTMLInputElement
-        await fireEvent.change(fileInput)
+        act(() => {
+            fireEvent.change(fileInput)
+        })
         expect(mockAxios.post).toHaveBeenCalledTimes(1)
         expect(wrapper.querySelector('button span')?.textContent).toBe(
             '上传中...',
