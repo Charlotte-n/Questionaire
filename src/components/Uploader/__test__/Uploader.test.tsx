@@ -1,11 +1,4 @@
-import {
-    render,
-    waitFor,
-    fireEvent,
-    cleanup,
-    renderHook,
-    act,
-} from '@testing-library/react'
+import { render, waitFor, fireEvent, act } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import Uploader from '../index'
 import axios from 'axios'
@@ -32,7 +25,7 @@ describe('Uploader component', () => {
         )
         expect(wrapper.querySelector('input')).toBeInTheDocument()
     })
-    test('upload process should work fine', async () => {
+    test.only('upload process should work fine', async () => {
         const { container: wrapper } = render(
             <Uploader action="url"></Uploader>,
         )
@@ -44,19 +37,27 @@ describe('Uploader component', () => {
             value: files,
             writable: false,
         })
-        act(() => {
+        await act(() => {
             fireEvent.change(fileInput)
         })
         expect(mockAxios.post).toHaveBeenCalledTimes(1)
         expect(wrapper.querySelector('button span')?.textContent).toBe(
             '上传中...',
         )
+        //button为disabled
+        expect(wrapper.querySelector('input')).toHaveAttribute('disabled', true)
+
         // 等待上传成功
         await waitFor(() => {
             expect(wrapper.querySelector('button span')?.textContent).toBe(
                 '上传成功',
             )
         })
+        //长度
+        expect(wrapper.querySelectorAll('li').length).toBe(1)
+        const firstItem = wrapper.querySelector('li:first-child')
+        expect(firstItem?.classList).toContain('uploading')
+        expect(firstItem?.classList).toContain('uploading-success')
     })
     test('upload process should work error', async () => {
         const { container: wrapper } = render(
@@ -68,6 +69,7 @@ describe('Uploader component', () => {
             fireEvent.change(fileInput)
         })
         expect(mockAxios.post).toHaveBeenCalledTimes(1)
+        expect(wrapper.querySelector('li')?.classList).toContain('uploading')
         expect(wrapper.querySelector('button span')?.textContent).toBe(
             '上传中...',
         )
@@ -77,5 +79,13 @@ describe('Uploader component', () => {
                 '上传失败',
             )
         })
+        expect(wrapper.querySelectorAll('li').length).toBe(1)
+        expect(wrapper.querySelector('li')?.classList).toContain(
+            'uploading-error',
+        )
+        await act(() => {
+            fireEvent.click(wrapper.querySelector('.close') as Element)
+        })
+        expect(wrapper.querySelectorAll('li').length).toBe(0)
     })
 })

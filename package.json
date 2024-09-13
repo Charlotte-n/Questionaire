@@ -20,6 +20,7 @@
         "@reduxjs/toolkit": "^2.2.7",
         "@testing-library/jest-dom": "^6.5.0",
         "@types/lodash-es": "^4.17.12",
+        "@types/uuid": "^10.0.0",
         "add": "^2.0.6",
         "antd": "^5.20.5",
         "axios": "^1.7.7",

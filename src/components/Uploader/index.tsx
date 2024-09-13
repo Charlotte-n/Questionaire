@@ -1,19 +1,38 @@
-import React, { memo, useRef } from 'react'
+import React, { memo, useMemo, useRef, useState } from 'react'
 import type { FC, LegacyRef, ReactNode } from 'react'
 import axios from 'axios'
+import { v4 as uuidv4 } from 'uuid'
 import { MergeProps } from '../../stores/commonproperties'
+import { produce } from 'immer'
 
 interface IProps {
     children?: ReactNode
     action: string
 }
 type fileUploadStatusType = 'ready' | 'uploading' | 'success' | 'error'
+interface FileUploadType {
+    uid: string
+    name: string
+    size: number
+    status: string
+    raw: File
+}
+
 const defaultProp = { action: 'test' }
 const Uploader: FC<IProps> = (props) => {
     const defaultProps = MergeProps(defaultProp, props)
     const inputRef = useRef<HTMLInputElement>(null)
-    const [fileUploadStatus, setfileUploadStatus] =
-        React.useState<fileUploadStatusType>('ready')
+    const [uploadedFiles, setUploadedFiles] = useState<FileUploadType[]>([])
+    const [fileObj, setfileObj] = useState<FileUploadType>({
+        uid: uuidv4(),
+        name: '',
+        size: 0,
+        status: 'ready',
+        raw: {} as File,
+    })
+    const isUploading = useMemo(() => {
+        return uploadedFiles.some((item) => item.status === 'uploading')
+    }, [uploadedFiles])
     function handleInputChange() {
         if (inputRef.current) {
             inputRef.current.click()
@@ -23,8 +42,17 @@ const Uploader: FC<IProps> = (props) => {
         const input = e.target
         const files = input.files
         const formData = new FormData()
-        formData.append('file', files[0])
-        setfileUploadStatus('uploading')
+        const file = files[0]
+        formData.append('file', file)
+        setfileObj(
+            produce((draft) => {
+                draft.name = file.name
+                draft.size = file.size
+                draft.status = 'uploading'
+                draft.raw = file
+            }),
+        )
+        setUploadedFiles(produce((draft) => draft.push(fileObj)))
         axios
             .post(defaultProps.action, formData, {
                 headers: {
@@ -32,10 +60,10 @@ const Uploader: FC<IProps> = (props) => {
                 },
             })
             .then((res) => {
-                setfileUploadStatus('success')
+                setfileObj(produce((draft) => (draft.status = 'success')))
             })
             .catch((err) => {
-                setfileUploadStatus('error')
+                setfileObj(produce((draft) => (draft.status = 'error')))
             })
     }
 
@@ -43,12 +71,10 @@ const Uploader: FC<IProps> = (props) => {
         <>
             <div>
                 <div>
-                    <button onClick={handleInputChange}>
+                    <button onClick={handleInputChange} disabled={isUploading}>
                         <span>
-                            {fileUploadStatus === 'ready' && '上传文件'}
-                            {fileUploadStatus === 'uploading' && '上传中...'}
-                            {fileUploadStatus === 'success' && '上传成功'}
-                            {fileUploadStatus === 'error' && '上传失败'}
+                            {isUploading && '上传中...'}
+                            {!isUploading && '点击上传'}
                         </span>
                     </button>
                 </div>
