@@ -6,8 +6,26 @@ import axios from 'axios'
 const file = new File(['hello'], 'hello.png', { type: 'image/png' })
 jest.mock('axios')
 const mockAxios = axios as jest.Mocked<typeof axios>
+//mock组件
+jest.mock('@ant-design/icons', () => ({
+    ...jest.requireActual('@ant-design/icons'), // 导入所有其他图标不变
+    DeleteOutlined: () => <span>Delete Icon</span>, // 只模拟 DeleteOutline
+    LoadingOutlined: () => <span>Loading Icon</span>,
+    FileOutlined: () => <span>File Icon</span>,
+}))
+
+function setInputValue(fileInput: HTMLElement) {
+    const files = [file]
+    Object.defineProperty(fileInput, 'files', {
+        value: files,
+        writable: false,
+    })
+}
 
 describe('Uploader component', () => {
+    beforeAll(() => {
+        const mockDelete = jest.fn()
+    })
     test('renders without crashing', () => {
         const { container: wrapper } = render(
             <Uploader action="url"></Uploader>,
@@ -32,11 +50,7 @@ describe('Uploader component', () => {
 
         mockAxios.post.mockResolvedValueOnce({ fileUploadStatus: 'success' })
         const fileInput = wrapper.querySelector('input') as HTMLInputElement
-        const files = [file]
-        Object.defineProperty(fileInput, 'files', {
-            value: files,
-            writable: false,
-        })
+        setInputValue(fileInput)
         await act(() => {
             fireEvent.change(fileInput)
         })
@@ -87,5 +101,35 @@ describe('Uploader component', () => {
             fireEvent.click(wrapper.querySelector('.close') as Element)
         })
         expect(wrapper.querySelectorAll('li').length).toBe(0)
+    })
+    //自定义模块
+    test.only('customized  should work fine', async () => {
+        mockAxios.post.mockRejectedValueOnce({ data: { url: 'test.json' } })
+        const { container } = render(
+            <Uploader action="url">
+                {/* 自定义模版 */}
+                {{
+                    default: <button>Custom Button</button>,
+                    loading: <div>custom loading</div>,
+                    uploaded: (props: { url: string }) => (
+                        <div>{props.url}</div>
+                    ),
+                }}
+            </Uploader>,
+        )
+        expect(container.querySelector('button')).toHaveTextContent(
+            'Custom Button',
+        )
+        const fileInput = container.querySelector('input') as HTMLInputElement
+        setInputValue(fileInput)
+        fireEvent.change(fileInput)
+        expect(container.querySelector('.loading')).toHaveTextContent(
+            'custom loading',
+        )
+        await waitFor(() => {
+            expect(container.querySelector('custom-loaded')?.textContent).toBe(
+                'test.json',
+            )
+        })
     })
 })

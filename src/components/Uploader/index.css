@@ -1,0 +1,9 @@
+.uploaded-error {
+    color: red;
+}
+.uploaded-success {
+    color: green;
+}
+.uploaded-uploading {
+    color: yellow;
+}
