@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1726187168281" clover="3.2.0">
-  <project timestamp="1726187168281" name="All files">
-    <metrics statements="34" coveredstatements="28" conditionals="5" coveredconditionals="3" methods="13" coveredmethods="5" elements="52" coveredelements="36" complexity="0" loc="34" ncloc="34" packages="2" files="2" classes="2"/>
+<coverage generated="1726241639604" clover="3.2.0">
+  <project timestamp="1726241639604" name="All files">
+    <metrics statements="39" coveredstatements="36" conditionals="5" coveredconditionals="3" methods="13" coveredmethods="8" elements="57" coveredelements="47" complexity="0" loc="39" ncloc="39" packages="2" files="2" classes="2"/>
     <package name="components.Uploader">
-      <metrics statements="26" coveredstatements="20" conditionals="5" coveredconditionals="3" methods="11" coveredmethods="3"/>
+      <metrics statements="31" coveredstatements="28" conditionals="5" coveredconditionals="3" methods="11" coveredmethods="6"/>
       <file name="index.tsx" path="D:\work\question\Questionnaire\src\components\Uploader\index.tsx">
-        <metrics statements="26" coveredstatements="20" conditionals="5" coveredconditionals="3" methods="11" coveredmethods="3"/>
+        <metrics statements="31" coveredstatements="28" conditionals="5" coveredconditionals="3" methods="11" coveredmethods="6"/>
         <line num="1" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
         <line num="4" count="1" type="stmt"/>
@@ -13,25 +13,30 @@
         <line num="6" count="1" type="stmt"/>
         <line num="21" count="1" type="stmt"/>
         <line num="22" count="1" type="stmt"/>
-        <line num="23" count="1" type="stmt"/>
-        <line num="24" count="1" type="stmt"/>
-        <line num="25" count="1" type="stmt"/>
+        <line num="23" count="6" type="stmt"/>
+        <line num="24" count="5" type="stmt"/>
+        <line num="25" count="5" type="stmt"/>
         <line num="26" count="1" type="stmt"/>
-        <line num="27" count="1" type="stmt"/>
-        <line num="30" count="0" type="cond" truecount="0" falsecount="1"/>
-        <line num="31" count="0" type="stmt"/>
-        <line num="35" count="1" type="stmt"/>
-        <line num="36" count="1" type="stmt"/>
-        <line num="37" count="1" type="stmt"/>
-        <line num="38" count="1" type="stmt"/>
-        <line num="39" count="1" type="stmt"/>
-        <line num="40" count="1" type="stmt"/>
-        <line num="47" count="0" type="stmt"/>
-        <line num="48" count="0" type="stmt"/>
-        <line num="55" count="0" type="stmt"/>
-        <line num="58" count="0" type="stmt"/>
-        <line num="62" count="1" type="stmt"/>
-        <line num="87" count="1" type="stmt"/>
+        <line num="33" count="1" type="stmt"/>
+        <line num="34" count="1" type="stmt"/>
+        <line num="37" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="42" count="1" type="stmt"/>
+        <line num="43" count="1" type="stmt"/>
+        <line num="44" count="1" type="stmt"/>
+        <line num="45" count="1" type="stmt"/>
+        <line num="46" count="1" type="stmt"/>
+        <line num="47" count="1" type="stmt"/>
+        <line num="49" count="1" type="stmt"/>
+        <line num="50" count="1" type="stmt"/>
+        <line num="51" count="1" type="stmt"/>
+        <line num="52" count="1" type="stmt"/>
+        <line num="55" count="4" type="stmt"/>
+        <line num="56" count="1" type="stmt"/>
+        <line num="63" count="1" type="stmt"/>
+        <line num="66" count="0" type="stmt"/>
+        <line num="70" count="1" type="stmt"/>
+        <line num="95" count="1" type="stmt"/>
       </file>
     </package>
     <package name="stores">
@@ -44,7 +49,7 @@
         <line num="27" count="1" type="stmt"/>
         <line num="43" count="1" type="stmt"/>
         <line num="51" count="1" type="stmt"/>
-        <line num="52" count="1" type="stmt"/>
+        <line num="52" count="6" type="stmt"/>
         <line num="53" count="1" type="stmt"/>
       </file>
     </package>

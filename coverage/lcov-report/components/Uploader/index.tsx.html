@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">62.85% </span>
+                <span class="strong">84.61% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>22/35</span>
+                <span class='fraction'>33/39</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">27.27% </span>
+                <span class="strong">54.54% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>3/11</span>
+                <span class='fraction'>6/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">76.92% </span>
+                <span class="strong">90.32% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>20/26</span>
+                <span class='fraction'>28/31</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -150,7 +150,15 @@
 <a name='L85'></a><a href='#L85'>85</a>
 <a name='L86'></a><a href='#L86'>86</a>
 <a name='L87'></a><a href='#L87'>87</a>
-<a name='L88'></a><a href='#L88'>88</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L88'></a><a href='#L88'>88</a>
+<a name='L89'></a><a href='#L89'>89</a>
+<a name='L90'></a><a href='#L90'>90</a>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a>
+<a name='L93'></a><a href='#L93'>93</a>
+<a name='L94'></a><a href='#L94'>94</a>
+<a name='L95'></a><a href='#L95'>95</a>
+<a name='L96'></a><a href='#L96'>96</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -172,9 +180,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -191,20 +206,21 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -262,6 +278,13 @@ const Uploader: FC&lt;IProps&gt; = (props) =&gt; {
     const defaultProps = MergeProps(defaultProp, props)
     const inputRef = useRef&lt;HTMLInputElement&gt;(null)
     const [uploadedFiles, setUploadedFiles] = useState&lt;FileUploadType[]&gt;([])
+    const [fileObj, setfileObj] = useState&lt;FileUploadType&gt;({
+        uid: uuidv4(),
+        name: '',
+        size: 0,
+        status: 'ready',
+        raw: {} as File,
+    })
     const isUploading = useMemo(() =&gt; {
         return uploadedFiles.some(<span class="fstat-no" title="function not covered" >(i</span>tem) =&gt; <span class="cstat-no" title="statement not covered" >item.status === 'uploading')</span>
     }, [uploadedFiles])
@@ -276,22 +299,23 @@ const Uploader: FC&lt;IProps&gt; = (props) =&gt; {
         const formData = new FormData()
         const file = files[0]
         formData.append('file', file)
-        const [fileObj<span class="cstat-no" title="statement not covered" >, s</span>etfileObj<span class="cstat-no" title="statement not covered" >] = u</span>seState(<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >(</span>{</span>
-            uid: uuidv4(),
-            name: file.name,
-            size: file.size,
-            status: 'loading',
-            raw: file,
-        }))
-<span class="cstat-no" title="statement not covered" >        setUploadedFiles(produce(<span class="fstat-no" title="function not covered" >(d</span>raft) =&gt; <span class="cstat-no" title="statement not covered" >draft.push(fileObj)))</span></span>
-<span class="cstat-no" title="statement not covered" >        axios</span>
+        setfileObj(
+            produce((draft) =&gt; {
+                draft.name = file.name
+                draft.size = file.size
+                draft.status = 'uploading'
+                draft.raw = file
+            }),
+        )
+        setUploadedFiles(produce((draft) =&gt; draft.push(fileObj)))
+        axios
             .post(defaultProps.action, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             })
-            .then(<span class="fstat-no" title="function not covered" >(r</span>es) =&gt; {
-<span class="cstat-no" title="statement not covered" >                setfileObj(produce(<span class="fstat-no" title="function not covered" >(d</span>raft) =&gt; <span class="cstat-no" title="statement not covered" >(draft.status = 'success')))</span></span>
+            .then((res) =&gt; {
+                setfileObj(produce(<span class="fstat-no" title="function not covered" >(d</span>raft) =&gt; <span class="cstat-no" title="statement not covered" >(draft.status = 'success')))</span>
             })
             .catch(<span class="fstat-no" title="function not covered" >(e</span>rr) =&gt; {
 <span class="cstat-no" title="statement not covered" >                setfileObj(produce(<span class="fstat-no" title="function not covered" >(d</span>raft) =&gt; <span class="cstat-no" title="statement not covered" >(draft.status = 'error')))</span></span>
@@ -331,7 +355,7 @@ export default memo(Uploader)
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-09-13T00:26:08.193Z
+                at 2024-09-13T15:33:59.489Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

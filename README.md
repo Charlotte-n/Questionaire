@@ -186,4 +186,133 @@ Mock:
     -   onChange
 -   拖拽上传
 
-##
+# 后端
+
+## 技术方案设计-接口设计
+
+### 接口文档
+
+#### 需求分析
+
+功能拆分
+
+1. 用户系统
+
+-   注册：邮箱密码，手机验证码，Oauth2(gitee,github,微信)
+-   登录:邮箱密码
+-   创建用户POST /users/create
+-   用户登录：POST /users/loginByEmail
+-   手机验证码：POST /users/genVeriCode
+-   手机验证码登录：POST /users/loginByPhoneNumber
+-   Oath2：
+-   跳转至 gitee GET /users/passport/gitee
+-   跳转回到带着 access_token GET /users/passport/gitee/callback?access_token=\*\*\*
+-   获取用户信息： GET /users/getUserInfo
+-   修改用户信息：PATH /users/updateUserInfo
+-   删除：DELETE /users/:id
+
+2. 作品管理
+
+-   创建空白作品 POST /works
+-   复制作品 POST /works/copy/:id
+-   获取我的作品或者模版列表 /works?title=\*\*\*&pageIndex=0&pageSize=4
+-   获取单个作品 GET /works/:id
+-   修改作品 PATCH /works/:id
+-   删除作品 DELETE /works/:id
+-   发布作品 POST /works/publish/:id
+-   发布为模版 POST /works/publish-template/:id
+
+3. 模板
+
+-   发布作品 POST /works/publish/:id
+-   发布为模版 POST /works/publish-template/:id
+
+4. 渠道-依附于作品的特殊信息
+
+-   创建渠道： POST channel/
+-   获取一个作品的所有渠道：GET channel/getWorkChannels/2
+-   更新渠道名称：PATCH channel/updateName/2
+-   删除渠道：DELETE channel/2
+
+5. 工具类
+
+-   上传照片（本地上传、云服务上传以及图片处理）POST /utils/upload-img
+-   展示H5页面
+    使用 lego-components 使用 ssr 在 h5 端进行展示，这个接口不是标准 RESTful API， 用来展示页面，并且做样式转换和处理
+
+-   GET /api/pages/:idAndUuid => nginx 改写至 h5.imooc-lego.com/p/:idAndUuid
+-   GET /api/pages/preview/:idAndUuid 改写至 h5.imooc-lego.com/p/preview/:idAndUuid
+
+6. 权限控制
+
+-   第一层级：登录用户
+-   第二层级：只能更新或者删除自己的资源
+-   第三层级只能更新特定字段
+-   第四层级：管理员
+
+7. 统一返回格式
+
+```js
+{
+    errno: 0, // 错误码，无错误则返回 0
+    data: {...}, // 或者 [...]
+    message: 'xxx'
+}
+```
+
+8. 数据列表标准返回，上述统一格式 data 中的返回
+
+```js
+{
+  total: 5, // 数据的总数
+  list: [], //返回的数据
+  pageIndex: 0, // 当前页数，从零开始
+  pageSize: 5 // 每页的个数
+}
+```
+
+### 调研后端技术选型
+
+-   路由 Routes
+-   请求 Request
+-   响应 Response
+
+#### express
+
+##### 优点
+
+快速，简单，易上手。
+
+##### 缺点
+
+-   路由响应中，很可能有：从外部请求数据的服务，有验证路由的请求参数，返回特定的格式。
+-   所有逻辑不分青红皂白的写在一起，很容易产生冗长的难以维护的代码。
+-   一些大型必备的模块，如第三方服务初始化，安全，日志都没有明确的标准。
+
+###### express的中间件
+
+```js
+function myMiddleware(req, res, next) {
+    next()
+}
+```
+
+中间件可以完成的任务
+
+-   执行任何代码。
+-   对请求和响应对象进行更改。
+-   结束请求/响应循环。
+-   调用堆栈中的下一个中间件。
+
+#### koa
+
+#### egg
+
+1. 支持ts
+2. 有一套优秀的统一的约定或者架构开发
+3. 有丰富的拓展机制和可定制性
+
+#### nestjs
+
+1. 支持ts
+2. 和egg别的很相似

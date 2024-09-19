@@ -30,9 +30,10 @@ const Uploader: FC<IProps> = (props) => {
         status: 'ready',
         raw: {} as File,
     })
+    //点击上传之后有uploading状态
     const isUploading = useMemo(() => {
         return uploadedFiles.some((item) => item.status === 'uploading')
-    }, [uploadedFiles])
+    }, [fileObj, uploadedFiles])
     function handleInputChange() {
         if (inputRef.current) {
             inputRef.current.click()
@@ -50,9 +51,14 @@ const Uploader: FC<IProps> = (props) => {
                 draft.size = file.size
                 draft.status = 'uploading'
                 draft.raw = file
+                draft.uid = uuidv4()
             }),
         )
-        setUploadedFiles(produce((draft) => draft.push(fileObj)))
+        setUploadedFiles(
+            produce((draft) => {
+                draft.push(fileObj)
+            }),
+        )
         axios
             .post(defaultProps.action, formData, {
                 headers: {
@@ -60,10 +66,18 @@ const Uploader: FC<IProps> = (props) => {
                 },
             })
             .then((res) => {
-                setfileObj(produce((draft) => (draft.status = 'success')))
+                setfileObj(
+                    produce((draft) => {
+                        draft.status = 'success'
+                    }),
+                )
             })
             .catch((err) => {
-                setfileObj(produce((draft) => (draft.status = 'error')))
+                setfileObj(
+                    produce((draft) => {
+                        draft.status = 'error'
+                    }),
+                )
             })
     }
 
@@ -77,6 +91,16 @@ const Uploader: FC<IProps> = (props) => {
                             {!isUploading && '点击上传'}
                         </span>
                     </button>
+                    <ul>
+                        {uploadedFiles.map((item) => {
+                            return (
+                                <li key={item.uid} className="flex">
+                                    <span>{item.name}</span>
+                                    <button>Del</button>
+                                </li>
+                            )
+                        })}
+                    </ul>
                 </div>
                 <div style={{ display: 'none' }}>
                     <input
