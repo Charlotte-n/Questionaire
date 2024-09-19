@@ -4,9 +4,16 @@ import axios from 'axios'
 import { v4 as uuidv4 } from 'uuid'
 import { MergeProps } from '../../stores/commonproperties'
 import { produce } from 'immer'
+import './index.css'
+import { DeleteOutlined, LoadingOutlined } from '@ant-design/icons'
+import { last } from 'lodash-es'
 
 interface IProps {
-    children?: ReactNode
+    children?: {
+        default: ReactNode
+        loading: ReactNode
+        uploaded: (props: { url: string }) => ReactNode
+    }
     action: string
 }
 type fileUploadStatusType = 'ready' | 'uploading' | 'success' | 'error'
@@ -16,19 +23,22 @@ interface FileUploadType {
     size: number
     status: string
     raw: File
+    response?: any
 }
 
 const defaultProp = { action: 'test' }
 const Uploader: FC<IProps> = (props) => {
+    const { children } = props
     const defaultProps = MergeProps(defaultProp, props)
     const inputRef = useRef<HTMLInputElement>(null)
     const [uploadedFiles, setUploadedFiles] = useState<FileUploadType[]>([])
-    const [fileObj, setfileObj] = useState<FileUploadType>({
-        uid: uuidv4(),
+    let fileObj = useRef<FileUploadType>({
+        uid: '',
         name: '',
         size: 0,
         status: 'ready',
         raw: {} as File,
+        response: {},
     })
     //点击上传之后有uploading状态
     const isUploading = useMemo(() => {
@@ -39,24 +49,30 @@ const Uploader: FC<IProps> = (props) => {
             inputRef.current.click()
         }
     }
+    function removeFile(uid: string) {
+        setUploadedFiles(
+            produce((draft) => {
+                const index = draft.findIndex((item) => item.uid === uid)
+                draft.splice(index, 1)
+            }),
+        )
+    }
     function handleUploadFile(e: any) {
         const input = e.target
         const files = input.files
         const formData = new FormData()
         const file = files[0]
         formData.append('file', file)
-        setfileObj(
-            produce((draft) => {
-                draft.name = file.name
-                draft.size = file.size
-                draft.status = 'uploading'
-                draft.raw = file
-                draft.uid = uuidv4()
-            }),
-        )
+        fileObj.current = {
+            uid: uuidv4(),
+            name: file.name,
+            size: file.size,
+            status: 'uploading',
+            raw: file,
+        }
         setUploadedFiles(
             produce((draft) => {
-                draft.push(fileObj)
+                draft.push(fileObj.current as FileUploadType)
             }),
         )
         axios
@@ -66,37 +82,95 @@ const Uploader: FC<IProps> = (props) => {
                 },
             })
             .then((res) => {
-                setfileObj(
+                fileObj.current = produce(fileObj.current, (draft) => {
+                    draft.status = 'success'
+                })
+                setUploadedFiles(
                     produce((draft) => {
-                        draft.status = 'success'
+                        const index = draft.findIndex(
+                            (item) => item.uid === fileObj.current!.uid,
+                        )
+                        draft[index].status = fileObj.current!.status
+                        draft[index].response = res.data
                     }),
                 )
             })
             .catch((err) => {
-                setfileObj(
+                fileObj.current = produce(fileObj.current, (draft) => {
+                    draft.status = 'error'
+                })
+                setUploadedFiles(
                     produce((draft) => {
-                        draft.status = 'error'
+                        const index = draft.findIndex(
+                            (item) => item.uid === fileObj.current!.uid,
+                        )
+                        console.log(draft)
+                        draft[index].status = fileObj.current!.status
                     }),
                 )
             })
+            .finally(() => {
+                if (inputRef.current) {
+                    inputRef.current.value = ''
+                }
+            })
     }
+    //最后一个状态
+    const lastFileData = useMemo(() => {
+        const lastFile = last(uploadedFiles)
+        if (lastFile) {
+            return {
+                loaded: lastFile.status === 'success',
+                data: lastFile.response,
+            }
+        }
+        return false
+    }, [uploadedFiles])
 
     return (
         <>
             <div>
                 <div>
-                    <button onClick={handleInputChange} disabled={isUploading}>
-                        <span>
-                            {isUploading && '上传中...'}
-                            {!isUploading && '点击上传'}
-                        </span>
-                    </button>
+                    <div onClick={handleInputChange}>
+                        {/* 默认上传 */}
+                        <div>
+                            {/* 点击上传 */}
+                            {!isUploading ? (
+                                //这里进行转换，查看是否为最后一个文件，并且最后一个文件的已经加载完的状态
+                                lastFileData && lastFileData.loaded ? (
+                                    <div>
+                                        {children?.uploaded ? (
+                                            children?.uploaded(
+                                                lastFileData.data,
+                                            )
+                                        ) : (
+                                            <div>点击上传</div>
+                                        )}
+                                    </div>
+                                ) : (
+                                    children?.default || <div>点击上传</div>
+                                )
+                            ) : (
+                                children?.loading || <LoadingOutlined />
+                            )}
+                        </div>
+                    </div>
                     <ul>
                         {uploadedFiles.map((item) => {
                             return (
-                                <li key={item.uid} className="flex">
-                                    <span>{item.name}</span>
-                                    <button>Del</button>
+                                <li
+                                    key={item.uid}
+                                    className={`uploaded-file uploaded-${item.status}`}
+                                >
+                                    <span className="mr-[10px]">
+                                        {item.name}
+                                    </span>
+                                    <button
+                                        className="delete-icon"
+                                        onClick={() => removeFile(item.uid)}
+                                    >
+                                        <DeleteOutlined></DeleteOutlined>
+                                    </button>
                                 </li>
                             )
                         })}
