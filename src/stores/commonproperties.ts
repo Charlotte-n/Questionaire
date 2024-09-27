@@ -39,6 +39,7 @@ export const TextProperties = {
     tag: 'div',
     ...CommonProperties,
 }
+
 //转换类型
 export const textStylePropName = without(
     Object.keys(TextProperties),

@@ -28,15 +28,17 @@ export interface CommonPropsType {
     bottom: string
 }
 
-export interface LTextPropsType extends CommonPropsType {
+type PartialCommonPropsType = Partial<CommonPropsType>
+
+export interface LTextPropsType extends PartialCommonPropsType {
     text: string
     tag: string
     fontFamily: string
     fontSize: string
     fontWeight: string
-    fontStyle: string
-    textDecoration: string
-    backgroundColor: string
+    fontStyle?: string
+    textDecoration?: string
+    backgroundColor?: string
     color: string
     lineHeight: string
     textAlign: string

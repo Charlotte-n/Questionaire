@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 import {
     ComponentConfType,
     getComponentConfByType,
@@ -10,6 +10,7 @@ import {
 import { useAppSelector } from '../../../../stores'
 import { getCurrentElement } from '../../../../stores/editor'
 import NoPage from '../no-page'
+import { propsComponentMap } from '../../../../utils/propsMap'
 
 const PropsTable: FC<LTextPropsType> = (prop) => {
     const currentElement = useAppSelector(getCurrentElement)
@@ -19,16 +20,20 @@ const PropsTable: FC<LTextPropsType> = (prop) => {
     const { ChangePropComponent } = getComponentConfByType(
         name,
     ) as ComponentConfType
+    const PropsComponent = propsComponentMap[ChangePropComponent]
+    useEffect(() => {
+        console.log(PropsComponent)
+    })
 
     function handleOnChange(item: OptionalLTextPropsType & { id: string }) {
         prop.onChange && prop.onChange(item)
     }
     return (
-        <ChangePropComponent
+        <PropsComponent
             {...props}
             onChange={handleOnChange}
             id={id}
-        ></ChangePropComponent>
+        ></PropsComponent>
     )
 }
 

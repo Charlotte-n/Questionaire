@@ -1,5 +1,6 @@
 //点击画布组件与右边来进行映射
 import { LTextPropsType } from '../components/LText'
+import PropsComponent from '../pages/components/PropComponent'
 export interface PropToForm {
     component: string
     value?: string
@@ -13,4 +14,12 @@ export const mapPropsToForms: PropToForms = {
     text: {
         component: 'a-input',
     },
+}
+
+type PropsComponentMap = {
+    [key: string]: React.FC<LTextPropsType & { id: string }>
+}
+
+export const propsComponentMap: PropsComponentMap = {
+    PropsComponentForLText: PropsComponent,
 }

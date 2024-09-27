@@ -1,12 +1,17 @@
-import React, { memo, useMemo, useRef, useState } from 'react'
-import type { FC, LegacyRef, ReactNode } from 'react'
-import axios from 'axios'
+import React, { memo, useCallback, useMemo, useRef, useState } from 'react'
+import type { FC, LegacyRef, ReactNode, Ref, RefObject } from 'react'
+import axios, { AxiosProgressEvent } from 'axios'
 import { v4 as uuidv4 } from 'uuid'
 import { MergeProps } from '../../stores/commonproperties'
 import { produce } from 'immer'
 import './index.css'
-import { DeleteOutlined, LoadingOutlined } from '@ant-design/icons'
+import {
+    DeleteOutlined,
+    LoadingOutlined,
+    UploadOutlined,
+} from '@ant-design/icons'
 import { last } from 'lodash-es'
+import { Progress } from 'antd'
 
 interface IProps {
     children?: {
@@ -15,6 +20,19 @@ interface IProps {
         uploaded: (props: { url: string }) => ReactNode
     }
     action: string
+    beforeUpload?: (file: File) => boolean | Promise<File>
+    onProgress?: (event: AxiosProgressEvent) => void
+    onSuccess?: (data: any) => void
+    onError?: (error: any) => void
+    onChange?: (file: File) => void
+    onRemove?: (file: File) => void
+    headers?: Record<string, string>
+    withCredentials?: boolean
+    accept?: string
+    multiple?: boolean
+    draggable?: boolean
+    cover?: boolean
+    showUploadList?: boolean
 }
 type fileUploadStatusType = 'ready' | 'uploading' | 'success' | 'error'
 interface FileUploadType {
@@ -24,14 +42,29 @@ interface FileUploadType {
     status: string
     raw: File
     response?: any
+    progress: number
+    isUploading: boolean
 }
 
-const defaultProp = { action: 'test' }
+interface lastFileType {
+    status: string
+    loaded: boolean
+    data: any
+    progress: number
+}
+
+const defaultProp = {
+    action: 'test',
+    draggable: false,
+    cover: true,
+    showUploadList: true,
+}
 const Uploader: FC<IProps> = (props) => {
     const { children } = props
     const defaultProps = MergeProps(defaultProp, props)
     const inputRef = useRef<HTMLInputElement>(null)
     const [uploadedFiles, setUploadedFiles] = useState<FileUploadType[]>([])
+    const [isDragOver, setDragOver] = useState(false)
     let fileObj = useRef<FileUploadType>({
         uid: '',
         name: '',
@@ -39,6 +72,8 @@ const Uploader: FC<IProps> = (props) => {
         status: 'ready',
         raw: {} as File,
         response: {},
+        progress: 0,
+        isUploading: false,
     })
     const isUploading = useMemo(() => {
         return uploadedFiles.some((item) => item.status === 'uploading')
@@ -49,6 +84,8 @@ const Uploader: FC<IProps> = (props) => {
         }
     }
     function removeFile(uid: string) {
+        const file = uploadedFiles.find((item) => item.uid === uid)?.raw
+        file && props.onRemove && props.onRemove(file)
         setUploadedFiles(
             produce((draft) => {
                 const index = draft.findIndex((item) => item.uid === uid)
@@ -56,9 +93,8 @@ const Uploader: FC<IProps> = (props) => {
             }),
         )
     }
-    function handleUploadFile(e: any) {
-        const input = e.target
-        const files = input.files
+
+    const postFile = useCallback((files: FileList) => {
         const formData = new FormData()
         const file = files[0]
         formData.append('file', file)
@@ -68,19 +104,48 @@ const Uploader: FC<IProps> = (props) => {
             size: file.size,
             status: 'uploading',
             raw: file,
+            progress: 0,
+            isUploading: true,
         }
         setUploadedFiles(
             produce((draft) => {
+                if (draft.length > 0 && defaultProp.cover) {
+                    draft.splice(0, draft.length)
+                }
                 draft.push(fileObj.current as FileUploadType)
             }),
         )
+
+        props.onChange && props.onChange(file)
         axios
             .post(defaultProps.action, formData, {
+                withCredentials: props.withCredentials
+                    ? props.withCredentials
+                    : false,
                 headers: {
                     'Content-Type': 'multipart/form-data',
+                    ...props.headers,
+                },
+                onUploadProgress(progressEvent) {
+                    props.onProgress && props.onProgress(progressEvent)
+                    if (progressEvent.lengthComputable) {
+                        const percentCompleted = Math.round(
+                            (progressEvent.loaded * 100) /
+                                (progressEvent.total as number),
+                        )
+                        setUploadedFiles(
+                            produce((draft) => {
+                                const index = draft.findIndex(
+                                    (item) => item.uid === fileObj.current!.uid,
+                                )
+                                draft[index].progress = percentCompleted
+                            }),
+                        )
+                    }
                 },
             })
             .then((res) => {
+                props.onSuccess && props.onSuccess(res)
                 fileObj.current = produce(fileObj.current, (draft) => {
                     draft.status = 'success'
                 })
@@ -91,10 +156,13 @@ const Uploader: FC<IProps> = (props) => {
                         )
                         draft[index].status = fileObj.current!.status
                         draft[index].response = res.data
+                        draft[index].progress = 100
+                        draft[index].isUploading = false
                     }),
                 )
             })
             .catch((err) => {
+                props.onError && props.onError(err)
                 fileObj.current = produce(fileObj.current, (draft) => {
                     draft.status = 'error'
                 })
@@ -103,8 +171,8 @@ const Uploader: FC<IProps> = (props) => {
                         const index = draft.findIndex(
                             (item) => item.uid === fileObj.current!.uid,
                         )
-                        console.log(draft)
                         draft[index].status = fileObj.current!.status
+                        draft[index].isUploading = false
                     }),
                 )
             })
@@ -113,6 +181,38 @@ const Uploader: FC<IProps> = (props) => {
                     inputRef.current.value = ''
                 }
             })
+    }, [])
+
+    const postFiles = useCallback((files: FileList) => {
+        if (files) {
+            if (props.beforeUpload) {
+                const result = props.beforeUpload(files[0])
+                if (result && result instanceof Promise) {
+                    result
+                        .then((res) => {
+                            if (res instanceof File) {
+                                postFile(files)
+                            } else {
+                                throw new Error(
+                                    'beforeUpload return type error',
+                                )
+                            }
+                        })
+                        .catch((e) => {
+                            console.error(e)
+                        })
+                } else if (result === true) {
+                    postFile(files)
+                }
+            } else {
+                postFile(files)
+            }
+        }
+    }, [])
+    function handleUploadFile(e: any) {
+        const input = e.target
+        const files = input.files
+        postFiles(files)
     }
     //最后一个状态
     const lastFileData = useMemo(() => {
@@ -121,59 +221,106 @@ const Uploader: FC<IProps> = (props) => {
             return {
                 loaded: lastFile.status === 'success',
                 data: lastFile.response,
+                status: lastFile.status,
+                progress: lastFile.progress,
             }
         }
         return false
     }, [uploadedFiles])
 
+    const handleDragOver = (e: DragEvent, over: boolean) => {
+        e.preventDefault()
+        setDragOver(over)
+    }
+    const handleDropOver = (e: DragEvent) => {
+        e.preventDefault()
+        setDragOver(false)
+        //寻找存储的文件
+        if (e.dataTransfer) {
+            postFiles(e.dataTransfer.files)
+        }
+    }
+
     return (
         <>
             <div>
                 <div>
-                    <div onClick={handleInputChange}>
+                    <div
+                        className={`is-dragover ${isDragOver ? 'drag' : ''}`}
+                        draggable={true}
+                        onClick={handleInputChange}
+                        onDragOver={(e) => handleDragOver(e as any, true)}
+                        onDrop={(e) => handleDropOver(e as any)}
+                        onDragLeave={(e) => handleDragOver(e as any, false)}
+                    >
                         {/* 默认上传 */}
                         <div>
-                            {/* 点击上传 */}
-                            {!isUploading ? (
-                                //这里进行转换，查看是否为最后一个文件，并且最后一个文件的已经加载完的状态
-                                lastFileData && lastFileData.loaded ? (
-                                    <div>
-                                        {children?.uploaded ? (
-                                            children?.uploaded(
-                                                lastFileData.data,
-                                            )
-                                        ) : (
-                                            <div>点击上传</div>
-                                        )}
-                                    </div>
+                            {isUploading ? (
+                                children?.loading ? (
+                                    children.loading
                                 ) : (
-                                    children?.default || <div>点击上传</div>
+                                    <LoadingOutlined></LoadingOutlined>
                                 )
+                            ) : lastFileData && lastFileData.loaded ? (
+                                <div>
+                                    {children?.uploaded ? (
+                                        children?.uploaded(lastFileData.data)
+                                    ) : (
+                                        <div>点击上传</div>
+                                    )}
+                                </div>
                             ) : (
-                                children?.loading || <LoadingOutlined />
+                                children?.default || <div>点击上传</div>
                             )}
                         </div>
                     </div>
-                    <ul>
-                        {uploadedFiles.map((item) => {
-                            return (
-                                <li
-                                    key={item.uid}
-                                    className={`uploaded-file uploaded-${item.status}`}
-                                >
-                                    <span className="mr-[10px]">
-                                        {item.name}
-                                    </span>
-                                    <button
-                                        className="delete-icon"
-                                        onClick={() => removeFile(item.uid)}
+                    {defaultProp.showUploadList && (
+                        <ul>
+                            {uploadedFiles.map((item) => {
+                                return (
+                                    <li
+                                        key={item.uid}
+                                        className={`uploaded-file uploaded-${item.status}`}
                                     >
-                                        <DeleteOutlined></DeleteOutlined>
-                                    </button>
-                                </li>
-                            )
-                        })}
-                    </ul>
+                                        <div>
+                                            <span className="mr-[10px]">
+                                                {item.name}
+                                            </span>
+                                            {!item.isUploading && (
+                                                <button
+                                                    className="delete-icon"
+                                                    onClick={() =>
+                                                        removeFile(item.uid)
+                                                    }
+                                                >
+                                                    <DeleteOutlined></DeleteOutlined>
+                                                </button>
+                                            )}
+                                        </div>
+                                        {item.isUploading && (
+                                            <div className="flex">
+                                                <span className="mr-[5px]">
+                                                    <LoadingOutlined></LoadingOutlined>
+                                                </span>
+                                                <Progress
+                                                    percent={item.progress}
+                                                    status={
+                                                        item.status ===
+                                                        'uploading'
+                                                            ? 'active'
+                                                            : item.status ===
+                                                                'success'
+                                                              ? 'success'
+                                                              : 'exception'
+                                                    }
+                                                ></Progress>
+                                            </div>
+                                        )}
+                                    </li>
+                                )
+                            })}
+                        </ul>
+                    )}
                 </div>
                 <div style={{ display: 'none' }}>
                     <input
@@ -182,6 +329,8 @@ const Uploader: FC<IProps> = (props) => {
                         }
                         type="file"
                         onChange={handleUploadFile}
+                        accept={props.accept ? props.accept : '*'}
+                        multiple={props.multiple ? props.multiple : false}
                     ></input>
                 </div>
             </div>

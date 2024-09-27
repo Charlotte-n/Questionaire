@@ -188,11 +188,61 @@ Mock:
 
 ### 基本的上传功能
 
+-   了解到了文件怎样上传的形式和ui界面的绘制
+
 ### 支持上传文件列表
+
+-   将列表显示在界面上
 
 ### 支持自定义模块
 
+-   使用了react里面的插槽
+
 ### 支持一系列的生命钩子
+
+-   上传前检查: beforeUpload
+-   上传中: onProgress：1. 使用axios的onUploadProgress 2.设计这些事件的参数
+-   上传成功: onSuccess
+-   上传失败: onError
+-   上传改变: onChange
 
 ### 拖拽上传
 
+-   dragover 和 dragleave 添加或者删除对应的class
+-   drop事件拿到正在被拖拽的文件，删除class并触发上传
+-   注意事件是可选的，只有在属性drag为true的时候才会生效
+
+### 其他的功能
+
+-   丰富上传数据 自定义headers
+-   丰富上传数据 自定义file的表单名称
+-   丰富上传数据 更多需要发送的数据
+-   input的原生属性 multiple
+-   input原生属性 accept
+-   with-credentials 发送时是否支持发送cookies，默认为false
+
+### 图片的预览
+
+## 总结
+
+vue3的三种实例
+
+1. app instance通过createApp创建
+2. component instance通过ref或者app.mount获取
+3. component internal instance通过getCurrentInstance获取
+   本地读取图片并且展示出来
+
+-   URL.createObjectURL(file)
+-   FileReader.readAsDataURL(file)
+    HTMLImageElement家族继承
+    HTMLImageElement -> HTMLELEMENT -> Element -> Node -> EventTarget
+    TDD开发的好处
+
+1. 对之前的功能更加有信心了，不会怕新功能破坏老功能
+2. 重构更加方便了
+
+# 业务组件库的打包
+
+## js模块的发展历程
+
+## 打包工具的作用

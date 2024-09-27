@@ -4,6 +4,7 @@ const config = {
     moduleNameMapper: {
         '^lodash-es$': 'lodash',
         '^uuid$': 'uuid',
+        '\\.(css|less|scss|sss|styl)$': 'jest-css-modules',
     },
     collectCoverage: true,
     coverageDirectory: 'coverage',

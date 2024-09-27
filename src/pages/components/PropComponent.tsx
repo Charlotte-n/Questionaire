@@ -1,11 +1,13 @@
 import { FC, useEffect, useRef } from 'react'
 import { Form, InputNumber, Radio, Select, Slider } from 'antd'
-import { LTextPropsType } from './interface'
+import { LTextPropsType } from '../../components/LText/interface'
 import TextArea from 'antd/es/input/TextArea'
 import { MergeProps, TextProperties } from '../../stores/commonproperties'
-import { fontFamilyOptions, textAlignOptions } from './constance'
-import ColorPicker from '../ColorPicker'
-import Uploader from '../Uploader'
+import {
+    fontFamilyOptions,
+    textAlignOptions,
+} from '../../components/LText/constance'
+import ColorPicker from '../../components/ColorPicker'
 
 const PropsComponent: FC<LTextPropsType & { id: string }> = (props) => {
     const mergeProps = MergeProps(TextProperties, props)
@@ -66,9 +68,6 @@ const PropsComponent: FC<LTextPropsType & { id: string }> = (props) => {
             </Form.Item>
             <Form.Item label="字体颜色" name="color" wrapperCol={{ span: 12 }}>
                 <ColorPicker onItemClick={onChangeColor}></ColorPicker>
-            </Form.Item>
-            <Form.Item label="上传">
-                <Uploader action="hhhh"></Uploader>
             </Form.Item>
         </Form>
     )

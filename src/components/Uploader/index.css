@@ -7,3 +7,13 @@
 .uploaded-uploading {
     color: yellow;
 }
+/* 
+.is-dragover {
+    background-color: #ccc;
+    padding: 50px 50px;
+    cursor: pointer;
+} */
+.drag {
+    /* 蓝色 */
+    border: 2px dashed rgb(0, 145, 255);
+}
