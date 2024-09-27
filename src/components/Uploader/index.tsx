@@ -75,9 +75,10 @@ const Uploader: FC<IProps> = (props) => {
         progress: 0,
         isUploading: false,
     })
+    //点击上传之后有uploading状态
     const isUploading = useMemo(() => {
         return uploadedFiles.some((item) => item.status === 'uploading')
-    }, [uploadedFiles])
+    }, [fileObj, uploadedFiles])
     function handleInputChange() {
         if (inputRef.current) {
             inputRef.current.click()
