@@ -1,5 +1,5 @@
-import { FC, useEffect, useRef } from 'react'
-import { Form, InputNumber, Radio, Select, Slider } from 'antd'
+import { FC, useEffect, useRef, useState } from 'react'
+import { Button, Form, InputNumber, Radio, Select, Slider, Modal } from 'antd'
 import { LTextPropsType } from '../../components/LText/interface'
 import TextArea from 'antd/es/input/TextArea'
 import { MergeProps, TextProperties } from '../../stores/commonproperties'
@@ -8,6 +8,7 @@ import {
     textAlignOptions,
 } from '../../components/LText/constance'
 import ColorPicker from '../../components/ColorPicker'
+import CropperCom from '../edit/component/cropper'
 
 const PropsComponent: FC<LTextPropsType & { id: string }> = (props) => {
     const mergeProps = MergeProps(TextProperties, props)
@@ -37,6 +38,7 @@ const PropsComponent: FC<LTextPropsType & { id: string }> = (props) => {
     function handleValuesChange(_, allValues: { [key: string]: any }) {
         props.onChange && props.onChange(Object.assign(allValues, { id }))
     }
+
     return (
         <Form
             form={form}
@@ -60,7 +62,7 @@ const PropsComponent: FC<LTextPropsType & { id: string }> = (props) => {
             <Form.Item label="字体" name="fontFamily" wrapperCol={{ span: 6 }}>
                 <Select options={fontFamilyOptions}></Select>
             </Form.Item>
-            <Form.Item label="对齐" name="textAlign" wrapperCol={{ span: 7 }}>
+            <Form.Item label="对齐" name="textAlign" wrapperCol={{ span: 8 }}>
                 <Radio.Group
                     options={textAlignOptions}
                     optionType="button"
@@ -68,6 +70,9 @@ const PropsComponent: FC<LTextPropsType & { id: string }> = (props) => {
             </Form.Item>
             <Form.Item label="字体颜色" name="color" wrapperCol={{ span: 12 }}>
                 <ColorPicker onItemClick={onChangeColor}></ColorPicker>
+            </Form.Item>
+            <Form.Item label="裁剪">
+                <CropperCom></CropperCom>
             </Form.Item>
         </Form>
     )

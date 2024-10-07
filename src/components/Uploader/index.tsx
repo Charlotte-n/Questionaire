@@ -1,6 +1,13 @@
-import React, { memo, useCallback, useMemo, useRef, useState } from 'react'
+import React, {
+    memo,
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from 'react'
 import type { FC, LegacyRef, ReactNode, Ref, RefObject } from 'react'
-import axios, { AxiosProgressEvent } from 'axios'
+import axios, { AxiosProgressEvent, AxiosResponse } from 'axios'
 import { v4 as uuidv4 } from 'uuid'
 import { MergeProps } from '../../stores/commonproperties'
 import { produce } from 'immer'
@@ -11,18 +18,19 @@ import {
     UploadOutlined,
 } from '@ant-design/icons'
 import { last } from 'lodash-es'
-import { Progress } from 'antd'
+import { Button, Progress } from 'antd'
+import { UploadImgRes } from '../../pages/edit/component/cropper'
 
 interface IProps {
     children?: {
-        default: ReactNode
-        loading: ReactNode
-        uploaded: (props: { url: string }) => ReactNode
+        default?: any
+        loading?: ReactNode
+        uploaded?: (props: { url: string }) => ReactNode
     }
     action: string
     beforeUpload?: (file: File) => boolean | Promise<File>
     onProgress?: (event: AxiosProgressEvent) => void
-    onSuccess?: (data: any) => void
+    onSuccess?: (data: UploadImgRes) => void
     onError?: (error: any) => void
     onChange?: (file: File) => void
     onRemove?: (file: File) => void
@@ -57,11 +65,12 @@ const defaultProp = {
     action: 'test',
     draggable: false,
     cover: true,
-    showUploadList: true,
+    showUploadList: false,
 }
 const Uploader: FC<IProps> = (props) => {
     const { children } = props
     const defaultProps = MergeProps(defaultProp, props)
+    console.log(defaultProps)
     const inputRef = useRef<HTMLInputElement>(null)
     const [uploadedFiles, setUploadedFiles] = useState<FileUploadType[]>([])
     const [isDragOver, setDragOver] = useState(false)
@@ -119,7 +128,7 @@ const Uploader: FC<IProps> = (props) => {
 
         props.onChange && props.onChange(file)
         axios
-            .post(defaultProps.action, formData, {
+            .post<UploadImgRes>(defaultProps.action, formData, {
                 withCredentials: props.withCredentials
                     ? props.withCredentials
                     : false,
@@ -146,7 +155,7 @@ const Uploader: FC<IProps> = (props) => {
                 },
             })
             .then((res) => {
-                props.onSuccess && props.onSuccess(res)
+                props.onSuccess && props.onSuccess(res.data)
                 fileObj.current = produce(fileObj.current, (draft) => {
                     draft.status = 'success'
                 })
@@ -244,11 +253,11 @@ const Uploader: FC<IProps> = (props) => {
 
     return (
         <>
-            <div>
+            <div className="flex">
                 <div>
                     <div
-                        className={`is-dragover ${isDragOver ? 'drag' : ''}`}
-                        draggable={true}
+                        // className={`is-dragover ${isDragOver ? 'drag' : ''}`}
+                        // draggable={false}
                         onClick={handleInputChange}
                         onDragOver={(e) => handleDragOver(e as any, true)}
                         onDrop={(e) => handleDropOver(e as any)}
@@ -267,11 +276,11 @@ const Uploader: FC<IProps> = (props) => {
                                     {children?.uploaded ? (
                                         children?.uploaded(lastFileData.data)
                                     ) : (
-                                        <div>点击上传</div>
+                                        <Button>点击上传</Button>
                                     )}
                                 </div>
                             ) : (
-                                children?.default || <div>点击上传</div>
+                                children?.default || <Button>点击上传</Button>
                             )}
                         </div>
                     </div>
