@@ -49,7 +49,6 @@ const Editor: FC = () => {
             value?: any
         },
     ) => {
-        console.log(item)
         dispatch(handleChangeComponent(item))
     }
 
@@ -70,11 +69,20 @@ const Editor: FC = () => {
                                     key={item.id}
                                     setActive={setActiveClick}
                                     id={item.id}
-                                    active={currentElement?.id === item.id}
                                 >
                                     {{
                                         content: (
-                                            <div>{getComponent(item)}</div>
+                                            <div
+                                                className={
+                                                    !item.isHidden &&
+                                                    currentElement?.id ===
+                                                        item.id
+                                                        ? 'border-[1px] border-[#1890ff] border-solid'
+                                                        : ''
+                                                }
+                                            >
+                                                {getComponent(item)}
+                                            </div>
                                         ),
                                     }}
                                 </EditWrapper>
@@ -84,21 +92,33 @@ const Editor: FC = () => {
                 </div>
             </div>
 
-            <div className="flex-1  h-[100%] flex flex-col py-[20px] px-[20px] bg-[white]">
-                <Tabs>
+            <div className="flex-1  h-[100%] flex flex-col bg-[white]">
+                <Tabs type="card">
                     <Tabs.TabPane key={'1'} tab={'属性设置'}>
-                        <div className="mt-[20px]">
-                            <PropsTable
-                                {...currentElement}
-                                onChange={handleChange}
-                            ></PropsTable>
+                        <div className="mt-[20px] pl-[10px]">
+                            {currentElement.isBlock ? (
+                                <div className="flex flex-col items-center justify-center">
+                                    <img
+                                        src={`/public/suoding`}
+                                        className="w-[200px] h-[200px]"
+                                        alt="图片被锁定了"
+                                    />
+                                    <span>该元素被锁定了</span>
+                                </div>
+                            ) : (
+                                <PropsTable
+                                    {...currentElement}
+                                    onChange={handleChange}
+                                ></PropsTable>
+                            )}
                         </div>
                     </Tabs.TabPane>
                     <Tabs.TabPane key={'2'} tab={'图层设置'}>
                         <LayerList
                             list={defaultEditorData.components}
                             change={handleChange}
-                            setActive={setActive}
+                            setActive={setActiveClick}
+                            currentElement={currentElement.id}
                         ></LayerList>
                     </Tabs.TabPane>
                     <Tabs.TabPane key={'3'} tab={'页面设置'}>

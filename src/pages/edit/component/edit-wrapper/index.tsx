@@ -3,18 +3,12 @@ interface Props {
     setActive: (event: MouseEvent, id: string) => void
     id: string
     children: any
-    active: boolean
     onChange?: (id: string) => void
 }
 const EditWrapper: FC<Props> = (props) => {
-    const { setActive, id, children, active } = props
+    const { setActive, id, children } = props
     return (
-        <div
-            onClick={(event: MouseEvent) => setActive(event, id)}
-            className={
-                active ? 'border-[1px] border-[#1890ff] border-solid' : ''
-            }
-        >
+        <div onClick={(event: MouseEvent) => setActive(event, id)}>
             {children.content}
         </div>
     )

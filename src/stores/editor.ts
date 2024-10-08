@@ -19,6 +19,7 @@ export interface ComponentData {
     isHidden: boolean
     //是否显示
     isBlock: boolean
+    layerName: string
 }
 
 export const defaultEditorData: EditorDataProps = {
@@ -33,6 +34,7 @@ export const defaultEditorData: EditorDataProps = {
             name: 'l-text',
             isHidden: false,
             isBlock: false,
+            layerName: '图层一',
         },
         {
             props: {
@@ -42,6 +44,7 @@ export const defaultEditorData: EditorDataProps = {
             name: 'l-text',
             isHidden: false,
             isBlock: false,
+            layerName: '图层二',
         },
         {
             props: {
@@ -51,6 +54,7 @@ export const defaultEditorData: EditorDataProps = {
             name: 'l-text',
             isHidden: false,
             isBlock: false,
+            layerName: '图层三',
         },
     ],
     currentElement: 'version',
@@ -69,11 +73,13 @@ export const EditorSlice = createSlice({
                 props: props.payload as OptionalLTextPropsType,
                 isBlock: false,
                 isHidden: false,
+                layerName: `图层${state.defaultEditorData.components?.length + 1}`,
             }
             state.defaultEditorData.components.push(newComponent)
         },
         setActive(state, props) {
             state.defaultEditorData.currentElement = props.payload
+            console.log(props.payload)
         },
         clearSelected(state) {
             state.defaultEditorData.currentElement = ''
@@ -86,6 +92,14 @@ export const EditorSlice = createSlice({
             )
             if (props.payload.isRoot) {
                 ;(component as any)[props.payload.key] = props.payload.value
+                if (props.payload.key === 'isHidden') {
+                    component!.props = {
+                        ...component!.props,
+                        visibility: props.payload.value ? 0 : 1,
+                        opacity: props.payload.value ? 0 : 1,
+                    }
+                }
+
                 return
             }
             state.defaultEditorData.components =

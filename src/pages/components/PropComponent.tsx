@@ -62,7 +62,7 @@ const PropsComponent: FC<LTextPropsType & { id: string }> = (props) => {
             <Form.Item label="字体" name="fontFamily" wrapperCol={{ span: 6 }}>
                 <Select options={fontFamilyOptions}></Select>
             </Form.Item>
-            <Form.Item label="对齐" name="textAlign" wrapperCol={{ span: 8 }}>
+            <Form.Item label="对齐" name="textAlign" wrapperCol={{ span: 10 }}>
                 <Radio.Group
                     options={textAlignOptions}
                     optionType="button"
