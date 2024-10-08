@@ -34,7 +34,7 @@ const PropsComponent: FC<LTextPropsType & { id: string }> = (props) => {
         changeStore({ color: colorRef.current })
     }
 
-    function handleValuesChange(_, allValues: { [key: string]: any }) {
+    function handleValuesChange(_: any, allValues: { [key: string]: any }) {
         props.onChange && props.onChange(Object.assign(allValues, { id }))
     }
     return (
