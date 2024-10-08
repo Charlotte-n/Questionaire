@@ -1,5 +1,6 @@
 import route from './router/index.tsx'
 import { RouterProvider } from 'react-router-dom'
+import 'cropperjs/dist/cropper.min.css'
 
 function App() {
     return (

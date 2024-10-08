@@ -15,6 +15,10 @@ export interface ComponentData {
     id: string
     // 业务组件库名称 l-text，l-image 等等
     name: string
+    //是否隐藏
+    isHidden: boolean
+    //是否显示
+    isBlock: boolean
 }
 
 export const defaultEditorData: EditorDataProps = {
@@ -27,6 +31,8 @@ export const defaultEditorData: EditorDataProps = {
             },
             id: 'version',
             name: 'l-text',
+            isHidden: false,
+            isBlock: false,
         },
         {
             props: {
@@ -34,6 +40,8 @@ export const defaultEditorData: EditorDataProps = {
             },
             id: 'version1',
             name: 'l-text',
+            isHidden: false,
+            isBlock: false,
         },
         {
             props: {
@@ -41,6 +49,8 @@ export const defaultEditorData: EditorDataProps = {
             },
             id: 'version2',
             name: 'l-text',
+            isHidden: false,
+            isBlock: false,
         },
     ],
     currentElement: 'version',
@@ -57,6 +67,8 @@ export const EditorSlice = createSlice({
                 id: Date.now().toString(),
                 name: 'l-text',
                 props: props.payload as OptionalLTextPropsType,
+                isBlock: false,
+                isHidden: false,
             }
             state.defaultEditorData.components.push(newComponent)
         },
@@ -67,6 +79,15 @@ export const EditorSlice = createSlice({
             state.defaultEditorData.currentElement = ''
         },
         handleChangeComponent(state, props) {
+            const { id } = props.payload
+            //根据id找
+            const component = state.defaultEditorData.components.find(
+                (item) => item.id === id,
+            )
+            if (props.payload.isRoot) {
+                ;(component as any)[props.payload.key] = props.payload.value
+                return
+            }
             state.defaultEditorData.components =
                 state.defaultEditorData.components.map((item) => {
                     return item.id === props.payload.id

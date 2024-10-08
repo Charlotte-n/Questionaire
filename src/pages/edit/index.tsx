@@ -1,4 +1,4 @@
-import React, { FC, MouseEvent } from 'react'
+import React, { FC, MouseEvent, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../stores'
 import { LTextPropsType, OptionalLTextPropsType } from '../../components/LText'
 import {
@@ -13,6 +13,8 @@ import { ComponentConfType, getComponentConfByType } from '../../components'
 import ComponentList from './component/component-list'
 import EditWrapper from './component/edit-wrapper'
 import PropsTable from './component/props-table'
+import { List, Modal, Tabs } from 'antd'
+import LayerList from './component/layer-list'
 
 function getComponent(c: ComponentData) {
     const { props, name }: { props: LTextPropsType; name: string } = c
@@ -30,30 +32,37 @@ const Editor: FC = () => {
     const currentElement = useAppSelector(getCurrentElement)
     const dispatch = useAppDispatch()
 
-    function addItem(props: any) {
+    const addItem = (props: any) => {
         dispatch(addComponent(props))
     }
-    function setActiveClick(event: MouseEvent, id: string) {
+    const setActiveClick = (event: MouseEvent, id: string) => {
         event.stopPropagation()
         dispatch(setActive(id))
     }
-    function handleCancelSelect() {
-        dispatch(clearSelected())
+    const handleCancelSelect = () => {
+        // dispatch(clearSelected())
     }
-    function handleChange(item: OptionalLTextPropsType & { id: string }) {
+    const handleChange = (
+        item: OptionalLTextPropsType & {
+            id: string
+            key?: string
+            value?: any
+        },
+    ) => {
         console.log(item)
         dispatch(handleChangeComponent(item))
     }
+
     return (
         <div className="flex items-center text-center h-[100vh] bg-[#f2f2f5]">
             <div className="flex-1  h-[100%] bg-[white]">
                 <ComponentList onItemClick={addItem}></ComponentList>
             </div>
             <div
-                className="w-[45vw] h-[100%] flex justify-center items-center overflow-hidden"
+                className="w-[60vw] h-[100%] flex justify-center items-center overflow-hidden"
                 onClick={handleCancelSelect}
             >
-                <div className="w-[80%] h-[80%] px-[10px] py-[10px] bg-[white] shadow-[#0000001f] shadow-md rounded-md overflow-auto">
+                <div className="w-[40%] h-[80%] px-[10px] py-[10px] bg-[white] shadow-[#0000001f] shadow-md rounded-md overflow-auto">
                     <div>
                         {defaultEditorData.components.map((item) => {
                             return (
@@ -74,14 +83,28 @@ const Editor: FC = () => {
                     </div>
                 </div>
             </div>
+
             <div className="flex-1  h-[100%] flex flex-col py-[20px] px-[20px] bg-[white]">
-                <p>组件属性</p>
-                <div className="mt-[20px]">
-                    <PropsTable
-                        {...currentElement}
-                        onChange={handleChange}
-                    ></PropsTable>
-                </div>
+                <Tabs>
+                    <Tabs.TabPane key={'1'} tab={'属性设置'}>
+                        <div className="mt-[20px]">
+                            <PropsTable
+                                {...currentElement}
+                                onChange={handleChange}
+                            ></PropsTable>
+                        </div>
+                    </Tabs.TabPane>
+                    <Tabs.TabPane key={'2'} tab={'图层设置'}>
+                        <LayerList
+                            list={defaultEditorData.components}
+                            change={handleChange}
+                            setActive={setActive}
+                        ></LayerList>
+                    </Tabs.TabPane>
+                    <Tabs.TabPane key={'3'} tab={'页面设置'}>
+                        <div>页面设置</div>
+                    </Tabs.TabPane>
+                </Tabs>
             </div>
         </div>
     )
