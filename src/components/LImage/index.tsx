@@ -6,7 +6,7 @@ export default {
     title: '图片',
     name: 'l-image',
     Component: LImageComponent,
-    ChangePropComponent: 'PropsComponentForLImage',
+    ChangePropComponent: 'PropsComponentForLText',
     defaultProps: {
         url: '',
         width: '100%',

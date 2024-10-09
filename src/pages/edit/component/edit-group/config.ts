@@ -6,7 +6,6 @@ interface GroupProps {
 export const defaultEditGroups: GroupProps[] = [
     {
         text: '基本属性',
-        name: 'l-text',
         subName: 'base',
     },
     {

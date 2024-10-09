@@ -1,5 +1,5 @@
 import { Collapse } from 'antd'
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 import PropsTable from '../props-table'
 import { useAppSelector } from '../../../../stores'
 import { getCurrentElement } from '../../../../stores/editor'
@@ -11,10 +11,13 @@ interface IProps {
 
 const EditGroup: FC<IProps> = ({ handleChange }) => {
     const currentElement = useAppSelector(getCurrentElement)
+    useEffect(() => {
+        console.log(currentElement)
+    }, [])
     return (
         <div>
             <Collapse style={{ borderRadius: 0 }}>
-                {defaultEditGroups.map((item, index) => {
+                {defaultEditGroups.map((item) => {
                     return (
                         <Collapse.Panel key={item.text} header={item.text}>
                             <PropsTable

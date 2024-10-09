@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
 import { Form, InputNumber, Radio, Select, Slider } from 'antd'
 import { LTextPropsType } from '../../components/LText/interface'
 import TextArea from 'antd/es/input/TextArea'
@@ -10,11 +10,15 @@ import {
 } from '../../components/LText/constance'
 import ColorPicker from '../../components/ColorPicker'
 import { sizeOptions } from './config'
+import CropperCom from '../edit/component/cropper'
+import { useAppSelector } from '../../stores'
+import { getCurrentElement } from '../../stores/editor'
 
 const PropsComponent: FC<LTextPropsType & { id: string; subName: string }> = (
     props,
 ) => {
     const mergeProps = MergeProps(TextProperties, props)
+    const currentElement = useAppSelector(getCurrentElement)
     const { id } = mergeProps
     const [form] = Form.useForm()
 
@@ -45,7 +49,7 @@ const PropsComponent: FC<LTextPropsType & { id: string; subName: string }> = (
             initialValues={mergeProps}
             onValuesChange={handleValuesChange}
         >
-            {props.subName === 'base' && (
+            {props.subName === 'base' && currentElement.name === 'l-text' && (
                 <div>
                     <Form.Item
                         label="文本"
@@ -94,6 +98,14 @@ const PropsComponent: FC<LTextPropsType & { id: string; subName: string }> = (
                         ></ColorPicker>
                     </Form.Item>
                 </div>
+            )}
+
+            {props.subName === 'base' && currentElement.name === 'l-image' && (
+                <CropperCom url={currentElement.props.url}></CropperCom>
+            )}
+
+            {props.subName === 'base' && currentElement.name === 'l-shape' && (
+                <div>样式</div>
             )}
 
             {props.subName === 'size' && (

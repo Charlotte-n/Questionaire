@@ -33,6 +33,7 @@ const Editor: FC = () => {
     const dispatch = useAppDispatch()
 
     const addItem = (props: any) => {
+        console.log(props, '添加的值为')
         dispatch(addComponent(props))
     }
 

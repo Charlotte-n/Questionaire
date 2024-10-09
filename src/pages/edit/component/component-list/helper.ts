@@ -24,8 +24,6 @@ function beforeUploadCheck(file: File, condition: CheckCondition) {
 }
 
 export function commonUploadCheck(file: File) {
-    console.log(file)
-
     const result = beforeUploadCheck(file, {
         format: ['image/png', 'image/jpeg'],
         size: 1,
@@ -37,6 +35,7 @@ export function commonUploadCheck(file: File) {
     if (error === 'size') {
         message.error('文件大小超过限制')
     }
+
     return passed
 }
 

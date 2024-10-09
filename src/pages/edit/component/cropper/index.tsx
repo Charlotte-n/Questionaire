@@ -107,10 +107,7 @@ const CropperCom: FC<IProps> = ({ url, onSuccess }) => {
                 {/* 预览 */}
                 {uploadImg !== '' ? (
                     <div>
-                        <img
-                            src={uploadImg}
-                            className="w-[100%] h-[100%] rounded-md"
-                        />
+                        <img src={uploadImg} className="h-[100px] rounded-md" />
                     </div>
                 ) : null}
 

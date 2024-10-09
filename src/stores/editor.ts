@@ -69,6 +69,18 @@ export const defaultEditorData: EditorDataProps = {
             isBlock: false,
             layerName: '图层三',
         },
+        {
+            props: {
+                url: 'https://merikle-backend.oss-cn-beijing.aliyuncs.com/test/09mjkt.png',
+                width: '200px',
+                height: '200px',
+            },
+            id: 'version3',
+            name: 'l-image',
+            isHidden: false,
+            isBlock: false,
+            layerName: '图层四',
+        },
     ],
     currentElement: 'version',
     page: {
@@ -84,15 +96,17 @@ export const EditorSlice = createSlice({
     },
     reducers: {
         addComponent(state, props): void {
-            const newComponent: ComponentData = {
-                id: Date.now().toString(),
-                name: 'l-text',
-                props: props.payload as OptionalLTextPropsType,
-                isBlock: false,
-                isHidden: false,
-                layerName: `图层${state.defaultEditorData.components?.length + 1}`,
-            }
-            state.defaultEditorData.components.push(newComponent)
+            // const newComponent: ComponentData = {
+            //     id: Date.now().toString(),
+            //     name: 'l-text',
+            //     props: props.payload as OptionalLTextPropsType,
+            //     isBlock: false,
+            //     isHidden: false,
+            //     layerName: `图层${state.defaultEditorData.components?.length + 1}`,
+            // }
+            console.log(props.payload)
+
+            state.defaultEditorData.components.push(props.payload)
         },
         setActive(state, props) {
             state.defaultEditorData.currentElement = props.payload

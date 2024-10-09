@@ -10,7 +10,6 @@ const ComponentList: FC<{
     onItemClick: (item: any) => void
 }> = ({ onItemClick }) => {
     const addImageComponent = useCallback((res: any) => {
-        console.log(res)
         const { url } = res.data
         getImageSize(url).then(({ width }) => {
             const maxWidth = 373
@@ -27,7 +26,6 @@ const ComponentList: FC<{
     }, [])
 
     //添加上传
-
     return (
         <>
             {defaultTemplates.map((item) => {
@@ -38,7 +36,7 @@ const ComponentList: FC<{
                 )
             })}
             <Uploader
-                action="test"
+                action="https://egg.hk.merikle.top/api/utils/uploadImgOSS"
                 beforeUpload={commonUploadCheck}
                 showUploadList={false}
                 onSuccess={(res) => addImageComponent(res)}
