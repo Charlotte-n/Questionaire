@@ -13,8 +13,7 @@ import {
 import { ComponentConfType, getComponentConfByType } from '../../components'
 import ComponentList from './component/component-list'
 import EditWrapper from './component/edit-wrapper'
-import PropsTable from './component/props-table'
-import { List, Modal, Tabs } from 'antd'
+import { Tabs } from 'antd'
 import LayerList from './component/layer-list'
 import EditGroup from './component/edit-group'
 import PageSetting from './component/page-setting'
@@ -106,7 +105,7 @@ const Editor: FC = () => {
             <div className="flex-1  h-[100%] flex flex-col bg-[white]">
                 <Tabs type="card">
                     <Tabs.TabPane key={'1'} tab={'属性设置'}>
-                        <div>
+                        <div className=" h-[90vh] overflow-y-auto">
                             {currentElement.isBlock ? (
                                 <div className="flex flex-col items-center justify-center">
                                     <img

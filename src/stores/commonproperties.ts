@@ -1,4 +1,4 @@
-import { without } from 'lodash-es'
+import { pad, without } from 'lodash-es'
 import { useMemo } from 'react'
 
 export const CommonProperties = {
@@ -6,8 +6,8 @@ export const CommonProperties = {
     actionType: '',
     url: '',
     //尺寸
-    height: '',
-    // width: '318px',
+    height: '80px',
+    width: '100px',
     //边框
     borderStyle: 'none',
     borderColor: '#000',
@@ -31,7 +31,10 @@ export const TextProperties = {
     fontWeight: 'normal',
     fontStyle: 'normal',
     textDecoration: 'none',
-    padding: '15px',
+    paddingTop: '15px',
+    paddingBottom: '15px',
+    paddingLeft: '15px',
+    paddingRight: '15px',
     backgroundColor: '',
     color: '#000',
     lineHeight: '1',

@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from 'react'
+import { FC } from 'react'
 import { Form, InputNumber, Radio, Select, Slider } from 'antd'
 import { LTextPropsType } from '../../components/LText/interface'
 import TextArea from 'antd/es/input/TextArea'
@@ -6,36 +6,32 @@ import { MergeProps, TextProperties } from '../../stores/commonproperties'
 import {
     fontFamilyOptions,
     textAlignOptions,
+    borderStyleOptions,
 } from '../../components/LText/constance'
 import ColorPicker from '../../components/ColorPicker'
-import CropperCom from '../edit/component/cropper'
 import { sizeOptions } from './config'
 
 const PropsComponent: FC<LTextPropsType & { id: string; subName: string }> = (
     props,
 ) => {
     const mergeProps = MergeProps(TextProperties, props)
-    const { text, fontSize, lineHeight, fontFamily, textAlign, id, color } =
-        mergeProps
-    const colorRef = useRef(color)
+    const { id } = mergeProps
     const [form] = Form.useForm()
 
-    useEffect(() => {
-        form.setFieldsValue({
-            text,
-            fontSize,
-            lineHeight,
-            fontFamily,
-            textAlign,
-        })
-    }, [text, fontSize, lineHeight, fontFamily, textAlign])
     function changeStore(otherProps: any) {
         props.onChange &&
             props.onChange(Object.assign({}, { id, ...otherProps }))
     }
     function onChangeColor(color: string) {
-        colorRef.current = color
-        changeStore({ color: colorRef.current })
+        changeStore({ color })
+    }
+
+    function onChangeBorderColor(color: string) {
+        changeStore({ borderColor: color })
+    }
+
+    function onChangeBackgroundColor(color: string) {
+        changeStore({ backgroundColor: color })
     }
 
     function handleValuesChange(_: any, allValues: { [key: string]: any }) {
@@ -46,7 +42,7 @@ const PropsComponent: FC<LTextPropsType & { id: string; subName: string }> = (
         <Form
             form={form}
             layout="horizontal"
-            initialValues={{ text, fontSize, lineHeight, color }}
+            initialValues={mergeProps}
             onValuesChange={handleValuesChange}
         >
             {props.subName === 'base' && (
@@ -85,15 +81,17 @@ const PropsComponent: FC<LTextPropsType & { id: string; subName: string }> = (
                             optionType="button"
                         ></Radio.Group>
                     </Form.Item>
-                    <Form.Item
-                        label="字体颜色"
-                        name="color"
-                        wrapperCol={{ span: 12 }}
-                    >
-                        <ColorPicker onItemClick={onChangeColor}></ColorPicker>
+                    <Form.Item label="文本颜色" name="color">
+                        <ColorPicker
+                            onItemClick={onChangeColor}
+                            color={mergeProps.color}
+                        ></ColorPicker>
                     </Form.Item>
-                    <Form.Item label="裁剪">
-                        <CropperCom></CropperCom>
+                    <Form.Item label="背景颜色" name="backgroundColor">
+                        <ColorPicker
+                            onItemClick={onChangeBackgroundColor}
+                            color={mergeProps.backgroundColor}
+                        ></ColorPicker>
                     </Form.Item>
                 </div>
             )}
@@ -123,15 +121,17 @@ const PropsComponent: FC<LTextPropsType & { id: string; subName: string }> = (
                         name="borderStyle"
                         wrapperCol={{ span: 12 }}
                     >
-                        <Select options={fontFamilyOptions}></Select>
+                        <Select options={borderStyleOptions}></Select>
                     </Form.Item>
-                    <Form.Item label="边框颜色" name="borderStyle">
-                        <ColorPicker onItemClick={onChangeColor}></ColorPicker>
+                    <Form.Item label="边框颜色" name="borderColor">
+                        <ColorPicker
+                            onItemClick={onChangeBorderColor}
+                        ></ColorPicker>
                     </Form.Item>
-                    <Form.Item label="边框宽度" name="borderStyle">
+                    <Form.Item label="边框宽度" name="borderWidth">
                         <Slider min={0} max={10} step={0.1}></Slider>
                     </Form.Item>
-                    <Form.Item label="边框圆角" name="borderStyle">
+                    <Form.Item label="边框圆角" name="borderRadius">
                         <Slider min={0} max={10} step={0.1}></Slider>
                     </Form.Item>
                 </div>

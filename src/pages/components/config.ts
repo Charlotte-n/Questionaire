@@ -11,22 +11,22 @@ export const sizeOptions = [
     },
     {
         label: '上边距',
-        name: 'marginTop',
+        name: 'paddingTop',
         wrapperCol: 15,
     },
     {
         label: '下边距',
-        name: 'marginBottom',
+        name: 'paddingBottom',
         wrapperCol: 15,
     },
     {
         label: '左边距',
-        name: 'marginLeft',
+        name: 'paddingLeft',
         wrapperCol: 15,
     },
     {
         label: '右边距',
-        name: 'marginRight',
+        name: 'paddingRight',
         wrapperCol: 15,
     },
 ]

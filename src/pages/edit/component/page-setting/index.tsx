@@ -1,5 +1,5 @@
 import { Form, InputNumber, Select } from 'antd'
-import React, { FC, useEffect } from 'react'
+import React, { FC, useEffect, useMemo } from 'react'
 import Uploader from '../../../../components/Uploader'
 import { UploadImgRes } from '../cropper'
 import ColorPicker from '../../../../components/ColorPicker'
@@ -16,9 +16,16 @@ const PageSetting: FC<IProps> = ({ url }) => {
     const { props } = defaultEditorData.page
     const dispatch = useAppDispatch()
 
-    const handleUploadSuccess = (data: UploadImgRes) => {
-        console.log(data.data.url, '我获取的值为')
+    const urlProcess = useMemo(() => {
+        if (!url) return ''
+        const reg = /\(["'](.+)["']\)/g
+        const matches = reg.exec(url)
+        if (matches && matches.length > 1) {
+            return matches[1]
+        }
+    }, [url])
 
+    const handleUploadSuccess = (data: UploadImgRes) => {
         dispatch(
             ChangePagePropsAction({ backgroundImage: `url(${data.data.url})` }),
         )
@@ -36,8 +43,11 @@ const PageSetting: FC<IProps> = ({ url }) => {
                 <ColorPicker></ColorPicker>
             </Form.Item>
             <Form.Item>
-                {url ? (
-                    <CropperCom url={url}></CropperCom>
+                {urlProcess ? (
+                    <CropperCom
+                        url={urlProcess}
+                        onSuccess={handleUploadSuccess}
+                    ></CropperCom>
                 ) : (
                     <Uploader
                         action="https://egg.hk.merikle.top/api/utils/uploadImgOSS"

@@ -13,3 +13,10 @@ export const fontFamilyOptions = [
     { label: '仿宋', value: "'FangSong','STFangsong'" },
     { label: '新宋体', value: "'NSimSun','STXihei'" },
 ]
+
+export const borderStyleOptions = [
+    { label: '无', value: 'none' },
+    { label: '实线', value: 'solid' },
+    { label: '虚线', value: 'dashed' },
+    { label: '点线', value: 'dotted' },
+]

@@ -18,6 +18,7 @@ export interface UploadImgRes {
 interface IProps {
     children?: ReactNode
     url: string
+    onSuccess?: (res: UploadImgRes) => void
 }
 
 interface CropperDataType {
@@ -27,13 +28,14 @@ interface CropperDataType {
     height: number
 }
 
-const CropperCom: FC<IProps> = ({ url }) => {
+const CropperCom: FC<IProps> = ({ url, onSuccess }) => {
     //裁剪图片
     const [isCopperOpen, setIsCopperOpen] = useState(false)
     //图片上传成功获取到图片
     const [uploadImg, setUploadImg] = useState(url || '')
     const handleUploadSuccess = (res: UploadImgRes) => {
         setUploadImg(res.data.url)
+        onSuccess && onSuccess(res)
     }
     const imgRef = useRef<HTMLImageElement | null>(null)
     let cropper: Cropper

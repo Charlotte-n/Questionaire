@@ -19,7 +19,7 @@ interface Props {
     onItemClick?: (color: string) => void
 }
 const ColorPicker: FC<Props> = (props) => {
-    const defaultProps = MergeProps(props, { color: '#f5222d' })
+    const defaultProps = MergeProps(props, { color: props.color || '#000000' })
     const [color, setColor] = useState(() => defaultProps.color)
     function onChangeColor(color: string) {
         setColor(color)
