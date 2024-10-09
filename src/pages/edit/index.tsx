@@ -16,6 +16,7 @@ import EditWrapper from './component/edit-wrapper'
 import PropsTable from './component/props-table'
 import { List, Modal, Tabs } from 'antd'
 import LayerList from './component/layer-list'
+import EditGroup from './component/edit-group'
 
 function getComponent(c: ComponentData) {
     const { props, name }: { props: LTextPropsType; name: string } = c
@@ -34,13 +35,16 @@ const Editor: FC = () => {
     const addItem = (props: any) => {
         dispatch(addComponent(props))
     }
+
     const setActiveClick = (event: MouseEvent, id: string) => {
         event.stopPropagation()
         dispatch(setActive(id))
     }
+
     const handleCancelSelect = () => {
         // dispatch(clearSelected())
     }
+
     const handleChange = (
         item: OptionalLTextPropsType & {
             id: string
@@ -50,6 +54,7 @@ const Editor: FC = () => {
     ) => {
         dispatch(handleChangeComponent(item))
     }
+
     const handleSort = (list: ComponentData[]) => {
         dispatch(handleSortAction(list))
     }
@@ -97,7 +102,7 @@ const Editor: FC = () => {
             <div className="flex-1  h-[100%] flex flex-col bg-[white]">
                 <Tabs type="card">
                     <Tabs.TabPane key={'1'} tab={'属性设置'}>
-                        <div className="mt-[20px] pl-[10px]">
+                        <div>
                             {currentElement.isBlock ? (
                                 <div className="flex flex-col items-center justify-center">
                                     <img
@@ -108,10 +113,9 @@ const Editor: FC = () => {
                                     <span>该元素被锁定了</span>
                                 </div>
                             ) : (
-                                <PropsTable
-                                    {...currentElement}
-                                    onChange={handleChange}
-                                ></PropsTable>
+                                <EditGroup
+                                    handleChange={handleChange}
+                                ></EditGroup>
                             )}
                         </div>
                     </Tabs.TabPane>

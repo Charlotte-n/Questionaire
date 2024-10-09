@@ -12,18 +12,16 @@ import { getCurrentElement } from '../../../../stores/editor'
 import NoPage from '../no-page'
 import { propsComponentMap } from '../../../../utils/propsMap'
 
-const PropsTable: FC<LTextPropsType> = (prop) => {
+const PropsTable: FC<LTextPropsType & { subName: string }> = (prop) => {
     const currentElement = useAppSelector(getCurrentElement)
     if (!currentElement) return <NoPage></NoPage>
+
     const { props, name, id } = currentElement
     if (!id) return <NoPage></NoPage>
     const { ChangePropComponent } = getComponentConfByType(
         name,
     ) as ComponentConfType
     const PropsComponent = propsComponentMap[ChangePropComponent]
-    useEffect(() => {
-        console.log(PropsComponent)
-    })
 
     function handleOnChange(item: OptionalLTextPropsType & { id: string }) {
         prop.onChange && prop.onChange(item)
@@ -33,6 +31,7 @@ const PropsTable: FC<LTextPropsType> = (prop) => {
             {...props}
             onChange={handleOnChange}
             id={id}
+            subName={prop.subName}
         ></PropsComponent>
     )
 }

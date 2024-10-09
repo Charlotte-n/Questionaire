@@ -4,7 +4,7 @@ import LTextConf, { LTextPropsType } from './LText'
 import LImageConf, { LImagePropsType } from './LImage'
 
 export type ComponentProps = LTextPropsType | LImagePropsType
-//TODO:类型的修改
+
 export type ComponentConfType = {
     title: string
     name: string
