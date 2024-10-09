@@ -7,6 +7,7 @@ import {
     ComponentData,
     getCurrentElement,
     handleChangeComponent,
+    handleSortAction,
     setActive,
 } from '../../stores/editor'
 import { ComponentConfType, getComponentConfByType } from '../../components'
@@ -48,6 +49,9 @@ const Editor: FC = () => {
         },
     ) => {
         dispatch(handleChangeComponent(item))
+    }
+    const handleSort = (list: ComponentData[]) => {
+        dispatch(handleSortAction(list))
     }
 
     return (
@@ -117,6 +121,7 @@ const Editor: FC = () => {
                             change={handleChange}
                             setActive={setActiveClick}
                             currentElement={currentElement.id}
+                            handleSort={handleSort}
                         ></LayerList>
                     </Tabs.TabPane>
                     <Tabs.TabPane key={'3'} tab={'页面设置'}>

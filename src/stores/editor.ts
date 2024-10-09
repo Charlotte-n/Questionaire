@@ -112,6 +112,9 @@ export const EditorSlice = createSlice({
                         : item
                 })
         },
+        handleSortAction(state, props) {
+            state.defaultEditorData.components = props.payload
+        },
     },
 })
 // 定义 selector
@@ -122,6 +125,11 @@ export const getCurrentElement = (state: any) => {
     )
 }
 
-export const { addComponent, setActive, clearSelected, handleChangeComponent } =
-    EditorSlice.actions
+export const {
+    addComponent,
+    setActive,
+    clearSelected,
+    handleChangeComponent,
+    handleSortAction,
+} = EditorSlice.actions
 export default EditorSlice.reducer
