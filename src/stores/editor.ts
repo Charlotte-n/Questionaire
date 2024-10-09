@@ -1,12 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { OptionalLTextPropsType } from '../components/LText'
 
+interface PageDataType {
+    props: any
+    title: string
+}
 export interface EditorDataProps {
     // 供中间编辑器渲染的数组
     components: ComponentData[]
     // 当前编辑的是哪个元素，uuid
     currentElement: string
     // 当然最后保存的时候还有有一些项目信息，这里并没有写出，等做到的时候再补充
+    page: PageDataType
 }
 export interface ComponentData {
     // 这个元素的 属性，属性请详见下面
@@ -22,6 +27,14 @@ export interface ComponentData {
     layerName: string
 }
 
+const defaultPageProps = {
+    backgroundColor: 'red',
+    backgroundImage:
+        'url("https://merikle-backend.oss-cn-beijing.aliyuncs.com/test/09mjkt.png")',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover',
+    height: '560px',
+}
 export const defaultEditorData: EditorDataProps = {
     components: [
         {
@@ -58,6 +71,10 @@ export const defaultEditorData: EditorDataProps = {
         },
     ],
     currentElement: 'version',
+    page: {
+        props: defaultPageProps,
+        title: '',
+    },
 }
 //将这些内容放到redux里面管理
 export const EditorSlice = createSlice({
@@ -115,6 +132,12 @@ export const EditorSlice = createSlice({
         handleSortAction(state, props) {
             state.defaultEditorData.components = props.payload
         },
+        ChangePagePropsAction(state, props) {
+            state.defaultEditorData.page.props = {
+                ...state.defaultEditorData.page.props,
+                ...props.payload,
+            }
+        },
     },
 })
 // 定义 selector
@@ -131,5 +154,6 @@ export const {
     clearSelected,
     handleChangeComponent,
     handleSortAction,
+    ChangePagePropsAction,
 } = EditorSlice.actions
 export default EditorSlice.reducer

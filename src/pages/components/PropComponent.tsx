@@ -1,14 +1,5 @@
 import { FC, useEffect, useRef, useState } from 'react'
-import {
-    Button,
-    Form,
-    InputNumber,
-    Radio,
-    Select,
-    Slider,
-    Modal,
-    Input,
-} from 'antd'
+import { Form, InputNumber, Radio, Select, Slider } from 'antd'
 import { LTextPropsType } from '../../components/LText/interface'
 import TextArea from 'antd/es/input/TextArea'
 import { MergeProps, TextProperties } from '../../stores/commonproperties'

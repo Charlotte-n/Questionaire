@@ -70,7 +70,6 @@ const defaultProp = {
 const Uploader: FC<IProps> = (props) => {
     const { children } = props
     const defaultProps = MergeProps(defaultProp, props)
-    console.log(defaultProps)
     const inputRef = useRef<HTMLInputElement>(null)
     const [uploadedFiles, setUploadedFiles] = useState<FileUploadType[]>([])
     const [isDragOver, setDragOver] = useState(false)
@@ -84,16 +83,19 @@ const Uploader: FC<IProps> = (props) => {
         progress: 0,
         isUploading: false,
     })
+
     //点击上传之后有uploading状态
     const isUploading = useMemo(() => {
         return uploadedFiles.some((item) => item.status === 'uploading')
     }, [fileObj, uploadedFiles])
-    function handleInputChange() {
+
+    const handleInputChange = () => {
         if (inputRef.current) {
             inputRef.current.click()
         }
     }
-    function removeFile(uid: string) {
+
+    const removeFile = (uid: string) => {
         const file = uploadedFiles.find((item) => item.uid === uid)?.raw
         file && props.onRemove && props.onRemove(file)
         setUploadedFiles(
@@ -219,11 +221,13 @@ const Uploader: FC<IProps> = (props) => {
             }
         }
     }, [])
-    function handleUploadFile(e: any) {
+
+    const handleUploadFile = (e: any) => {
         const input = e.target
         const files = input.files
         postFiles(files)
     }
+
     //最后一个状态
     const lastFileData = useMemo(() => {
         const lastFile = last(uploadedFiles)
@@ -256,8 +260,8 @@ const Uploader: FC<IProps> = (props) => {
             <div className="flex">
                 <div>
                     <div
-                        // className={`is-dragover ${isDragOver ? 'drag' : ''}`}
-                        // draggable={false}
+                        className={`is-dragover ${isDragOver ? 'drag' : ''}`}
+                        draggable={false}
                         onClick={handleInputChange}
                         onDragOver={(e) => handleDragOver(e as any, true)}
                         onDrop={(e) => handleDropOver(e as any)}

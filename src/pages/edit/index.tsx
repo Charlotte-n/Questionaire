@@ -17,6 +17,7 @@ import PropsTable from './component/props-table'
 import { List, Modal, Tabs } from 'antd'
 import LayerList from './component/layer-list'
 import EditGroup from './component/edit-group'
+import PageSetting from './component/page-setting'
 
 function getComponent(c: ComponentData) {
     const { props, name }: { props: LTextPropsType; name: string } = c
@@ -68,7 +69,10 @@ const Editor: FC = () => {
                 className="w-[60vw] h-[100%] flex justify-center items-center overflow-hidden"
                 onClick={handleCancelSelect}
             >
-                <div className="w-[40%] h-[80%] px-[10px] py-[10px] bg-[white] shadow-[#0000001f] shadow-md rounded-md overflow-auto">
+                <div
+                    className="w-[40%] h-[80%] px-[10px] py-[10px] bg-[white] shadow-[#0000001f] shadow-md rounded-md overflow-auto"
+                    style={defaultEditorData.page.props}
+                >
                     <div>
                         {defaultEditorData.components.map((item) => {
                             return (
@@ -129,7 +133,9 @@ const Editor: FC = () => {
                         ></LayerList>
                     </Tabs.TabPane>
                     <Tabs.TabPane key={'3'} tab={'页面设置'}>
-                        <div>页面设置</div>
+                        <PageSetting
+                            url={defaultEditorData.page.props.backgroundImage}
+                        ></PageSetting>
                     </Tabs.TabPane>
                 </Tabs>
             </div>
