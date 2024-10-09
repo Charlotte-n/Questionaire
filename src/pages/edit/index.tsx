@@ -18,8 +18,6 @@ import LayerList from './component/layer-list'
 
 function getComponent(c: ComponentData) {
     const { props, name }: { props: LTextPropsType; name: string } = c
-    console.log('wodezhiwei', props)
-
     const { Component } = getComponentConfByType(name) as ComponentConfType
     return (
         <>

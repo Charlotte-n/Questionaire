@@ -31,62 +31,61 @@ interface IInputEditProps {
     setCurrentEditId: (id: any) => void
 }
 
-const useWrapper = () => {
-    const wrapper = useRef(null)
-    return wrapper
-}
 const InputEdit: FC<IInputEditProps> = memo(
     ({ children, value, changeValue, id, setCurrentEditId, currentEditId }) => {
         const [isEditing, setIsEditing] = useState(false)
         const [innerValue, setInnerValue] = useState(value)
-        const wrapper = useWrapper()
+        const wrapperRef = useRef(null)
         const { isClickOutSide, setIsClickOutSide } = useClickOutside(
-            wrapper.current as unknown as HTMLElement,
+            wrapperRef.current as any,
         )
         const inputRef = useRef(null)
 
-        const handleClick = () => {
-            setIsEditing(true)
-            setCurrentEditId(id)
-        }
-
         useKeyPress('Enter', () => {
-            setIsEditing(false)
-            setCurrentEditId(null)
             changeValue(id, 'layerName', innerValue)
+            setCurrentEditId(null)
         })
+
         useKeyPress('Escape', () => {
-            setIsEditing(false)
             setCurrentEditId(null)
         })
 
         useEffect(() => {
-            if (isEditing) {
+            if (currentEditId === id) {
                 ;(inputRef.current as unknown as HTMLElement)?.focus()
             }
-        }, [isEditing])
+        }, [currentEditId])
 
         useEffect(() => {
-            if (isClickOutSide && isEditing) {
+            if (isClickOutSide && currentEditId) {
                 setCurrentEditId(null)
-                setIsEditing(false)
                 changeValue(id, 'layerName', innerValue)
-                setIsClickOutSide(false)
             }
+            setIsClickOutSide(false)
         }, [isClickOutSide])
 
         return (
-            <div onClick={handleClick} ref={wrapper}>
-                {isEditing && currentEditId === id ? (
-                    <Input
-                        ref={inputRef}
-                        placeholder="文本不能为空"
-                        value={innerValue}
-                        onChange={(event) => setInnerValue(event.target.value)}
-                    ></Input>
-                ) : (
-                    children.default
-                )}
+            <div>
+                <div
+                    onClick={(e) => {
+                        e.nativeEvent.stopImmediatePropagation()
+                        setCurrentEditId(id)
+                    }}
+                    ref={wrapperRef}
+                >
+                    {currentEditId === id ? (
+                        <Input
+                            ref={inputRef}
+                            placeholder="文本不能为空"
+                            value={innerValue}
+                            onChange={(event) =>
+                                setInnerValue(event.target.value)
+                            }
+                        ></Input>
+                    ) : (
+                        children.default
+                    )}
+                </div>
             </div>
         )
     },
@@ -116,7 +115,7 @@ const LayerList: FC<IProps> = ({ list, change, setActive, currentElement }) => {
 
     return (
         <ul className="border-[1px] border-solid">
-            {list?.map((item, index) => {
+            {list?.map((item) => {
                 return (
                     <li
                         key={item.id}
@@ -125,7 +124,7 @@ const LayerList: FC<IProps> = ({ list, change, setActive, currentElement }) => {
                             setActive(event, item.id)
                         }}
                     >
-                        <div>
+                        <div className="flex-2">
                             <Tooltip
                                 title={item.isHidden ? '显示' : '隐藏'}
                                 className="mr-[20px]"
@@ -139,13 +138,13 @@ const LayerList: FC<IProps> = ({ list, change, setActive, currentElement }) => {
                                             <EyeInvisibleOutlined />
                                         )
                                     }
-                                    onClick={() =>
+                                    onClick={(e) => {
                                         handleChange(
                                             item.id,
                                             'isHidden',
                                             !item.isHidden,
                                         )
-                                    }
+                                    }}
                                 ></Button>
                             </Tooltip>
                             <Tooltip title={item.isBlock ? '解锁' : '锁定'}>
@@ -158,27 +157,30 @@ const LayerList: FC<IProps> = ({ list, change, setActive, currentElement }) => {
                                             <LockOutlined />
                                         )
                                     }
-                                    onClick={() =>
+                                    onClick={(e) => {
                                         handleChange(
                                             item.id,
                                             'isBlock',
                                             !item.isBlock,
                                         )
-                                    }
+                                    }}
                                 ></Button>
                             </Tooltip>
                         </div>
-                        <InputEdit
-                            value={item.layerName}
-                            changeValue={changeValue}
-                            id={item.id}
-                            currentEditId={currentEditId}
-                            setCurrentEditId={setCurrentEditId}
-                        >
-                            {{
-                                default: <div>{item.layerName}</div>,
-                            }}
-                        </InputEdit>
+                        <div className="flex-1">
+                            <InputEdit
+                                value={item.layerName}
+                                changeValue={changeValue}
+                                id={item.id}
+                                currentEditId={currentEditId}
+                                setCurrentEditId={setCurrentEditId}
+                            >
+                                {{
+                                    default: <div>{item.layerName}</div>,
+                                }}
+                            </InputEdit>
+                        </div>
+
                         <Tooltip title={'拖动排序'}>
                             <Button
                                 shape="circle"
