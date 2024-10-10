@@ -17,11 +17,11 @@ export const CommonProperties = {
     opacity: 1,
     shadow: '0 0 0 #000',
     //位置
-    // position: 'absolute',
-    // top: '0',
-    // left: '0',
-    // right: '0',
-    // bottom: '0',
+    position: 'absolute',
+    top: '10px',
+    left: '20px',
+    right: '0',
+    bottom: '0',
 }
 
 export const TextProperties = {
@@ -43,6 +43,10 @@ export const TextProperties = {
     ...CommonProperties,
 }
 
+export const ImageProperties = {
+    ...CommonProperties,
+}
+
 //转换类型
 export const textStylePropName = without(
     Object.keys(TextProperties),
@@ -51,6 +55,12 @@ export const textStylePropName = without(
     'tag',
     'onItemClick',
 )
+
+export const imageStylePropName = without(
+    Object.keys(ImageProperties),
+    'actionType',
+)
+
 //计算出props,设置默认值
 export const MergeProps = (defaultProps: any, props: any) => {
     return useMemo(() => {

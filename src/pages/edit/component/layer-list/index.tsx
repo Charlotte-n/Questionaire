@@ -21,7 +21,7 @@ interface IProps {
     children?: ReactNode
     list: ComponentData[]
     change: (data: { id: string; key: string; value: any }) => void
-    setActive: (event: MouseEvent, id: string) => void
+    setActive: (event: any, id: string) => void
     currentElement: string
     handleSort: (list: ComponentData[]) => void
 }
@@ -47,7 +47,6 @@ interface ISortableItemProps {
 // 文本编辑
 const InputEdit: FC<IInputEditProps> = memo(
     ({ children, value, changeValue, id, setCurrentEditId, currentEditId }) => {
-        const [isEditing, setIsEditing] = useState(false)
         const [innerValue, setInnerValue] = useState(value)
         const wrapperRef = useRef(null)
         const { isClickOutSide, setIsClickOutSide } = useClickOutside(

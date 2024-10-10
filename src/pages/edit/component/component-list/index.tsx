@@ -6,6 +6,8 @@ import { LoadingOutlined, UploadOutlined } from '@ant-design/icons'
 import { Button } from 'antd'
 import { commonUploadCheck, getImageSize } from './helper'
 import { v4 as uuidv4 } from 'uuid'
+import { imageStylePropName } from '../../../../stores/commonproperties'
+
 const ComponentList: FC<{
     onItemClick: (item: any) => void
 }> = ({ onItemClick }) => {
@@ -17,6 +19,7 @@ const ComponentList: FC<{
                 name: 'l-image',
                 id: uuidv4(),
                 props: {
+                    ...imageStylePropName,
                     url,
                     width: `${width > maxWidth ? maxWidth : width}px`,
                     height: `100%`,

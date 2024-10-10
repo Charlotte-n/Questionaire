@@ -27,6 +27,7 @@ function getComponent(c: ComponentData) {
         </>
     )
 }
+
 const Editor: FC = () => {
     const { defaultEditorData } = useAppSelector((state) => state.editorSlice)
     const currentElement = useAppSelector(getCurrentElement)
@@ -53,6 +54,8 @@ const Editor: FC = () => {
             value?: any
         },
     ) => {
+        console.log(item)
+
         dispatch(handleChangeComponent(item))
     }
 
@@ -61,49 +64,57 @@ const Editor: FC = () => {
     }
 
     return (
-        <div className="flex items-center text-center h-[100vh] bg-[#f2f2f5]">
-            <div className="flex-1  h-[100%] bg-[white]">
+        <div className="flex text-center h-[100vh] bg-[#f2f2f5]">
+            <div className="w-[20vw]  h-[100%] bg-[white] max-w-[20vw]">
                 <ComponentList onItemClick={addItem}></ComponentList>
             </div>
-            <div
-                className="w-[60vw] h-[100%] flex justify-center items-center overflow-hidden"
-                onClick={handleCancelSelect}
-            >
-                <div
-                    className="w-[40%] h-[80%] px-[10px] py-[10px] bg-[white] shadow-[#0000001f] shadow-md rounded-md overflow-auto"
-                    style={defaultEditorData.page.props}
-                >
-                    <div>
-                        {defaultEditorData.components.map((item) => {
-                            return (
-                                <EditWrapper
-                                    key={item.id}
-                                    setActive={setActiveClick}
-                                    id={item.id}
-                                >
-                                    {{
-                                        content: (
-                                            <div
-                                                className={
-                                                    !item.isHidden &&
-                                                    currentElement?.id ===
-                                                        item.id
-                                                        ? 'border-[1px] border-[#1890ff] border-solid'
-                                                        : ''
-                                                }
-                                            >
-                                                {getComponent(item)}
-                                            </div>
-                                        ),
-                                    }}
-                                </EditWrapper>
-                            )
-                        })}
+            {/* TODO:这里的样式再进行琢磨一下，涉及定位之类的 */}
+            <div className="flex flex-auto py-[20px]">
+                <div className="flex flex-col items-center flex-auto">
+                    <p>画布区域</p>
+                    <div
+                        className="canvas-area fixed overflow-hidden mt-[50px] max-h-[80vh] min-w-[20vw]"
+                        onClick={handleCancelSelect}
+                    >
+                        <div
+                            className="px-[10px] py-[10px] bg-[white] shadow-[#0000001f] shadow-md rounded-md overflow-auto"
+                            style={defaultEditorData.page.props}
+                        >
+                            <div className="">
+                                {defaultEditorData.components.map((item) => {
+                                    return (
+                                        <EditWrapper
+                                            key={item.id}
+                                            setActive={setActiveClick}
+                                            id={item.id}
+                                            props={item.props}
+                                            onChange={handleChange}
+                                        >
+                                            {{
+                                                content: (
+                                                    <div
+                                                        className={
+                                                            !item.isHidden &&
+                                                            currentElement?.id ===
+                                                                item.id
+                                                                ? 'border-[1px] border-[#1890ff] border-solid'
+                                                                : ''
+                                                        }
+                                                    >
+                                                        {getComponent(item)}
+                                                    </div>
+                                                ),
+                                            }}
+                                        </EditWrapper>
+                                    )
+                                })}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div className="flex-1  h-[100%] flex flex-col bg-[white]">
+            <div className="w-[20vw]  h-[100%] flex flex-col bg-[white] max-w-[20vw]">
                 <Tabs type="card">
                     <Tabs.TabPane key={'1'} tab={'属性设置'}>
                         <div className=" h-[90vh] overflow-y-auto">

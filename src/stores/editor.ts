@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { OptionalLTextPropsType } from '../components/LText'
+import { ImageProperties } from './commonproperties'
 
 interface PageDataType {
     props: any
@@ -71,6 +72,7 @@ export const defaultEditorData: EditorDataProps = {
         },
         {
             props: {
+                ...ImageProperties,
                 url: 'https://merikle-backend.oss-cn-beijing.aliyuncs.com/test/09mjkt.png',
                 width: '200px',
                 height: '200px',
@@ -96,16 +98,6 @@ export const EditorSlice = createSlice({
     },
     reducers: {
         addComponent(state, props): void {
-            // const newComponent: ComponentData = {
-            //     id: Date.now().toString(),
-            //     name: 'l-text',
-            //     props: props.payload as OptionalLTextPropsType,
-            //     isBlock: false,
-            //     isHidden: false,
-            //     layerName: `图层${state.defaultEditorData.components?.length + 1}`,
-            // }
-            console.log(props.payload)
-
             state.defaultEditorData.components.push(props.payload)
         },
         setActive(state, props) {
