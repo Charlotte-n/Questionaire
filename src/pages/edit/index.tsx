@@ -1,4 +1,4 @@
-import React, { FC, MouseEvent, useState } from 'react'
+import React, { FC, MouseEvent, useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../stores'
 import { LTextPropsType, OptionalLTextPropsType } from '../../components/LText'
 import {
@@ -17,6 +17,7 @@ import { Tabs } from 'antd'
 import LayerList from './component/layer-list'
 import EditGroup from './component/edit-group'
 import PageSetting from './component/page-setting'
+import { initHotKeys } from '../../plugins/hotKeys'
 
 function getComponent(c: ComponentData) {
     const { props, name }: { props: LTextPropsType; name: string } = c
@@ -62,6 +63,8 @@ const Editor: FC = () => {
     const handleSort = (list: ComponentData[]) => {
         dispatch(handleSortAction(list))
     }
+
+    initHotKeys()
 
     return (
         <div className="flex text-center h-[100vh] bg-[#f2f2f5]">

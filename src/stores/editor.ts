@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { OptionalLTextPropsType } from '../components/LText'
 import { ImageProperties } from './commonproperties'
+import { message } from 'antd'
 
 interface PageDataType {
     props: any
@@ -13,6 +14,7 @@ export interface EditorDataProps {
     currentElement: string
     // 当然最后保存的时候还有有一些项目信息，这里并没有写出，等做到的时候再补充
     page: PageDataType
+    copedComponent: ComponentData | null | undefined
 }
 export interface ComponentData {
     // 这个元素的 属性，属性请详见下面
@@ -142,6 +144,15 @@ export const EditorSlice = createSlice({
                 ...props.payload,
             }
         },
+        copyComponent(state, props) {
+            state.defaultEditorData.copedComponent =
+                state.defaultEditorData.components.find(
+                    (item) => item.id === props.payload,
+                )
+            if (state.defaultEditorData.copedComponent) {
+                message.success('拷贝图层成功')
+            }
+        },
     },
 })
 // 定义 selector
@@ -159,5 +170,6 @@ export const {
     handleChangeComponent,
     handleSortAction,
     ChangePagePropsAction,
+    copyComponent,
 } = EditorSlice.actions
 export default EditorSlice.reducer
