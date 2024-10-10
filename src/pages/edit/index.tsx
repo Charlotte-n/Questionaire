@@ -65,9 +65,11 @@ const Editor: FC = () => {
 
     return (
         <div className="flex text-center h-[100vh] bg-[#f2f2f5]">
+            {/* 左侧 */}
             <div className="w-[20vw]  h-[100%] bg-[white] max-w-[20vw]">
                 <ComponentList onItemClick={addItem}></ComponentList>
             </div>
+            {/* 中间画布 */}
             {/* TODO:这里的样式再进行琢磨一下，涉及定位之类的 */}
             <div className="flex flex-auto py-[20px]">
                 <div className="flex flex-col items-center flex-auto">
@@ -89,6 +91,9 @@ const Editor: FC = () => {
                                             id={item.id}
                                             props={item.props}
                                             onChange={handleChange}
+                                            isActive={
+                                                currentElement?.id === item.id
+                                            }
                                         >
                                             {{
                                                 content: (
@@ -113,7 +118,7 @@ const Editor: FC = () => {
                     </div>
                 </div>
             </div>
-
+            {/* 右侧设置属性 */}
             <div className="w-[20vw]  h-[100%] flex flex-col bg-[white] max-w-[20vw]">
                 <Tabs type="card">
                     <Tabs.TabPane key={'1'} tab={'属性设置'}>

@@ -1,0 +1,36 @@
+.edit-wrapper > * {
+    /* width: 100%; */
+}
+.resizes .resize {
+    position: absolute;
+    display: block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: white;
+    border: 3px solid #1890ff;
+}
+
+.resizes .resize.top-left {
+    left: -5px;
+    top: -5px;
+    cursor: nwse-resize;
+}
+
+.resizes .resize.top-right {
+    top: -5px;
+    right: -5px;
+    cursor: nesw-resize;
+}
+
+.resizes .resize.bottom-left {
+    bottom: -5px;
+    left: -5px;
+    cursor: nesw-resize;
+}
+
+.resizes .resize.bottom-right {
+    bottom: -5px;
+    right: -5px;
+    cursor: nwse-resize;
+}

@@ -74,8 +74,6 @@ export const defaultEditorData: EditorDataProps = {
             props: {
                 ...ImageProperties,
                 url: 'https://merikle-backend.oss-cn-beijing.aliyuncs.com/test/09mjkt.png',
-                width: '200px',
-                height: '200px',
             },
             id: 'version3',
             name: 'l-image',

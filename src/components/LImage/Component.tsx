@@ -12,7 +12,12 @@ const LImageComponent: FC<Props> = (props) => {
     const { url, width, height } = defaultProps
     return (
         <div>
-            <img src={url} width={width} height={height} />
+            <img
+                src={url}
+                width={width}
+                height={height}
+                style={{ height: height, width: width }}
+            />
         </div>
     )
 }
