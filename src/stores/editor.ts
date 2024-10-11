@@ -105,8 +105,13 @@ export const EditorSlice = createSlice({
             state.defaultEditorData.components.push(props.payload)
         },
         setActive(state, props) {
-            state.defaultEditorData.currentElement = props.payload
-            console.log(props.payload)
+            const { id, type } = props.payload
+            //如果是页面的话就设置currentElement为页面
+            if (type !== 'element') {
+                state.defaultEditorData.currentElement = 'page'
+                return
+            }
+            state.defaultEditorData.currentElement = id
         },
         clearSelected(state) {
             state.defaultEditorData.currentElement = ''

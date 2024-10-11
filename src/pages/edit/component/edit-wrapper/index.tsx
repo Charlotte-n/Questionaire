@@ -3,7 +3,10 @@ import useComponentCommon from '../../../../hooks/useComponentCommon'
 import './index.css'
 
 interface Props {
-    setActive: (event: MouseEvent, id: string) => void
+    setActive: (
+        event: MouseEvent,
+        { id, type }: { id?: string; type: string },
+    ) => void
     id: string
     children: any
     onChange?: (value: any) => void
@@ -182,7 +185,9 @@ const EditWrapper: FC<Props> = (props) => {
         <div
             className="edit-wrapper relative"
             ref={editWrapperRef}
-            onClick={(event: MouseEvent) => setActive(event, id)}
+            onClick={(event: MouseEvent) =>
+                setActive(event, { id, type: 'element' })
+            }
             style={styleProps}
         >
             <div

@@ -33,19 +33,27 @@ const Editor: FC = () => {
     const { defaultEditorData } = useAppSelector((state) => state.editorSlice)
     const currentElement = useAppSelector(getCurrentElement)
     const dispatch = useAppDispatch()
+    const [activeKey, setActiveKey] = useState('1')
 
     const addItem = (props: any) => {
-        console.log(props, '添加的值为')
         dispatch(addComponent(props))
     }
 
-    const setActiveClick = (event: MouseEvent, id: string) => {
-        event.stopPropagation()
-        dispatch(setActive(id))
+    const setActiveClick = (
+        e: MouseEvent,
+        { id, type }: { id?: string; type: string },
+    ) => {
+        e.stopPropagation()
+        dispatch(
+            setActive({
+                id,
+                type,
+            }),
+        )
     }
 
     const handleCancelSelect = () => {
-        // dispatch(clearSelected())
+        dispatch(clearSelected())
     }
 
     const handleChange = (
@@ -55,13 +63,41 @@ const Editor: FC = () => {
             value?: any
         },
     ) => {
-        console.log(item)
-
         dispatch(handleChangeComponent(item))
     }
 
     const handleSort = (list: ComponentData[]) => {
         dispatch(handleSortAction(list))
+    }
+
+    //更新激活的activeKey
+    const handleChangeTab = (key: string) => {
+        switch (key) {
+            case '1':
+                handleCancelSelect()
+                setActiveKey('1')
+                break
+            case '2':
+                handleCancelSelect()
+                setActiveKey('2')
+                break
+            case '3':
+                setActiveKey('3')
+                dispatch(
+                    setActive({
+                        type: 'page',
+                    }),
+                )
+                break
+            default:
+                break
+        }
+    }
+
+    //切换到页面设置tab
+    const handleChangePageTab = (e: MouseEvent) => {
+        setActiveKey('3')
+        setActiveClick(e, { type: 'page' })
     }
 
     initHotKeys()
@@ -78,11 +114,11 @@ const Editor: FC = () => {
                 <div className="flex flex-col items-center flex-auto">
                     <p>画布区域</p>
                     <div
-                        className="canvas-area fixed overflow-hidden mt-[50px] max-h-[80vh] min-w-[20vw]"
-                        onClick={handleCancelSelect}
+                        className={`canvas-area fixed overflow-hidden mt-[50px] max-h-[80vh] min-w-[20vw] cursor-pointer rounded-md ${defaultEditorData.currentElement === 'page' ? 'border-[2px] border-[#1890ff] border-solid' : ''}`}
+                        onClick={(e) => handleChangePageTab(e)}
                     >
                         <div
-                            className="px-[10px] py-[10px] bg-[white] shadow-[#0000001f] shadow-md rounded-md overflow-auto"
+                            className="px-[10px] py-[10px] bg-[white] shadow-[#0000001f] shadow-md  overflow-auto"
                             style={defaultEditorData.page.props}
                         >
                             <div className="">
@@ -123,7 +159,14 @@ const Editor: FC = () => {
             </div>
             {/* 右侧设置属性 */}
             <div className="w-[20vw]  h-[100%] flex flex-col bg-[white] max-w-[20vw]">
-                <Tabs type="card">
+                <Tabs
+                    type="card"
+                    defaultActiveKey={
+                        defaultEditorData.currentElement === 'page' ? '3' : '1'
+                    }
+                    onChange={handleChangeTab}
+                    activeKey={activeKey}
+                >
                     <Tabs.TabPane key={'1'} tab={'属性设置'}>
                         <div className=" h-[90vh] overflow-y-auto">
                             {!currentElement ? (

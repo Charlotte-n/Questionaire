@@ -21,7 +21,7 @@ interface IProps {
     children?: ReactNode
     list: ComponentData[]
     change: (data: { id: string; key: string; value: any }) => void
-    setActive: (event: any, id: string) => void
+    setActive: (event: any, { id, type }: { id?: string; type: string }) => void
     currentElement: string
     handleSort: (list: ComponentData[]) => void
 }
@@ -38,7 +38,7 @@ interface IInputEditProps {
 }
 interface ISortableItemProps {
     change: (data: { id: string; key: string; value: any }) => void
-    setActive: (event: any, id: string) => void
+    setActive: (event: any, { id, type }: { id?: string; type: string }) => void
     currentElement: string
     item: ComponentData
     sortIndex: number
@@ -149,7 +149,7 @@ const List = ({
             key={item.id}
             className={`flex flex-1 justify-between px-[10px] pt-[10px] pb-[10px] border-b-[1px] border-solid cursor-pointer hover:bg-[#eaf7fe] ${item.id === currentElement ? 'border-[1px] border-[#1890ff]' : ''}`}
             onClick={(event: any) => {
-                setActive(event, item.id)
+                setActive(event, { id: item.id, type: 'element' })
             }}
         >
             <div className="flex-2">
