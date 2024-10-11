@@ -12,8 +12,8 @@ interface IProps {
 }
 
 const PageSetting: FC<IProps> = ({ url }) => {
-    const { defaultEditorData } = useAppSelector((state) => state.editorSlice)
-    const { props } = defaultEditorData.page
+    const { page } = useAppSelector((state) => state.editorSlice)
+    const { props } = page
     const dispatch = useAppDispatch()
 
     const urlProcess = useMemo(() => {

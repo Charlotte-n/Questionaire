@@ -1,4 +1,4 @@
-import React, { FC, MouseEvent, useEffect, useState } from 'react'
+import React, { FC, MouseEvent, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../stores'
 import { LTextPropsType, OptionalLTextPropsType } from '../../components/LText'
 import {
@@ -30,7 +30,11 @@ function getComponent(c: ComponentData) {
 }
 
 const Editor: FC = () => {
-    const { defaultEditorData } = useAppSelector((state) => state.editorSlice)
+    const {
+        components,
+        page,
+        currentElement: currentElementID,
+    } = useAppSelector((state) => state.editorSlice)
     const currentElement = useAppSelector(getCurrentElement)
     const dispatch = useAppDispatch()
     const [activeKey, setActiveKey] = useState('1')
@@ -114,15 +118,15 @@ const Editor: FC = () => {
                 <div className="flex flex-col items-center flex-auto">
                     <p>画布区域</p>
                     <div
-                        className={`canvas-area fixed overflow-hidden mt-[50px] max-h-[80vh] min-w-[20vw] cursor-pointer rounded-md ${defaultEditorData.currentElement === 'page' ? 'border-[2px] border-[#1890ff] border-solid' : ''}`}
+                        className={`canvas-area fixed overflow-hidden mt-[50px] max-h-[80vh] min-w-[20vw] cursor-pointer rounded-md ${currentElementID === 'page' ? 'border-[2px] border-[#1890ff] border-solid' : ''}`}
                         onClick={(e) => handleChangePageTab(e)}
                     >
                         <div
                             className="px-[10px] py-[10px] bg-[white] shadow-[#0000001f] shadow-md  overflow-auto"
-                            style={defaultEditorData.page.props}
+                            style={page.props}
                         >
                             <div className="">
-                                {defaultEditorData.components.map((item) => {
+                                {components.map((item) => {
                                     return (
                                         <EditWrapper
                                             key={item.id}
@@ -161,9 +165,7 @@ const Editor: FC = () => {
             <div className="w-[20vw]  h-[100%] flex flex-col bg-[white] max-w-[20vw]">
                 <Tabs
                     type="card"
-                    defaultActiveKey={
-                        defaultEditorData.currentElement === 'page' ? '3' : '1'
-                    }
+                    defaultActiveKey={currentElementID === 'page' ? '3' : '1'}
                     onChange={handleChangeTab}
                     activeKey={activeKey}
                 >
@@ -189,7 +191,7 @@ const Editor: FC = () => {
                     </Tabs.TabPane>
                     <Tabs.TabPane key={'2'} tab={'图层设置'}>
                         <LayerList
-                            list={defaultEditorData.components}
+                            list={components}
                             change={handleChange}
                             setActive={setActiveClick}
                             currentElement={currentElement && currentElement.id}
@@ -198,7 +200,7 @@ const Editor: FC = () => {
                     </Tabs.TabPane>
                     <Tabs.TabPane key={'3'} tab={'页面设置'}>
                         <PageSetting
-                            url={defaultEditorData.page.props.backgroundImage}
+                            url={page.props.backgroundImage}
                         ></PageSetting>
                     </Tabs.TabPane>
                 </Tabs>

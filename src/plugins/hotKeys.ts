@@ -18,8 +18,10 @@ const wrapper = (callback: KeyHandler) => {
 
 export const initHotKeys = () => {
     const dispatch = useAppDispatch()
-    const { defaultEditorData } = useAppSelector((state) => state.editorSlice)
-    const id = defaultEditorData.currentElement
+    const { currentElement: currentElementID } = useAppSelector(
+        (state) => state.editorSlice,
+    )
+    const id = currentElementID
 
     useHotKeys('ctrl+c, command+c', function () {
         dispatch(copyComponent({ id }))

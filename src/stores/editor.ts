@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { OptionalLTextPropsType } from '../components/LText'
 import { ImageProperties } from './commonproperties'
 import { message } from 'antd'
 import { cloneDeep } from 'lodash-es'
@@ -54,7 +53,7 @@ const defaultPageProps = {
     backgroundSize: 'cover',
     height: '560px',
 }
-export const defaultEditorData: EditorDataProps = {
+export const initialState: EditorDataProps = {
     components: [
         {
             props: {
@@ -113,15 +112,13 @@ export const defaultEditorData: EditorDataProps = {
 //将这些内容放到redux里面管理
 export const EditorSlice = createSlice({
     name: 'editor',
-    initialState: {
-        defaultEditorData,
-    },
+    initialState,
     reducers: {
         addComponent(state, props): void {
-            state.defaultEditorData.components.push(props.payload)
+            state.components.push(props.payload)
 
             //添加添加历史记录
-            state.defaultEditorData.histories.push({
+            state.histories.push({
                 id: uuidv4(),
                 componentId: props.payload.id,
                 type: 'add',
@@ -132,17 +129,17 @@ export const EditorSlice = createSlice({
             const { id, type } = props.payload
             //如果是页面的话就设置currentElement为页面
             if (type !== 'element') {
-                state.defaultEditorData.currentElement = 'page'
+                state.currentElement = 'page'
                 return
             }
-            state.defaultEditorData.currentElement = id
+            state.currentElement = id
         },
         clearSelected(state) {
-            state.defaultEditorData.currentElement = ''
+            state.currentElement = ''
         },
         handleChangeComponent(state, props) {
             const { id, key, value } = props.payload
-            const component = getCom(state.defaultEditorData.components, id)
+            const component = getCom(state.components, id)
             if (!component) {
                 message.error('修改失败')
                 return
@@ -163,7 +160,7 @@ export const EditorSlice = createSlice({
             }
 
             //添加修改的历史记录
-            state.defaultEditorData.histories.push({
+            state.histories.push({
                 id: uuidv4(),
                 componentId: id,
                 type: 'change',
@@ -182,19 +179,16 @@ export const EditorSlice = createSlice({
             }
         },
         handleSortAction(state, props) {
-            state.defaultEditorData.components = props.payload
+            state.components = props.payload
         },
         ChangePagePropsAction(state, props) {
-            state.defaultEditorData.page.props = {
-                ...state.defaultEditorData.page.props,
+            state.page.props = {
+                ...state.page.props,
                 ...props.payload,
             }
         },
         copyComponent(state, props) {
-            const component = getCom(
-                state.defaultEditorData.components,
-                props.payload.id,
-            )
+            const component = getCom(state.components, props.payload.id)
             if (!component) {
                 message.error('拷贝图层失败')
                 return
@@ -203,7 +197,7 @@ export const EditorSlice = createSlice({
         },
         pasteComponent(state, props) {
             const { id } = props.payload
-            const component = getCom(state.defaultEditorData.components, id)
+            const component = getCom(state.components, id)
             if (!component) {
                 message.error('粘贴失败')
                 return
@@ -211,10 +205,10 @@ export const EditorSlice = createSlice({
             const pastedCom = cloneDeep(component)
             pastedCom!.id = uuidv4()
             pastedCom!.layerName = `${pastedCom!.layerName}副本`
-            state.defaultEditorData.components.push(pastedCom)
+            state.components.push(pastedCom)
 
             //添加新增历史记录
-            state.defaultEditorData.histories.push({
+            state.histories.push({
                 id: uuidv4(),
                 componentId: pastedCom!.id,
                 type: 'add',
@@ -224,21 +218,18 @@ export const EditorSlice = createSlice({
         },
         deleteComponent(state, props) {
             const { id } = props.payload
-            const component = getCom(state.defaultEditorData.components, id)
-            const componentIndex = state.defaultEditorData.components.findIndex(
+            const component = getCom(state.components, id)
+            const componentIndex = state.components.findIndex(
                 (item) => item.id === id,
             )
             if (!component) {
                 message.error('删除失败')
                 return
             }
-            state.defaultEditorData.components =
-                state.defaultEditorData.components.filter(
-                    (item) => item.id !== id,
-                )
+            state.components = state.components.filter((item) => item.id !== id)
 
             //添加删除历史记录
-            state.defaultEditorData.histories.push({
+            state.histories.push({
                 id: uuidv4(),
                 componentId: id,
                 type: 'delete',
@@ -249,7 +240,7 @@ export const EditorSlice = createSlice({
         },
         moveComponent(state, props) {
             const { id, amount, type } = props.payload
-            const component = getCom(state.defaultEditorData.components, id)
+            const component = getCom(state.components, id)
             if (!component) {
                 message.error('移动失败')
                 return
@@ -284,14 +275,25 @@ export const EditorSlice = createSlice({
                     break
             }
         },
+        undo(state, props) {
+            if (state.historyIndex === -1) {
+            }
+            const { type, id } = props.payload
+            switch (type) {
+                case 'add':
+                    state.components = state.components.filter(
+                        (item) => item.id !== id,
+                    )
+                    break
+            }
+        },
     },
 })
 
 // 定义 selector
 export const getCurrentElement = (state: any) => {
-    return state.editorSlice.defaultEditorData.components.find(
-        (item: ComponentData) =>
-            item.id === state.editorSlice.defaultEditorData.currentElement,
+    return state.editorSlice.components.find(
+        (item: ComponentData) => item.id === state.editorSlice.currentElement,
     )
 }
 
