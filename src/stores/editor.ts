@@ -275,6 +275,12 @@ export const EditorSlice = createSlice({
                     break
             }
         },
+
+        /**
+         * 撤销
+         * @param state
+         * @param props
+         */
         undo(state, props) {
             if (state.historyIndex === -1) {
                 state.historyIndex = state.histories.length - 1
@@ -310,6 +316,44 @@ export const EditorSlice = createSlice({
                     } else {
                         component!.props[key] = oldValue
                     }
+                    break
+            }
+        },
+
+        /**
+         * 重做
+         * @param state
+         * @param props
+         */
+        redo(state, props) {
+            if (state.historyIndex === -1) {
+                return
+            }
+            const history = state.histories[state.historyIndex]
+            switch (history.type) {
+                case 'add':
+                    state.components.push(history.data as ComponentData)
+                    break
+                case 'delete':
+                    state.components = state.components.filter(
+                        (item) => item.id !== history.componentId,
+                    )
+                    break
+                case 'change':
+                    const { key, newValue } = history.data as HistoryDataType
+                    const component = getCom(
+                        state.components,
+                        history.componentId,
+                    )
+                    if (Array.isArray(key)) {
+                        key.forEach((item, index) => {
+                            component!.props[item] = newValue[index]
+                        })
+                    } else {
+                        component!.props[key] = newValue
+                    }
+                    break
+                default:
                     break
             }
         },
