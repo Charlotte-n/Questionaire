@@ -17,7 +17,14 @@ export const mapPropsToForms: PropToForms = {
 }
 
 type PropsComponentMap = {
-    [key: string]: React.FC<LTextPropsType & { id: string }>
+    [key: string]: React.FC<{
+        onChange: (item: {
+            key: string | string[]
+            value: string | string[]
+            id: string
+        }) => void
+        subName: string
+    }>
 }
 
 export const propsComponentMap: PropsComponentMap = {

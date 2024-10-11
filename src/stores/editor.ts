@@ -247,24 +247,77 @@ export const EditorSlice = createSlice({
             }
             switch (type) {
                 case 'up':
+                    //添加修改的历史记录
+                    state.histories.push({
+                        id: uuidv4(),
+                        componentId: id,
+                        type: 'change',
+                        data: {
+                            oldValue: [component.props['top']],
+                            newValue: [
+                                `${parseInt(component.props.top) - amount}px`,
+                            ],
+                            key: 'top',
+                        },
+                    })
                     component.props = {
                         ...component.props,
                         top: `${parseInt(component.props.top) - amount}px`,
                     }
+
                     break
                 case 'down':
+                    //添加修改的历史记录
+                    state.histories.push({
+                        id: uuidv4(),
+                        componentId: id,
+                        type: 'change',
+                        data: {
+                            oldValue: [component.props['top']],
+                            newValue: [
+                                `${parseInt(component.props.top) + amount}px`,
+                            ],
+                            key: 'top',
+                        },
+                    })
                     component.props = {
                         ...component.props,
                         top: `${parseInt(component.props.top) + amount}px`,
                     }
                     break
                 case 'left':
+                    //添加修改的历史记录
+                    state.histories.push({
+                        id: uuidv4(),
+                        componentId: id,
+                        type: 'change',
+                        data: {
+                            oldValue: [component.props['left']],
+                            newValue: [
+                                `${parseInt(component.props.left) - amount}px`,
+                            ],
+                            key: 'left',
+                        },
+                    })
                     component.props = {
                         ...component.props,
                         left: `${parseInt(component.props.left) - amount}px`,
                     }
                     break
                 case 'right':
+                    //添加修改的历史记录
+                    state.histories.push({
+                        id: uuidv4(),
+                        componentId: id,
+                        type: 'change',
+                        data: {
+                            oldValue: [component.props['left']],
+                            newValue: [
+                                `${parseInt(component.props.left) + amount}px`,
+                            ],
+                            key: 'left',
+                        },
+                    })
                     component.props = {
                         ...component.props,
                         left: `${parseInt(component.props.left) + amount}px`,
@@ -279,17 +332,16 @@ export const EditorSlice = createSlice({
         /**
          * 撤销
          * @param state
-         * @param props
          */
-        undo(state, props) {
+        undo(state) {
             if (state.historyIndex === -1) {
                 state.historyIndex = state.histories.length - 1
             } else {
                 state.historyIndex--
             }
             const history = state.histories[state.historyIndex]
-            const { type } = props.payload
-            switch (type) {
+
+            switch (history.type) {
                 case 'add':
                     state.components = state.components.filter(
                         (item) => item.id !== history.componentId,
@@ -303,19 +355,7 @@ export const EditorSlice = createSlice({
                     )
                     break
                 case 'change':
-                    const { key, oldValue, newValue } =
-                        history.data as HistoryDataType
-                    const component = getCom(
-                        state.components,
-                        history.componentId,
-                    )
-                    if (Array.isArray(key)) {
-                        key.forEach((item, index) => {
-                            component!.props[item] = oldValue[index]
-                        })
-                    } else {
-                        component!.props[key] = oldValue
-                    }
+                    modifyHistory(state, history, 'undo')
                     break
             }
         },
@@ -323,9 +363,8 @@ export const EditorSlice = createSlice({
         /**
          * 重做
          * @param state
-         * @param props
          */
-        redo(state, props) {
+        redo(state) {
             if (state.historyIndex === -1) {
                 return
             }
@@ -340,18 +379,7 @@ export const EditorSlice = createSlice({
                     )
                     break
                 case 'change':
-                    const { key, newValue } = history.data as HistoryDataType
-                    const component = getCom(
-                        state.components,
-                        history.componentId,
-                    )
-                    if (Array.isArray(key)) {
-                        key.forEach((item, index) => {
-                            component!.props[item] = newValue[index]
-                        })
-                    } else {
-                        component!.props[key] = newValue
-                    }
+                    modifyHistory(state, history, 'redo')
                     break
                 default:
                     break
@@ -371,6 +399,22 @@ const getCom = (components: ComponentData[], id: string) => {
     return components.find((item: ComponentData) => item.id === id)
 }
 
+const modifyHistory = (
+    state: any,
+    history: HistoriesType,
+    type: 'redo' | 'undo',
+) => {
+    const { key, newValue, oldValue } = history.data as HistoryDataType
+    const component = getCom(state.components, history.componentId)
+    if (Array.isArray(key)) {
+        key.forEach((item, index) => {
+            component!.props[item] =
+                type === 'redo' ? newValue[index] : oldValue[index]
+        })
+    } else {
+        component!.props[key] = type === 'redo' ? newValue : newValue
+    }
+}
 export const {
     addComponent,
     setActive,
@@ -382,5 +426,7 @@ export const {
     pasteComponent,
     deleteComponent,
     moveComponent,
+    undo,
+    redo,
 } = EditorSlice.actions
 export default EditorSlice.reducer

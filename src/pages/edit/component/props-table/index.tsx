@@ -1,36 +1,40 @@
-import React, { FC, useEffect } from 'react'
+import React, { FC } from 'react'
 import {
     ComponentConfType,
     getComponentConfByType,
 } from '../../../../components'
-import {
-    LTextPropsType,
-    OptionalLTextPropsType,
-} from '../../../../components/LText'
 import { useAppSelector } from '../../../../stores'
 import { getCurrentElement } from '../../../../stores/editor'
 import NoPage from '../no-page'
 import { propsComponentMap } from '../../../../utils/propsMap'
 
-const PropsTable: FC<LTextPropsType & { subName: string }> = (prop) => {
+const PropsTable: FC<{
+    subName: string
+    onChange: (item: {
+        id: string
+        key: string | string[]
+        value: string | string[]
+    }) => void
+}> = (prop) => {
     const currentElement = useAppSelector(getCurrentElement)
     if (!currentElement) return <NoPage></NoPage>
 
-    const { props, name, id } = currentElement
-    if (!id) return <NoPage></NoPage>
+    const { name } = currentElement
     const { ChangePropComponent } = getComponentConfByType(
         name,
     ) as ComponentConfType
     const PropsComponent = propsComponentMap[ChangePropComponent]
 
-    function handleOnChange(item: OptionalLTextPropsType & { id: string }) {
+    function handleOnChange(item: {
+        id: string
+        key: string | string[]
+        value: string | string[]
+    }) {
         prop.onChange && prop.onChange(item)
     }
     return (
         <PropsComponent
-            {...props}
             onChange={handleOnChange}
-            id={id}
             subName={prop.subName}
         ></PropsComponent>
     )

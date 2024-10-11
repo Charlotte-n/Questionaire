@@ -1,6 +1,6 @@
-import { FC, useEffect } from 'react'
+import { FC, useEffect, useMemo } from 'react'
 import { Form, InputNumber, Radio, Select, Slider } from 'antd'
-import { LTextPropsType } from '../../components/LText/interface'
+import { OptionalLTextPropsType } from '../../components/LText'
 import TextArea from 'antd/es/input/TextArea'
 import { MergeProps, TextProperties } from '../../stores/commonproperties'
 import {
@@ -14,13 +14,22 @@ import CropperCom from '../edit/component/cropper'
 import { useAppSelector } from '../../stores'
 import { getCurrentElement } from '../../stores/editor'
 
-const PropsComponent: FC<LTextPropsType & { id: string; subName: string }> = (
-    props,
-) => {
-    const mergeProps = MergeProps(TextProperties, props)
+const PropsComponent: FC<{
+    subName: string
+    onChange: (item: {
+        id: string
+        key: string | string[]
+        value: string | string[]
+    }) => void
+}> = (props) => {
     const currentElement = useAppSelector(getCurrentElement)
-    const { id } = mergeProps
     const [form] = Form.useForm()
+    const mergeProps = MergeProps(TextProperties, currentElement.props)
+    const { id } = currentElement
+
+    useEffect(() => {
+        form.resetFields()
+    }, [currentElement])
 
     function changeStore(otherProps: any) {
         props.onChange &&

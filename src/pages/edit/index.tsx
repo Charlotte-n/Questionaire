@@ -18,6 +18,7 @@ import LayerList from './component/layer-list'
 import EditGroup from './component/edit-group'
 import PageSetting from './component/page-setting'
 import { initHotKeys } from '../../plugins/hotKeys'
+import HistoryArea from './component/history-area'
 
 function getComponent(c: ComponentData) {
     const { props, name }: { props: LTextPropsType; name: string } = c
@@ -60,13 +61,11 @@ const Editor: FC = () => {
         dispatch(clearSelected())
     }
 
-    const handleChange = (
-        item: OptionalLTextPropsType & {
-            id: string
-            key?: string
-            value?: any
-        },
-    ) => {
+    const handleChange = (item: {
+        id: string
+        key: string | string[]
+        value: string | string[]
+    }) => {
         dispatch(handleChangeComponent(item))
     }
 
@@ -115,8 +114,9 @@ const Editor: FC = () => {
             {/* 中间画布 */}
             {/* TODO:这里的样式再进行琢磨一下，涉及定位之类的 */}
             <div className="flex flex-auto py-[20px]">
-                <div className="flex flex-col items-center flex-auto">
+                <div className="flex flex-col items-center flex-auto relative">
                     <p>画布区域</p>
+                    <HistoryArea />
                     <div
                         className={`canvas-area fixed overflow-hidden mt-[50px] max-h-[80vh] min-w-[20vw] cursor-pointer rounded-md ${currentElementID === 'page' ? 'border-[2px] border-[#1890ff] border-solid' : ''}`}
                         onClick={(e) => handleChangePageTab(e)}

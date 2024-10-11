@@ -120,7 +120,6 @@ const EditWrapper: FC<Props> = (props) => {
             const handleMoveUp = () => {
                 document.removeEventListener('mousemove', handleMove as any)
                 cancelAnimationFrame(animationFrameId)
-
                 // 更新属性
                 props.onChange &&
                     props.onChange({
