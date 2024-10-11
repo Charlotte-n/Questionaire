@@ -2,6 +2,8 @@ import { createSlice } from '@reduxjs/toolkit'
 import { OptionalLTextPropsType } from '../components/LText'
 import { ImageProperties } from './commonproperties'
 import { message } from 'antd'
+import { cloneDeep } from 'lodash-es'
+import { v4 as uuidv4 } from 'uuid'
 
 interface PageDataType {
     props: any
@@ -89,7 +91,9 @@ export const defaultEditorData: EditorDataProps = {
         props: defaultPageProps,
         title: '',
     },
+    copedComponent: undefined,
 }
+
 //将这些内容放到redux里面管理
 export const EditorSlice = createSlice({
     name: 'editor',
@@ -145,22 +149,92 @@ export const EditorSlice = createSlice({
             }
         },
         copyComponent(state, props) {
-            state.defaultEditorData.copedComponent =
-                state.defaultEditorData.components.find(
-                    (item) => item.id === props.payload,
+            const component = getCom(
+                state.defaultEditorData.components,
+                props.payload.id,
+            )
+            if (!component) {
+                message.error('拷贝图层失败')
+                return
+            }
+            message.success('拷贝图层成功')
+        },
+        pasteComponent(state, props) {
+            const { id } = props.payload
+            const component = getCom(state.defaultEditorData.components, id)
+            if (!component) {
+                message.error('粘贴失败')
+                return
+            }
+            const pastedCom = cloneDeep(component)
+            pastedCom!.id = uuidv4()
+            pastedCom!.layerName = `${pastedCom!.layerName}副本`
+            state.defaultEditorData.components.push(pastedCom)
+            message.success('粘贴成功')
+        },
+        deleteComponent(state, props) {
+            const { id } = props.payload
+            const component = getCom(state.defaultEditorData.components, id)
+            if (!component) {
+                message.error('删除失败')
+                return
+            }
+            state.defaultEditorData.components =
+                state.defaultEditorData.components.filter(
+                    (item) => item.id !== id,
                 )
-            if (state.defaultEditorData.copedComponent) {
-                message.success('拷贝图层成功')
+            message.success('删除成功')
+        },
+        moveComponent(state, props) {
+            const { id, amount, type } = props.payload
+            const component = getCom(state.defaultEditorData.components, id)
+            if (!component) {
+                message.error('移动失败')
+                return
+            }
+            switch (type) {
+                case 'up':
+                    component.props = {
+                        ...component.props,
+                        top: `${parseInt(component.props.top) - amount}px`,
+                    }
+                    break
+                case 'down':
+                    component.props = {
+                        ...component.props,
+                        top: `${parseInt(component.props.top) + amount}px`,
+                    }
+                    break
+                case 'left':
+                    component.props = {
+                        ...component.props,
+                        left: `${parseInt(component.props.left) - amount}px`,
+                    }
+                    break
+                case 'right':
+                    component.props = {
+                        ...component.props,
+                        left: `${parseInt(component.props.left) + amount}px`,
+                    }
+                    break
+                default:
+                    message.error('移动失败')
+                    break
             }
         },
     },
 })
+
 // 定义 selector
 export const getCurrentElement = (state: any) => {
     return state.editorSlice.defaultEditorData.components.find(
         (item: ComponentData) =>
             item.id === state.editorSlice.defaultEditorData.currentElement,
     )
+}
+
+const getCom = (components: ComponentData[], id: string) => {
+    return components.find((item: ComponentData) => item.id === id)
 }
 
 export const {
@@ -171,5 +245,8 @@ export const {
     handleSortAction,
     ChangePagePropsAction,
     copyComponent,
+    pasteComponent,
+    deleteComponent,
+    moveComponent,
 } = EditorSlice.actions
 export default EditorSlice.reducer

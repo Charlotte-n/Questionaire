@@ -49,66 +49,72 @@ const PropsComponent: FC<LTextPropsType & { id: string; subName: string }> = (
             initialValues={mergeProps}
             onValuesChange={handleValuesChange}
         >
-            {props.subName === 'base' && currentElement.name === 'l-text' && (
-                <div>
-                    <Form.Item
-                        label="文本"
-                        name="text"
-                        rules={[{ required: true, message: '请输入标题内容' }]}
-                    >
-                        <TextArea></TextArea>
-                    </Form.Item>
-                    <Form.Item
-                        label="字号"
-                        name="fontSize"
-                        wrapperCol={{ span: 4 }}
-                    >
-                        <InputNumber></InputNumber>
-                    </Form.Item>
-                    <Form.Item label="行高" name="lineHeight">
-                        <Slider min={0} max={3} step={0.1}></Slider>
-                    </Form.Item>
-                    <Form.Item
-                        label="字体"
-                        name="fontFamily"
-                        wrapperCol={{ span: 6 }}
-                    >
-                        <Select options={fontFamilyOptions}></Select>
-                    </Form.Item>
-                    <Form.Item
-                        label="对齐"
-                        name="textAlign"
-                        wrapperCol={{ span: 12 }}
-                    >
-                        <Radio.Group
-                            options={textAlignOptions}
-                            optionType="button"
-                        ></Radio.Group>
-                    </Form.Item>
-                    <Form.Item label="文本颜色" name="color">
-                        <ColorPicker
-                            onItemClick={onChangeColor}
-                            color={mergeProps.color}
-                        ></ColorPicker>
-                    </Form.Item>
-                    <Form.Item label="背景颜色" name="backgroundColor">
-                        <ColorPicker
-                            onItemClick={onChangeBackgroundColor}
-                            color={mergeProps.backgroundColor}
-                        ></ColorPicker>
-                    </Form.Item>
-                </div>
-            )}
+            {currentElement &&
+                props.subName === 'base' &&
+                currentElement.name === 'l-text' && (
+                    <div>
+                        <Form.Item
+                            label="文本"
+                            name="text"
+                            rules={[
+                                { required: true, message: '请输入标题内容' },
+                            ]}
+                        >
+                            <TextArea></TextArea>
+                        </Form.Item>
+                        <Form.Item
+                            label="字号"
+                            name="fontSize"
+                            wrapperCol={{ span: 4 }}
+                        >
+                            <InputNumber></InputNumber>
+                        </Form.Item>
+                        <Form.Item label="行高" name="lineHeight">
+                            <Slider min={0} max={3} step={0.1}></Slider>
+                        </Form.Item>
+                        <Form.Item
+                            label="字体"
+                            name="fontFamily"
+                            wrapperCol={{ span: 6 }}
+                        >
+                            <Select options={fontFamilyOptions}></Select>
+                        </Form.Item>
+                        <Form.Item
+                            label="对齐"
+                            name="textAlign"
+                            wrapperCol={{ span: 12 }}
+                        >
+                            <Radio.Group
+                                options={textAlignOptions}
+                                optionType="button"
+                            ></Radio.Group>
+                        </Form.Item>
+                        <Form.Item label="文本颜色" name="color">
+                            <ColorPicker
+                                onItemClick={onChangeColor}
+                                color={mergeProps.color}
+                            ></ColorPicker>
+                        </Form.Item>
+                        <Form.Item label="背景颜色" name="backgroundColor">
+                            <ColorPicker
+                                onItemClick={onChangeBackgroundColor}
+                                color={mergeProps.backgroundColor}
+                            ></ColorPicker>
+                        </Form.Item>
+                    </div>
+                )}
 
-            {props.subName === 'base' && currentElement.name === 'l-image' && (
-                <CropperCom url={currentElement.props.url}></CropperCom>
-            )}
+            {currentElement &&
+                props.subName === 'base' &&
+                currentElement.name === 'l-image' && (
+                    <CropperCom url={currentElement.props.url}></CropperCom>
+                )}
 
-            {props.subName === 'base' && currentElement.name === 'l-shape' && (
-                <div>样式</div>
-            )}
+            {currentElement &&
+                props.subName === 'base' &&
+                currentElement.name === 'l-shape' && <div>样式</div>}
 
-            {props.subName === 'size' && (
+            {currentElement && props.subName === 'size' && (
                 <div>
                     {sizeOptions.map((item) => {
                         return (
@@ -126,7 +132,7 @@ const PropsComponent: FC<LTextPropsType & { id: string; subName: string }> = (
                 </div>
             )}
 
-            {props.subName === 'border' && (
+            {currentElement && props.subName === 'border' && (
                 <div>
                     <Form.Item
                         label="边框类型"
@@ -149,7 +155,7 @@ const PropsComponent: FC<LTextPropsType & { id: string; subName: string }> = (
                 </div>
             )}
 
-            {props.subName === 'shadow' && (
+            {currentElement && props.subName === 'shadow' && (
                 <div>
                     <Form.Item label="透明度" name="opacity">
                         <Slider min={0} max={1} step={0.1}></Slider>
@@ -166,7 +172,7 @@ const PropsComponent: FC<LTextPropsType & { id: string; subName: string }> = (
                 </div>
             )}
 
-            {props.subName === 'position' && (
+            {currentElement && props.subName === 'position' && (
                 <div>
                     <Form.Item label="X轴坐标" name="" wrapperCol={{ span: 6 }}>
                         <InputNumber></InputNumber>
@@ -177,7 +183,7 @@ const PropsComponent: FC<LTextPropsType & { id: string; subName: string }> = (
                 </div>
             )}
 
-            {props.subName === 'event' && (
+            {currentElement && props.subName === 'event' && (
                 <div>
                     <Form.Item label="事件功能" name="onClick">
                         <Select options={fontFamilyOptions}></Select>

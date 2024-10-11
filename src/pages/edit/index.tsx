@@ -126,7 +126,9 @@ const Editor: FC = () => {
                 <Tabs type="card">
                     <Tabs.TabPane key={'1'} tab={'属性设置'}>
                         <div className=" h-[90vh] overflow-y-auto">
-                            {currentElement.isBlock ? (
+                            {!currentElement ? (
+                                <div>没有选中元素</div>
+                            ) : currentElement.isBlock ? (
                                 <div className="flex flex-col items-center justify-center">
                                     <img
                                         src={`/public/suoding`}
@@ -147,7 +149,7 @@ const Editor: FC = () => {
                             list={defaultEditorData.components}
                             change={handleChange}
                             setActive={setActiveClick}
-                            currentElement={currentElement.id}
+                            currentElement={currentElement && currentElement.id}
                             handleSort={handleSort}
                         ></LayerList>
                     </Tabs.TabPane>
