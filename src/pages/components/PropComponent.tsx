@@ -27,19 +27,24 @@ const PropsComponent: FC<LTextPropsType & { id: string; subName: string }> = (
             props.onChange(Object.assign({}, { id, ...otherProps }))
     }
     function onChangeColor(color: string) {
-        changeStore({ color })
+        changeStore({ key: 'color', value: color })
     }
 
     function onChangeBorderColor(color: string) {
-        changeStore({ borderColor: color })
+        changeStore({ key: 'borderColor', value: color })
     }
 
     function onChangeBackgroundColor(color: string) {
-        changeStore({ backgroundColor: color })
+        changeStore({ key: 'backgroundColor', value: color })
     }
 
     function handleValuesChange(_: any, allValues: { [key: string]: any }) {
-        props.onChange && props.onChange(Object.assign(allValues, { id }))
+        props.onChange &&
+            props.onChange({
+                id,
+                key: Object.keys(allValues),
+                value: Object.values(allValues),
+            })
     }
 
     return (

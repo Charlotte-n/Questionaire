@@ -125,8 +125,11 @@ const EditWrapper: FC<Props> = (props) => {
                 props.onChange &&
                     props.onChange({
                         id,
-                        left: currentElement.style.left,
-                        top: currentElement.style.top,
+                        key: ['left', 'top'],
+                        value: [
+                            currentElement.style.left,
+                            currentElement.style.top,
+                        ],
                     })
 
                 setTimeout(() => {
@@ -170,7 +173,18 @@ const EditWrapper: FC<Props> = (props) => {
             props.onChange &&
                 props.onChange({
                     id,
-                    ...size,
+                    key: [
+                        'width',
+                        'height',
+                        size.left ? 'left' : '',
+                        size.top ? 'top' : '',
+                    ],
+                    value: [
+                        currentElement.style.width,
+                        currentElement.style.height,
+                        size.left ? currentElement.style.left : '',
+                        size.top ? currentElement.style.top : '',
+                    ],
                 })
 
             setTimeout(() => {

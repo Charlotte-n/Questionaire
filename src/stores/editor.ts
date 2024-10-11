@@ -5,6 +5,18 @@ import { message } from 'antd'
 import { cloneDeep } from 'lodash-es'
 import { v4 as uuidv4 } from 'uuid'
 
+interface HistoryDataType {
+    oldValue: ComponentData
+    newValue: ComponentData
+    key: string
+}
+interface HistoriesType {
+    id: string
+    componentId: string
+    type: 'add' | 'delete' | 'change'
+    data: ComponentData | HistoryDataType
+    index?: number
+}
 interface PageDataType {
     props: any
     title: string
@@ -17,6 +29,8 @@ export interface EditorDataProps {
     // 当然最后保存的时候还有有一些项目信息，这里并没有写出，等做到的时候再补充
     page: PageDataType
     copedComponent: ComponentData | null | undefined
+    histories: HistoriesType[]
+    historyIndex: number
 }
 export interface ComponentData {
     // 这个元素的 属性，属性请详见下面
@@ -92,6 +106,8 @@ export const defaultEditorData: EditorDataProps = {
         title: '',
     },
     copedComponent: undefined,
+    histories: [],
+    historyIndex: -1,
 }
 
 //将这些内容放到redux里面管理
@@ -103,6 +119,14 @@ export const EditorSlice = createSlice({
     reducers: {
         addComponent(state, props): void {
             state.defaultEditorData.components.push(props.payload)
+
+            //添加添加历史记录
+            state.defaultEditorData.histories.push({
+                id: uuidv4(),
+                componentId: props.payload.id,
+                type: 'add',
+                data: cloneDeep(props.payload),
+            })
         },
         setActive(state, props) {
             const { id, type } = props.payload
@@ -117,13 +141,17 @@ export const EditorSlice = createSlice({
             state.defaultEditorData.currentElement = ''
         },
         handleChangeComponent(state, props) {
-            const { id } = props.payload
-            //根据id找
-            const component = state.defaultEditorData.components.find(
-                (item) => item.id === id,
-            )
+            const { id, key, value } = props.payload
+            const component = getCom(state.defaultEditorData.components, id)
+            if (!component) {
+                message.error('修改失败')
+                return
+            }
+            const oldValue = Array.isArray(key)
+                ? key.map((item) => component!.props[item])
+                : component!.props[key]
             if (props.payload.isRoot) {
-                ;(component as any)[props.payload.key] = props.payload.value
+                ;(component as any)[key] = props.payload.value
                 if (props.payload.key === 'isHidden') {
                     component!.props = {
                         ...component!.props,
@@ -131,18 +159,27 @@ export const EditorSlice = createSlice({
                         opacity: props.payload.value ? 0 : 1,
                     }
                 }
-
                 return
             }
-            state.defaultEditorData.components =
-                state.defaultEditorData.components.map((item) => {
-                    return item.id === props.payload.id
-                        ? {
-                              ...item,
-                              props: { ...item.props, ...props.payload },
-                          }
-                        : item
+
+            //添加修改的历史记录
+            state.defaultEditorData.histories.push({
+                id: uuidv4(),
+                componentId: id,
+                type: 'change',
+                data: {
+                    oldValue: oldValue,
+                    newValue: value,
+                    key: key,
+                },
+            })
+            if (Array.isArray(key)) {
+                key.forEach((item, index) => {
+                    component!.props[item] = value[index]
                 })
+            } else {
+                component!.props[key] = value
+            }
         },
         handleSortAction(state, props) {
             state.defaultEditorData.components = props.payload
@@ -175,11 +212,22 @@ export const EditorSlice = createSlice({
             pastedCom!.id = uuidv4()
             pastedCom!.layerName = `${pastedCom!.layerName}副本`
             state.defaultEditorData.components.push(pastedCom)
+
+            //添加新增历史记录
+            state.defaultEditorData.histories.push({
+                id: uuidv4(),
+                componentId: pastedCom!.id,
+                type: 'add',
+                data: cloneDeep(pastedCom),
+            })
             message.success('粘贴成功')
         },
         deleteComponent(state, props) {
             const { id } = props.payload
             const component = getCom(state.defaultEditorData.components, id)
+            const componentIndex = state.defaultEditorData.components.findIndex(
+                (item) => item.id === id,
+            )
             if (!component) {
                 message.error('删除失败')
                 return
@@ -188,6 +236,15 @@ export const EditorSlice = createSlice({
                 state.defaultEditorData.components.filter(
                     (item) => item.id !== id,
                 )
+
+            //添加删除历史记录
+            state.defaultEditorData.histories.push({
+                id: uuidv4(),
+                componentId: id,
+                type: 'delete',
+                data: component,
+                index: componentIndex,
+            })
             message.success('删除成功')
         },
         moveComponent(state, props) {
