@@ -5,8 +5,8 @@ import { cloneDeep } from 'lodash-es'
 import { v4 as uuidv4 } from 'uuid'
 
 interface HistoryDataType {
-    oldValue: ComponentData
-    newValue: ComponentData
+    oldValue: string[]
+    newValue: string[]
     key: string
 }
 interface HistoriesType {
@@ -277,13 +277,39 @@ export const EditorSlice = createSlice({
         },
         undo(state, props) {
             if (state.historyIndex === -1) {
+                state.historyIndex = state.histories.length - 1
+            } else {
+                state.historyIndex--
             }
-            const { type, id } = props.payload
+            const history = state.histories[state.historyIndex]
+            const { type } = props.payload
             switch (type) {
                 case 'add':
                     state.components = state.components.filter(
-                        (item) => item.id !== id,
+                        (item) => item.id !== history.componentId,
                     )
+                    break
+                case 'delete':
+                    state.components.splice(
+                        history.index as number,
+                        0,
+                        history.data as ComponentData,
+                    )
+                    break
+                case 'change':
+                    const { key, oldValue, newValue } =
+                        history.data as HistoryDataType
+                    const component = getCom(
+                        state.components,
+                        history.componentId,
+                    )
+                    if (Array.isArray(key)) {
+                        key.forEach((item, index) => {
+                            component!.props[item] = oldValue[index]
+                        })
+                    } else {
+                        component!.props[key] = oldValue
+                    }
                     break
             }
         },
