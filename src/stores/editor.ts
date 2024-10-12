@@ -159,22 +159,13 @@ export const EditorSlice = createSlice({
                 return
             }
 
-            //添加修改的历史记录
-            state.histories.push({
-                id: uuidv4(),
-                componentId: id,
-                type: 'change',
-                data: {
-                    oldValue: oldValue,
-                    newValue: value,
-                    key: key,
-                },
-            })
+            //实现文本输入的防抖
+            debouncePushHistory(state, { id, key, value }, oldValue)
             if (Array.isArray(key)) {
                 key.forEach((item, index) => {
                     component!.props[item] = value[index]
                 })
-            } else {
+            } else if (typeof key === 'string' && typeof value === 'string') {
                 component!.props[key] = value
             }
         },
@@ -384,6 +375,7 @@ export const EditorSlice = createSlice({
                 default:
                     break
             }
+            state.historyIndex++
         },
     },
 })
@@ -406,6 +398,10 @@ const modifyHistory = (
 ) => {
     const { key, newValue, oldValue } = history.data as HistoryDataType
     const component = getCom(state.components, history.componentId)
+    if (!component) {
+        message.error('修改失败')
+        return
+    }
     if (Array.isArray(key)) {
         key.forEach((item, index) => {
             component!.props[item] =
@@ -415,6 +411,41 @@ const modifyHistory = (
         component!.props[key] = type === 'redo' ? newValue : newValue
     }
 }
+
+// 防抖方法
+const debounce = (callback: any, timeout = 1000) => {
+    let timer: any = null
+    return (...args: any) => {
+        clearTimeout(timer)
+        timer = setTimeout(() => {
+            callback(args)
+        }, timeout)
+    }
+}
+// 添加防抖的方法
+const debouncePushHistory = debounce(
+    (
+        state: any,
+        {
+            id,
+            key,
+            value,
+        }: { id: string; key: string | string[]; value: string | string[] },
+        oldValue: any,
+    ) => {
+        //添加修改的历史记录
+        state.histories.push({
+            id: uuidv4(),
+            componentId: id,
+            type: 'change',
+            data: {
+                oldValue: oldValue,
+                newValue: value,
+                key: key,
+            },
+        })
+    },
+)
 export const {
     addComponent,
     setActive,

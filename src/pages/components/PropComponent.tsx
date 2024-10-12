@@ -13,6 +13,7 @@ import { sizeOptions } from './config'
 import CropperCom from '../edit/component/cropper'
 import { useAppSelector } from '../../stores'
 import { getCurrentElement } from '../../stores/editor'
+import { omit } from 'lodash-es'
 
 const PropsComponent: FC<{
     subName: string
@@ -28,8 +29,8 @@ const PropsComponent: FC<{
     const { id } = currentElement
 
     useEffect(() => {
-        form.resetFields()
-    }, [currentElement])
+        form.setFieldsValue(mergeProps)
+    }, [form, currentElement])
 
     function changeStore(otherProps: any) {
         props.onChange &&
