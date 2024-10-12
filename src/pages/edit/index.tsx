@@ -1,4 +1,4 @@
-import React, { FC, MouseEvent, useState } from 'react'
+import React, { FC, MouseEvent, useCallback, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../stores'
 import { LTextPropsType, OptionalLTextPropsType } from '../../components/LText'
 import {
@@ -8,10 +8,10 @@ import {
     getCurrentElement,
     handleChangeComponent,
     handleSortAction,
+    pushHistoryAction,
     setActive,
 } from '../../stores/editor'
 import { ComponentConfType, getComponentConfByType } from '../../components'
-import ComponentList from './component/component-list'
 import EditWrapper from './children/edit-wrapper'
 import { Tabs } from 'antd'
 import LayerList from './component/layer-list'
@@ -20,6 +20,7 @@ import PageSetting from './component/page-setting'
 import { initHotKeys } from '../../plugins/hotKeys'
 import HistoryArea from './component/history-area'
 import LeftEditor from './children/left-edit'
+import { debounce } from '../utils/util'
 
 function getComponent(c: ComponentData) {
     const { props, name }: { props: LTextPropsType; name: string } = c
@@ -62,14 +63,37 @@ const Editor: FC = () => {
         dispatch(clearSelected())
     }
 
-    const handleChange = (item: {
+    //TODO:debounceHandleChange函数。如果debounceHandleChange的定义每次调用handleChange时都重新创建，那么防抖功能（debounce function）就不会正常工作，因为每次都会产生一个新的debounceHandleChange实例，每个实例都有自己的定时器。
+    const debounceHandleChange = useCallback(
+        debounce(
+            (item: {
+                id: string
+                key: string | string[]
+                value: string | string[]
+            }) => {
+                dispatch(pushHistoryAction(item))
+            },
+            1000,
+        ),
+        [],
+    )
+
+    const handleChange = async (item: {
         id: string
         key: string | string[]
         value: string | string[]
     }) => {
         dispatch(handleChangeComponent(item))
+        debounceHandleChange(item)
     }
 
+    const addHistory = (item: {
+        id: string
+        key: string | string[]
+        value: string | string[]
+    }) => {
+        debounceHandleChange(item)
+    }
     const handleSort = (list: ComponentData[]) => {
         dispatch(handleSortAction(list))
     }

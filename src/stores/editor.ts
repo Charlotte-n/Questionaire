@@ -31,6 +31,7 @@ export interface EditorDataProps {
     copedComponent: ComponentData | null | undefined
     histories: HistoriesType[]
     historyIndex: number
+    cacheOldValues: any
 }
 export interface ComponentData {
     // 这个元素的 属性，属性请详见下面
@@ -108,6 +109,7 @@ export const initialState: EditorDataProps = {
     copedComponent: undefined,
     histories: [],
     historyIndex: -1,
+    cacheOldValues: null,
 }
 
 //将这些内容放到redux里面管理
@@ -147,24 +149,6 @@ export const EditorSlice = createSlice({
                 message.error('修改失败')
                 return
             }
-            const oldValue = Array.isArray(key)
-                ? key.map((item) => component!.props[item])
-                : component!.props[key]
-
-            //TODO: 作为一个难点记录（困难点）
-            //实现文本输入的防抖
-            debounce(() => {
-                state.histories.push({
-                    id: uuidv4(),
-                    componentId: id,
-                    type: 'change',
-                    data: {
-                        oldValue: oldValue,
-                        newValue: value,
-                        key: key,
-                    },
-                })
-            })
 
             if (props.payload.isRoot) {
                 ;(component as any)[key] = props.payload.value
@@ -178,6 +162,13 @@ export const EditorSlice = createSlice({
                 return
             }
 
+            const oldValue = Array.isArray(key)
+                ? key.map((item) => component!.props[item])
+                : component!.props[key]
+            if (!state.cacheOldValues) {
+                state.cacheOldValues = oldValue
+            }
+
             if (Array.isArray(key)) {
                 key.forEach((item, index) => {
                     component!.props[item] = value[index]
@@ -185,6 +176,11 @@ export const EditorSlice = createSlice({
             } else if (typeof key === 'string' && typeof value === 'string') {
                 component!.props[key] = value
             }
+        },
+        pushHistoryAction(state, props) {
+            const { id, key, value } = props.payload
+            //TODO: 作为一个难点记录（困难点）
+            pushHistory(state, { id, key, value })
         },
         handleSortAction(state, props) {
             state.components = props.payload
@@ -429,15 +425,33 @@ const modifyHistory = (
     }
 }
 
-// 防抖方法
-const debounce = (callback: any, timeout = 1000) => {
-    let timer: any = null
-    return (...args: any) => {
-        clearTimeout(timer)
-        timer = window.setTimeout(() => {
-            callback(...args)
-        }, timeout)
+const pushHistory = (
+    state: any,
+    {
+        id,
+        key,
+        value,
+    }: {
+        id: string
+        key: string | string[]
+        value: string | string[]
+    },
+) => {
+    if (state.historyIndex !== -1) {
+        state.histories = state.histories.slice(0, state.historyIndex)
+        state.historyIndex = -1
     }
+    state.histories.push({
+        id: uuidv4(),
+        componentId: id,
+        type: 'change',
+        data: {
+            oldValue: state.cacheOldValues,
+            newValue: value,
+            key: key,
+        },
+    })
+    state.cacheOldValues = ''
 }
 
 export const {
@@ -453,5 +467,6 @@ export const {
     moveComponent,
     undo,
     redo,
+    pushHistoryAction,
 } = EditorSlice.actions
 export default EditorSlice.reducer
