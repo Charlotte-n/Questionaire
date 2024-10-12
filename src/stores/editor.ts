@@ -32,6 +32,7 @@ export interface EditorDataProps {
     histories: HistoriesType[]
     historyIndex: number
     cacheOldValues: any
+    maxHistoryNumber: number
 }
 export interface ComponentData {
     // 这个元素的 属性，属性请详见下面
@@ -110,6 +111,7 @@ export const initialState: EditorDataProps = {
     histories: [],
     historyIndex: -1,
     cacheOldValues: null,
+    maxHistoryNumber: 5,
 }
 
 //将这些内容放到redux里面管理
@@ -437,10 +439,20 @@ const pushHistory = (
         value: string | string[]
     },
 ) => {
+    //当有过回滚的记录时，清空后面的记录
     if (state.historyIndex !== -1) {
         state.histories = state.histories.slice(0, state.historyIndex)
         state.historyIndex = -1
     }
+
+    //最大保存的历史记录数目
+    if (state.histories.length > state.maxHistoryNumber) {
+        console.log(1)
+
+        state.histories.shift()
+        return
+    }
+
     state.histories.push({
         id: uuidv4(),
         componentId: id,
