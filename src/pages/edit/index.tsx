@@ -12,13 +12,14 @@ import {
 } from '../../stores/editor'
 import { ComponentConfType, getComponentConfByType } from '../../components'
 import ComponentList from './component/component-list'
-import EditWrapper from './component/edit-wrapper'
+import EditWrapper from './children/edit-wrapper'
 import { Tabs } from 'antd'
 import LayerList from './component/layer-list'
 import EditGroup from './component/edit-group'
 import PageSetting from './component/page-setting'
 import { initHotKeys } from '../../plugins/hotKeys'
 import HistoryArea from './component/history-area'
+import LeftEditor from './children/left-edit'
 
 function getComponent(c: ComponentData) {
     const { props, name }: { props: LTextPropsType; name: string } = c
@@ -108,8 +109,9 @@ const Editor: FC = () => {
     return (
         <div className="flex text-center h-[100vh] bg-[#f2f2f5]">
             {/* 左侧 */}
-            <div className="w-[20vw]  h-[100%] bg-[white] max-w-[20vw]">
-                <ComponentList onItemClick={addItem}></ComponentList>
+            <div className="w-[20vw] px-[15px] pt-[20px]  h-[100%] bg-[white] max-w-[20vw]">
+                <LeftEditor />
+                {/* <ComponentList onItemClick={addItem}></ComponentList> */}
             </div>
             {/* 中间画布 */}
             {/* TODO:这里的样式再进行琢磨一下，涉及定位之类的 */}

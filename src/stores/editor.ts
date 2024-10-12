@@ -3,6 +3,7 @@ import { ImageProperties } from './commonproperties'
 import { message } from 'antd'
 import { cloneDeep } from 'lodash-es'
 import { v4 as uuidv4 } from 'uuid'
+import { produce } from 'immer'
 
 interface HistoryDataType {
     oldValue: string[]
@@ -118,6 +119,7 @@ export const EditorSlice = createSlice({
             state.components.push(props.payload)
 
             //添加添加历史记录
+
             state.histories.push({
                 id: uuidv4(),
                 componentId: props.payload.id,
@@ -140,6 +142,7 @@ export const EditorSlice = createSlice({
         handleChangeComponent(state, props) {
             const { id, key, value } = props.payload
             const component = getCom(state.components, id)
+
             if (!component) {
                 message.error('修改失败')
                 return
@@ -147,6 +150,22 @@ export const EditorSlice = createSlice({
             const oldValue = Array.isArray(key)
                 ? key.map((item) => component!.props[item])
                 : component!.props[key]
+
+            //TODO: 作为一个难点记录（困难点）
+            //实现文本输入的防抖
+            debounce(() => {
+                state.histories.push({
+                    id: uuidv4(),
+                    componentId: id,
+                    type: 'change',
+                    data: {
+                        oldValue: oldValue,
+                        newValue: value,
+                        key: key,
+                    },
+                })
+            })
+
             if (props.payload.isRoot) {
                 ;(component as any)[key] = props.payload.value
                 if (props.payload.key === 'isHidden') {
@@ -159,8 +178,6 @@ export const EditorSlice = createSlice({
                 return
             }
 
-            //实现文本输入的防抖
-            debouncePushHistory(state, { id, key, value }, oldValue)
             if (Array.isArray(key)) {
                 key.forEach((item, index) => {
                     component!.props[item] = value[index]
@@ -417,35 +434,12 @@ const debounce = (callback: any, timeout = 1000) => {
     let timer: any = null
     return (...args: any) => {
         clearTimeout(timer)
-        timer = setTimeout(() => {
-            callback(args)
+        timer = window.setTimeout(() => {
+            callback(...args)
         }, timeout)
     }
 }
-// 添加防抖的方法
-const debouncePushHistory = debounce(
-    (
-        state: any,
-        {
-            id,
-            key,
-            value,
-        }: { id: string; key: string | string[]; value: string | string[] },
-        oldValue: any,
-    ) => {
-        //添加修改的历史记录
-        state.histories.push({
-            id: uuidv4(),
-            componentId: id,
-            type: 'change',
-            data: {
-                oldValue: oldValue,
-                newValue: value,
-                key: key,
-            },
-        })
-    },
-)
+
 export const {
     addComponent,
     setActive,
