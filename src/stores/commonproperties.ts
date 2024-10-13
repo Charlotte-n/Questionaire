@@ -62,7 +62,7 @@ export const imageStylePropName = without(
 )
 
 //计算出props,设置默认值
-export const MergeProps = (defaultProps: any, props: any) => {
+export const MergeProps = <T>(defaultProps: any, props: any): T => {
     return useMemo(() => {
         return {
             ...defaultProps,

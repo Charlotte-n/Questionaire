@@ -1,6 +1,6 @@
-import React, { FC, MouseEvent, useCallback, useState } from 'react'
+import React, { FC, MouseEvent, useCallback, useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../stores'
-import { LTextPropsType, OptionalLTextPropsType } from '../../components/LText'
+import { LTextPropsType } from '../../components/LText'
 import {
     addComponent,
     clearSelected,
@@ -21,6 +21,7 @@ import { initHotKeys } from '../../plugins/hotKeys'
 import HistoryArea from './component/history-area'
 import LeftEditor from './children/left-edit'
 import { debounce } from '../utils/util'
+import initContextMenu from './component/context-menu/initContextMenu'
 
 function getComponent(c: ComponentData) {
     const { props, name }: { props: LTextPropsType; name: string } = c
@@ -47,10 +48,10 @@ const Editor: FC = () => {
     }
 
     const setActiveClick = (
-        e: MouseEvent,
         { id, type }: { id?: string; type: string },
+        e?: MouseEvent,
     ) => {
-        e.stopPropagation()
+        e && e.stopPropagation()
         dispatch(
             setActive({
                 id,
@@ -87,13 +88,6 @@ const Editor: FC = () => {
         debounceHandleChange(item)
     }
 
-    const addHistory = (item: {
-        id: string
-        key: string | string[]
-        value: string | string[]
-    }) => {
-        debounceHandleChange(item)
-    }
     const handleSort = (list: ComponentData[]) => {
         dispatch(handleSortAction(list))
     }
@@ -123,12 +117,13 @@ const Editor: FC = () => {
     }
 
     //切换到页面设置tab
-    const handleChangePageTab = (e: MouseEvent) => {
+    const handleChangePageTab = () => {
         setActiveKey('3')
-        setActiveClick(e, { type: 'page' })
+        setActiveClick({ type: 'page' })
     }
 
     initHotKeys()
+    initContextMenu(setActiveClick as any)
 
     return (
         <div className="flex text-center h-[100vh] bg-[#f2f2f5]">
@@ -144,11 +139,11 @@ const Editor: FC = () => {
                     <p>画布区域</p>
                     <HistoryArea />
                     <div
-                        className={`canvas-area fixed overflow-hidden mt-[50px] max-h-[80vh] min-w-[20vw] cursor-pointer rounded-md ${currentElementID === 'page' ? 'border-[2px] border-[#1890ff] border-solid' : ''}`}
-                        onClick={(e) => handleChangePageTab(e)}
+                        className={`canvas-area fixed overflow-hidden mt-[50px] max-h-[80vh] min-w-[20vw] cursor-pointer rounded-md`}
+                        onClick={() => handleChangePageTab()}
                     >
                         <div
-                            className="px-[10px] py-[10px] bg-[white] shadow-[#0000001f] shadow-md  overflow-auto"
+                            className={`px-[10px] py-[10px] bg-[white] shadow-[#0000001f] shadow-md  overflow-auto  ${currentElementID === 'page' ? 'border-[2px] border-[#1890ff] border-solid' : ''}`}
                             style={page.props}
                         >
                             <div className="">

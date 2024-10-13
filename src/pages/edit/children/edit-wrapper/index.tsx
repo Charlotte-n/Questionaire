@@ -4,8 +4,8 @@ import './index.css'
 
 interface Props {
     setActive: (
-        event: MouseEvent,
         { id, type }: { id?: string; type: string },
+        event: MouseEvent,
     ) => void
     id: string
     children: any
@@ -198,10 +198,12 @@ const EditWrapper: FC<Props> = (props) => {
         <div
             className="edit-wrapper relative"
             ref={editWrapperRef}
-            onClick={(event: MouseEvent) =>
-                setActive(event, { id, type: 'element' })
-            }
+            onClick={(event: MouseEvent) => {
+                // event.stopPropagation()
+                setActive({ id, type: 'element' }, event)
+            }}
             style={styleProps}
+            data-id={id}
         >
             <div
                 className="move-wrapper z-[100] cursor-pointer"
