@@ -1,6 +1,9 @@
 import { RouterType } from './index'
 import React from 'react'
 import Editor from '../pages/edit/index.tsx'
+import { lazy } from 'react'
+
+const Login = lazy(() => import('../pages/login/index.tsx'))
 const router: RouterType = [
     {
         path: '/',
@@ -8,7 +11,7 @@ const router: RouterType = [
     },
     {
         path: '/login',
-        element: <div>登陆页面</div>,
+        element: <Login />,
     },
     {
         path: '/edit',
