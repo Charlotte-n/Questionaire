@@ -2,10 +2,16 @@ import { Button, Form, Input, Layout, message, Slider } from 'antd'
 import React, { FC, useState, useRef, useEffect } from 'react'
 import { Rules } from './config'
 import { produce } from 'immer'
-import { loginByPhoneNumber, sendCode } from '../../apis/user/login'
+import {
+    getUserInfo,
+    loginByPhoneNumber,
+    sendCode,
+} from '../../apis/user/login'
 import { useNavigate } from 'react-router-dom'
-import { useAppDispatch } from '../../stores'
-import { setToken } from '../../stores/user'
+import { useAppDispatch, useAppSelector } from '../../stores'
+import { setToken, setUserInfo } from '../../stores/user'
+import { isLoading, opNameIsLoading } from '../../stores/global'
+import { store } from '../../stores/index'
 
 type FieldType = {
     phoneNumber?: string
@@ -23,7 +29,8 @@ const Login: FC = () => {
     const [disabled, setDisabled] = useState(false)
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
-
+    const { opName } = useAppSelector((state) => state.globalSlice)
+    //倒计时
     const countDown = () => {
         setCount(60)
         const timer = setInterval(() => {
@@ -32,6 +39,7 @@ const Login: FC = () => {
         return timer
     }
 
+    //发送验证码
     const handleGetVerifyCodeApi = async () => {
         try {
             const res = await sendCode({
@@ -53,17 +61,22 @@ const Login: FC = () => {
         }
     }
 
+    //手机登陆
     const handleLoginByPhone = async () => {
         try {
             const result = await loginByPhoneNumber({
                 phoneNumber: formData.phoneNumber,
                 verifyCode: formData.verifyCode,
             })
+            await form.validateFields()
             if (result.code === 0) {
                 message.success('登录成功')
                 dispatch(setToken(result.data.token))
                 // 获取用户信息
-
+                const userInfo = await getUserInfo(
+                    formData.phoneNumber.toString(),
+                )
+                dispatch(setUserInfo(userInfo))
                 navigate('/')
             } else {
                 message.error(result.message)
@@ -144,6 +157,10 @@ const Login: FC = () => {
                             type="primary"
                             className=" rounded-full mr-[10px]"
                             onClick={handleLoginByPhone}
+                            loading={opNameIsLoading(
+                                store,
+                                'loginByPhoneNumber',
+                            )}
                         >
                             登录
                         </Button>

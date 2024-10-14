@@ -1,6 +1,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
 import Store from 'redux'
 import { store } from '../stores'
+import { finishLoading, setError, startLoading } from '../stores/global'
 class HYRequest {
     instance: AxiosInstance
     private store
@@ -11,11 +12,16 @@ class HYRequest {
 
         //添加拦截器
         this.instance.interceptors.request.use(
-            (config) => {
+            (config: any) => {
                 const state = this.store.getState()
+                const newConfig = config as AxiosRequestConfig & {
+                    opName: string
+                }
                 if (state.userSlice.token) {
                     config.headers.Authorization = `Bearer ${state.userSlice.token}`
                 }
+                this.store.dispatch(setError({ status: false, message: '' }))
+                this.store.dispatch(startLoading({ opName: newConfig.opName }))
                 return config
             },
             (error) => {
@@ -25,6 +31,15 @@ class HYRequest {
 
         this.instance.interceptors.response.use(
             (res) => {
+                const { config } = res
+                const newConfig = config as AxiosRequestConfig & {
+                    opName: string
+                }
+                const { errno, message } = res.data.data
+                if (errno && errno !== 0) {
+                    this.store.dispatch(setError({ status: true, message }))
+                }
+                this.store.dispatch(finishLoading({ opName: newConfig.opName }))
                 return res.data
             },
             (error) => {
@@ -34,7 +49,7 @@ class HYRequest {
     }
 
     //封装请求方法
-    request<T = any>(config: AxiosRequestConfig) {
+    request<T = any>(config: AxiosRequestConfig & { opName: string }) {
         return new Promise<T>((resolve, reject) => {
             this.instance
                 .request<any, T>(config)
@@ -48,26 +63,26 @@ class HYRequest {
         })
     }
 
-    get<T = any>(config: AxiosRequestConfig) {
+    get<T = any>(config: AxiosRequestConfig & { opName: string }) {
         return this.request<T>({
             ...config,
             method: 'GET',
         })
     }
 
-    post<T = any>(config: AxiosRequestConfig) {
+    post<T = any>(config: AxiosRequestConfig & { opName: string }) {
         return this.request<T>({
             ...config,
             method: 'POST',
         })
     }
-    delete<T = any>(config: AxiosRequestConfig) {
+    delete<T = any>(config: AxiosRequestConfig & { opName: string }) {
         return this.request<T>({
             ...config,
             method: 'DELETE',
         })
     }
-    patch<T = any>(config: AxiosRequestConfig) {
+    patch<T = any>(config: AxiosRequestConfig & { opName: string }) {
         return this.request<T>({
             ...config,
             method: 'PATCH',

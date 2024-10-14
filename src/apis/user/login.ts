@@ -1,6 +1,7 @@
 import hyRequest from '../../services'
 import { loginByPhoneNumberApiType, sendCodeApiType } from './interface'
 import { ResponseType } from '../interface'
+import { UserStateType } from '../../stores/user'
 
 export const sendCode = (data: { phoneNumber: string }) => {
     const { phoneNumber } = data
@@ -9,6 +10,7 @@ export const sendCode = (data: { phoneNumber: string }) => {
         data: {
             phoneNumber,
         },
+        opName: 'sendCode',
     })
 }
 
@@ -19,5 +21,13 @@ export const loginByPhoneNumber = (data: {
     return hyRequest.post<ResponseType<loginByPhoneNumberApiType>>({
         url: '/user/loginByPhone',
         data,
+        opName: 'loginByPhoneNumber',
+    })
+}
+
+export const getUserInfo = (params: string) => {
+    return hyRequest.get<ResponseType<UserStateType>>({
+        url: `/user/userInfo/${params}`,
+        opName: 'getUserInfo',
     })
 }

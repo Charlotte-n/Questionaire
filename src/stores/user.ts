@@ -1,7 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-interface UserStateType {
+export interface UserStateType {
+    _id: string
     username: string
+    nickname: string
+    updatedAt: string
+    createdAt: string
+    id: number
 }
 
 interface initialStateType {
@@ -26,5 +31,5 @@ const userSlice = createSlice({
     },
 })
 
-export const { setToken } = userSlice.actions
+export const { setToken, setUserInfo } = userSlice.actions
 export default userSlice.reducer

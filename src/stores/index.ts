@@ -4,12 +4,14 @@ import EditorReducer from './editor'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import templateReducer from './templates'
 import userReducer from './user'
+import globalReducer from './global'
 
 export const store = configureStore({
     reducer: {
         counterSlice: CounterReducer,
         editorSlice: EditorReducer,
         userSlice: userReducer,
+        globalSlice: globalReducer,
         // templateSlice: templateReducer,
     },
 })
