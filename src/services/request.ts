@@ -35,7 +35,7 @@ class HYRequest {
                 const newConfig = config as AxiosRequestConfig & {
                     opName: string
                 }
-                const { errno, message } = res.data.data
+                const { errno, message } = res.data
                 if (errno && errno !== 0) {
                     this.store.dispatch(setError({ status: true, message }))
                 }
@@ -43,6 +43,13 @@ class HYRequest {
                 return res.data
             },
             (error) => {
+                this.store.dispatch(
+                    setError({ status: true, message: '服务器内部错误' }),
+                )
+                const newConfig = error.config as AxiosRequestConfig & {
+                    opName: string
+                }
+                this.store.dispatch(finishLoading({ opName: newConfig.opName }))
                 return error
             },
         )
@@ -58,6 +65,7 @@ class HYRequest {
                 })
                 .catch((err) => {
                     console.log(err)
+
                     reject(err)
                 })
         })

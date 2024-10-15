@@ -34,7 +34,7 @@ export const globalSlice = createSlice({
             const { opName } = props.payload
             state.requestNum--
             if (opName) {
-                delete state.opName[opName]
+                state.opName[opName] = false
             }
         },
         setError(state, props) {

@@ -29,7 +29,7 @@ const Login: FC = () => {
     const [disabled, setDisabled] = useState(false)
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
-    const { opName } = useAppSelector((state) => state.globalSlice)
+    const { errors } = useAppSelector((state) => state.globalSlice)
     //倒计时
     const countDown = () => {
         setCount(60)
@@ -46,7 +46,6 @@ const Login: FC = () => {
                 phoneNumber: formData.phoneNumber,
             })
             if (res.code !== 0) {
-                message.error('服务器繁忙,请稍后重试')
                 return
             }
             message.success('验证码发送成功,请注意查收')
@@ -56,9 +55,7 @@ const Login: FC = () => {
                 draft.current = countDown()
             })
             setDisabled(true)
-        } catch (e) {
-            message.error('验证码发送失败,请稍后重试')
-        }
+        } catch (e) {}
     }
 
     //手机登陆
@@ -78,14 +75,17 @@ const Login: FC = () => {
                 )
                 dispatch(setUserInfo(userInfo))
                 navigate('/')
-            } else {
-                message.error(result.message)
             }
         } catch (e) {
-            message.error('登录失败,请稍后重试')
+            message.error('校验失败', 2)
         }
     }
 
+    useEffect(() => {
+        if (errors.status) {
+            message.error(errors.message || '未知错误', 2)
+        }
+    }, [errors.status])
     useEffect(() => {
         if (count < 0) {
             clearInterval(timer.current as number)
