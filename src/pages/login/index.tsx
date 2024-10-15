@@ -2,16 +2,17 @@ import { Button, Form, Input, Layout, message, Slider } from 'antd'
 import React, { FC, useState, useRef, useEffect } from 'react'
 import { Rules } from './config'
 import { produce } from 'immer'
-import {
-    getUserInfo,
-    loginByPhoneNumber,
-    sendCode,
-} from '../../apis/user/login'
+import { loginByPhoneNumber, sendCode } from '../../apis/user/login'
 import { useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../stores'
-import { setToken, setUserInfo } from '../../stores/user'
-import { isLoading, opNameIsLoading } from '../../stores/global'
-import { store } from '../../stores/index'
+import {
+    getUserInfoAsync,
+    setIsLogin,
+    setToken,
+    setUserInfo,
+} from '../../stores/user'
+import { opNameIsLoading } from '../../stores/global'
+import store from '../../stores/index'
 
 type FieldType = {
     phoneNumber?: string
@@ -70,10 +71,7 @@ const Login: FC = () => {
                 message.success('登录成功')
                 dispatch(setToken(result.data.token))
                 // 获取用户信息
-                const userInfo = await getUserInfo(
-                    formData.phoneNumber.toString(),
-                )
-                dispatch(setUserInfo(userInfo))
+                dispatch(getUserInfoAsync(formData.phoneNumber))
                 navigate('/')
             }
         } catch (e) {

@@ -4,10 +4,11 @@ import Editor from '../pages/edit/index.tsx'
 import { lazy } from 'react'
 
 const Login = lazy(() => import('../pages/login/index.tsx'))
+const Home = lazy(() => import('../pages/home/index.tsx'))
 const router: RouterType = [
     {
         path: '/',
-        element: <div>Hello world!</div>,
+        element: <Home />,
     },
     {
         path: '/login',

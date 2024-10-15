@@ -9,7 +9,7 @@ import {
 import useComponentCommon from '../../hooks/useComponentCommon'
 
 const LText: FC<OptionalLTextPropsType> = (props) => {
-    const mergeProps = MergeProps(TextProperties, props)
+    const mergeProps = MergeProps(TextProperties, props) as any
     const { styleProps } = useComponentCommon(mergeProps, textStylePropName)
     return (
         <>

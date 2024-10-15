@@ -6,7 +6,7 @@ import templateReducer from './templates'
 import userReducer from './user'
 import globalReducer from './global'
 
-export const store = configureStore({
+const store = configureStore({
     reducer: {
         counterSlice: CounterReducer,
         editorSlice: EditorReducer,
@@ -21,3 +21,4 @@ type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch
 export const useAppDispatch: () => AppDispatch = useDispatch
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
+export default store

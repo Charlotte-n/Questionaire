@@ -1,27 +1,30 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
-import Store from 'redux'
-import { store } from '../stores'
+import store from '../stores'
 import { finishLoading, setError, startLoading } from '../stores/global'
+import { getUserInfoAsync, loginout } from '../stores/user'
 class HYRequest {
     instance: AxiosInstance
-    private store
 
     constructor(config: AxiosRequestConfig) {
         this.instance = axios.create(config)
-        this.store = store
 
         //添加拦截器
         this.instance.interceptors.request.use(
             (config: any) => {
-                const state = this.store.getState()
+                const state = store.getState()
                 const newConfig = config as AxiosRequestConfig & {
                     opName: string
                 }
-                if (state.userSlice.token) {
+                console.log(store)
+
+                if (state.userSlice.token && state.userSlice.isLogin) {
                     config.headers.Authorization = `Bearer ${state.userSlice.token}`
+                    // 获取用户信息
+                    store.dispatch(getUserInfoAsync(''))
                 }
-                this.store.dispatch(setError({ status: false, message: '' }))
-                this.store.dispatch(startLoading({ opName: newConfig.opName }))
+
+                store.dispatch(setError({ status: false, message: '' }))
+                store.dispatch(startLoading({ opName: newConfig.opName }))
                 return config
             },
             (error) => {
@@ -36,20 +39,25 @@ class HYRequest {
                     opName: string
                 }
                 const { errno, message } = res.data
-                if (errno && errno !== 0) {
-                    this.store.dispatch(setError({ status: true, message }))
+
+                //登陆到期了
+                if (errno && errno === 1005) {
+                    message.error('登录过期，请重新登录')
+                    store.dispatch(loginout())
+                } else {
+                    store.dispatch(setError({ status: true, message }))
                 }
-                this.store.dispatch(finishLoading({ opName: newConfig.opName }))
+                store.dispatch(finishLoading({ opName: newConfig.opName }))
                 return res.data
             },
             (error) => {
-                this.store.dispatch(
+                store.dispatch(
                     setError({ status: true, message: '服务器内部错误' }),
                 )
                 const newConfig = error.config as AxiosRequestConfig & {
                     opName: string
                 }
-                this.store.dispatch(finishLoading({ opName: newConfig.opName }))
+                store.dispatch(finishLoading({ opName: newConfig.opName }))
                 return error
             },
         )
