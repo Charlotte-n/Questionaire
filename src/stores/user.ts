@@ -19,7 +19,7 @@ interface initialStateType {
 const initialState: initialStateType = {
     userInfo: null,
     token: localStorage.getItem('token') || '',
-    isLogin: false,
+    isLogin: JSON.parse(localStorage.getItem('isLogin') as string) || false,
 }
 const userSlice = createSlice({
     name: 'user',
@@ -30,14 +30,15 @@ const userSlice = createSlice({
             state.token = props.payload
         },
         setIsLogin(state, props) {
+            localStorage.setItem('isLogin', props.payload)
             state.isLogin = props.payload
         },
         loginout(state) {
-            state.isLogin = false
             state.userInfo = null
             state.token = ''
             localStorage.removeItem('token')
             localStorage.removeItem('phone')
+            localStorage.removeItem('isLogin')
         },
     },
     extraReducers: (builder) => {

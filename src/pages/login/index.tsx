@@ -5,12 +5,7 @@ import { produce } from 'immer'
 import { loginByPhoneNumber, sendCode } from '../../apis/user/login'
 import { useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../stores'
-import {
-    getUserInfoAsync,
-    setIsLogin,
-    setToken,
-    setUserInfo,
-} from '../../stores/user'
+import { getUserInfoAsync, setToken } from '../../stores/user'
 import { opNameIsLoading } from '../../stores/global'
 import store from '../../stores/index'
 
