@@ -15,7 +15,7 @@ interface Props {
 const SingleTemplate: FC<Props> = (props) => {
     const { copiedCount, coverImage, author, title } = props.baseInfo
     return (
-        <div className="rounded-md w-[25vw] h-[35vh] bg-[#fdfdfd] border-[1px] border-solid">
+        <div className="rounded-md w-[20vw] h-[35vh] bg-[#fdfdfd] border-[1px] border-solid">
             <div className="hover-container">
                 <img src={coverImage} className="w-[100%] h-[100%]" />
                 <div className="hover-item">

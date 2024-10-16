@@ -5,9 +5,10 @@ import { produce } from 'immer'
 import { loginByPhoneNumber, sendCode } from '../../apis/user/login'
 import { useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../stores'
-import { getUserInfoAsync, setToken } from '../../stores/user'
+import { setToken } from '../../stores/user'
 import { opNameIsLoading } from '../../stores/global'
 import store from '../../stores/index'
+import { setLocalStorage } from '../../utils/localstorge'
 
 type FieldType = {
     phoneNumber?: string
@@ -65,9 +66,11 @@ const Login: FC = () => {
             if (result.code === 0) {
                 message.success('登录成功')
                 dispatch(setToken(result.data.token))
-                // 获取用户信息
-                dispatch(getUserInfoAsync(formData.phoneNumber))
-                navigate('/')
+                setLocalStorage('phone', formData.phoneNumber)
+
+                setTimeout(() => {
+                    navigate('/')
+                }, 1000)
             }
         } catch (e) {
             message.error('校验失败', 2)

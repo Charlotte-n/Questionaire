@@ -25,7 +25,7 @@ const Hot: FC = () => {
             {templates.length &&
                 templates.map((item: any) => {
                     return (
-                        <Col key={item._id} span={6}>
+                        <Col key={item._id} span={5}>
                             <SingleTemplate
                                 baseInfo={{
                                     coverImage: item.coverImg,

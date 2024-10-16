@@ -37,11 +37,10 @@ const userSlice = createSlice({
             localStorage.setItem('isLogin', props.payload)
         },
         loginout(state) {
-            state.userInfo = null
-            state.token = ''
             removeLocalStorage('token')
             removeLocalStorage('userInfo')
             removeLocalStorage('phone')
+            removeLocalStorage('isLogin')
         },
     },
     extraReducers: (builder) => {
@@ -58,9 +57,11 @@ export const getUserInfoAsync = createAsyncThunk(
     'user/setUserInfo',
     async (phone: string, { rejectWithValue }) => {
         try {
+            setLocalStorage('isLogin', true)
             const res = await getUserInfo(
-                phone ? phone : (localStorage.getItem('phone') as string),
+                phone ? phone : (getLocalStorage('phone') as string),
             )
+
             return res.data
         } catch (err) {
             return rejectWithValue(err)

@@ -1,7 +1,8 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
 import store from '../stores'
 import { finishLoading, setError, startLoading } from '../stores/global'
-import { getUserInfoAsync, loginout } from '../stores/user'
+import { loginout } from '../stores/user'
+import { message } from 'antd'
 class HYRequest {
     instance: AxiosInstance
 
@@ -15,7 +16,10 @@ class HYRequest {
                 const newConfig = config as AxiosRequestConfig & {
                     opName: string
                 }
+
                 if (state.userSlice.token) {
+                    console.log(state.userSlice.token)
+
                     config.headers.Authorization = `Bearer ${state.userSlice.token}`
                 }
 
@@ -24,6 +28,8 @@ class HYRequest {
                 return config
             },
             (error) => {
+                console.log(error)
+                message.error('服务器内部错误')
                 return error
             },
         )
@@ -34,21 +40,23 @@ class HYRequest {
                 const newConfig = config as AxiosRequestConfig & {
                     opName: string
                 }
-                const { errno, message } = res.data
+                const { errno, message: msg } = res.data
 
                 //登陆到期了
                 if (errno && errno === 1005) {
                     message.error('登录过期，请重新登录')
                     store.dispatch(loginout())
-                } else {
-                    store.dispatch(setError({ status: true, message }))
+                    window.location.href = '/'
+                } else if (errno) {
+                    message.error(msg)
+                    store.dispatch(setError({ status: true, message: msg }))
                 }
                 store.dispatch(finishLoading({ opName: newConfig.opName }))
                 return res.data
             },
             (error) => {
                 console.log(error)
-
+                message.error('服务器内部错误')
                 store.dispatch(
                     setError({ status: true, message: '服务器内部错误' }),
                 )
