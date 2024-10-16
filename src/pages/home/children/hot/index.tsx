@@ -33,6 +33,7 @@ const Hot: FC = () => {
                                     title: item.title,
                                     copiedCount: item.copiedCount,
                                 }}
+                                id={item.id}
                             ></SingleTemplate>
                         </Col>
                     )

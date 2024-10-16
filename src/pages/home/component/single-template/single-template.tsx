@@ -2,6 +2,7 @@ import { Button, Card } from 'antd'
 import React, { FC } from 'react'
 import Ellipsis from '../../../../components/Ellipsis/ellipsis'
 import './index.css'
+import { useNavigate } from 'react-router-dom'
 
 interface Props {
     baseInfo: {
@@ -10,10 +11,18 @@ interface Props {
         title: string
         copiedCount: number
     }
+    id: number
 }
 
 const SingleTemplate: FC<Props> = (props) => {
     const { copiedCount, coverImage, author, title } = props.baseInfo
+    const { id } = props
+    const navigate = useNavigate()
+
+    const handleGoToTemplate = (id: number) => {
+        navigate(`/edit/${id}`)
+    }
+
     return (
         <div className="rounded-md w-[20vw] h-[35vh] bg-[#fdfdfd] border-[1px] border-solid">
             <div className="hover-container">
@@ -23,6 +32,7 @@ const SingleTemplate: FC<Props> = (props) => {
                         type="primary"
                         size="large"
                         className="rounded-full"
+                        onClick={() => handleGoToTemplate(id)}
                     >
                         使用此模板创建
                     </Button>

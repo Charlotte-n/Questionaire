@@ -21,9 +21,15 @@ export const getTemplateList = ({
 //获取单个模板
 export const getSingleTemplate = (id: string) => {
     return hyRequest.get({
-        url: '/api/works/template/:id',
-        params: {
-            id,
-        },
+        url: `/works/template/${id}`,
+        opName: 'getSingleTemplate',
+    })
+}
+
+//保存单个模板
+export const saveWorks = (id: string) => {
+    return hyRequest.post({
+        url: `/works/update/${id}`,
+        opName: 'saveWorks',
     })
 }

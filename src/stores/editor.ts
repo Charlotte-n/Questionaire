@@ -1,9 +1,12 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { ImageProperties } from './commonproperties'
 import { message } from 'antd'
 import { cloneDeep } from 'lodash-es'
 import { v4 as uuidv4 } from 'uuid'
-import { produce } from 'immer'
+import { getSingleTemplate, saveWorks } from '../apis/work/work'
+import { createAsyncThunkWrapper } from '../hoc/AsyncThunkWrapper'
+import { singleEditorTypes } from './editorTypes'
+import { ResponseType } from '../apis/interface'
 
 interface HistoryDataType {
     oldValue: string[]
@@ -393,6 +396,31 @@ export const EditorSlice = createSlice({
             state.historyIndex++
         },
     },
+    extraReducers: (builder) => {
+        builder.addCase(getCurrentTemplateAsync.fulfilled, (state, props) => {
+            let prop = props.payload as singleEditorTypes
+            if (prop) {
+                state.components = prop.content.components.map(
+                    (item: any, index: number) => {
+                        return {
+                            ...item,
+                            isHidden: false,
+                            isLocked: false,
+                            layerName: '图层' + index + 1,
+                        }
+                    },
+                )
+                state.page.title = prop.title
+                state.page.props = prop.content.props
+            }
+        })
+        builder.addCase(saveTemplateAsync.fulfilled, (state, props) => {
+            const actions = props.payload as ResponseType<singleEditorTypes>
+            if (actions.code === 0) {
+                message.success('保存成功')
+            }
+        })
+    },
 })
 
 // 定义 selector
@@ -448,7 +476,6 @@ const pushHistory = (
     //最大保存的历史记录数目
     if (state.histories.length > state.maxHistoryNumber) {
         console.log(1)
-
         state.histories.shift()
         return
     }
@@ -465,6 +492,17 @@ const pushHistory = (
     })
     state.cacheOldValues = ''
 }
+
+export const getCurrentTemplateAsync = createAsyncThunkWrapper<
+    singleEditorTypes,
+    string
+>('editor/getCurrentTemplateAsync', getSingleTemplate, false)
+
+export const saveTemplateAsync = createAsyncThunkWrapper<any, string>(
+    'editor/saveTemplateAsync',
+    saveWorks,
+    true,
+)
 
 export const {
     addComponent,

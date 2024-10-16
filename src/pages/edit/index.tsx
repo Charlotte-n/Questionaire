@@ -6,9 +6,11 @@ import {
     clearSelected,
     ComponentData,
     getCurrentElement,
+    getCurrentTemplateAsync,
     handleChangeComponent,
     handleSortAction,
     pushHistoryAction,
+    saveTemplateAsync,
     setActive,
 } from '../../stores/editor'
 import { ComponentConfType, getComponentConfByType } from '../../components'
@@ -22,6 +24,7 @@ import HistoryArea from './component/history-area'
 import LeftEditor from './children/left-edit'
 import { debounce } from '../utils/util'
 import initContextMenu from './component/context-menu/initContextMenu'
+import { useParams } from 'react-router-dom'
 
 function getComponent(c: ComponentData) {
     const { props, name }: { props: LTextPropsType; name: string } = c
@@ -42,6 +45,8 @@ const Editor: FC = () => {
     const currentElement = useAppSelector(getCurrentElement)
     const dispatch = useAppDispatch()
     const [activeKey, setActiveKey] = useState('1')
+    //获取router的id
+    const { id } = useParams<{ id: string }>()
 
     const addItem = (props: any) => {
         dispatch(addComponent(props))
@@ -124,6 +129,10 @@ const Editor: FC = () => {
 
     initHotKeys()
     initContextMenu(setActiveClick as any)
+
+    useEffect(() => {
+        dispatch(getCurrentTemplateAsync(id as string))
+    }, [])
 
     return (
         <div className="flex text-center h-[100vh] bg-[#f2f2f5]">
