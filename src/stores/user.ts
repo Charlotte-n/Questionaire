@@ -31,10 +31,10 @@ const userSlice = createSlice({
     initialState,
     reducers: {
         setToken(state, props) {
-            localStorage.setItem('token', props.payload)
+            setLocalStorage('token', props.payload)
         },
         setIsLogin(state, props) {
-            localStorage.setItem('isLogin', props.payload)
+            setLocalStorage('isLogin', props.payload)
         },
         loginout(state) {
             removeLocalStorage('token')

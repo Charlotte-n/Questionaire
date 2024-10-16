@@ -15,7 +15,8 @@ const router: RouterType = [
         element: <Login />,
     },
     {
-        path: '/edit',
+        //动态路由
+        path: '/edit/:id',
         element: <Editor></Editor>,
     },
 ]

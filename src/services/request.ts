@@ -3,6 +3,7 @@ import store from '../stores'
 import { finishLoading, setError, startLoading } from '../stores/global'
 import { loginout } from '../stores/user'
 import { message } from 'antd'
+import { getLocalStorage } from '../utils/localstorge'
 class HYRequest {
     instance: AxiosInstance
 
@@ -16,13 +17,10 @@ class HYRequest {
                 const newConfig = config as AxiosRequestConfig & {
                     opName: string
                 }
-
-                if (state.userSlice.token) {
+                if (getLocalStorage('token')) {
                     console.log(state.userSlice.token)
-
-                    config.headers.Authorization = `Bearer ${state.userSlice.token}`
+                    config.headers.Authorization = `Bearer ${getLocalStorage('token')}`
                 }
-
                 store.dispatch(setError({ status: false, message: '' }))
                 store.dispatch(startLoading({ opName: newConfig.opName }))
                 return config
