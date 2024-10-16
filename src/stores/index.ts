@@ -12,7 +12,7 @@ const store = configureStore({
         editorSlice: EditorReducer,
         userSlice: userReducer,
         globalSlice: globalReducer,
-        // templateSlice: templateReducer,
+        templateSlice: templateReducer,
     },
 })
 

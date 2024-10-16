@@ -8,13 +8,23 @@ const initialState: initialStateType = {
     templates: [],
 }
 export const templatesSlice = createSlice({
-    name: '',
+    name: 'template',
     initialState,
     reducers: {
         fetchTemplates(state, props) {},
     },
+    extraReducers: (builder) => {
+        builder.addCase(fetchTemplatesAsync.fulfilled, (state, props) => {})
+    },
 })
 
-const fetchTemplates = createAsyncThunk('fetchTemplate', () => {})
+const fetchTemplatesAsync = createAsyncThunk(
+    'template/fetchTemplate',
+    (id: string, { rejectWithValue }) => {
+        console.log(id)
+    },
+)
+
+export const { fetchTemplates } = templatesSlice.actions
 
 export default templatesSlice.reducer

@@ -51,7 +51,7 @@ export default function withProductRoute(
                     }
                 }
             }
-        }, [[location.pathname, navigate]])
+        }, [location.pathname, navigate])
 
         return <WrapperComponent {...props}></WrapperComponent>
     }
