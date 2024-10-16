@@ -75,11 +75,6 @@ const Login: FC = () => {
     }
 
     useEffect(() => {
-        if (errors.status) {
-            message.error(errors.message || '未知错误', 2)
-        }
-    }, [errors.status])
-    useEffect(() => {
         if (count < 0) {
             clearInterval(timer.current as number)
             setDisabled(false)

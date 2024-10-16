@@ -1,9 +1,13 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
+
+import Hot from './children/hot'
 
 const Home: FC = () => {
-    //获取当前用户
-
-    return <div>hello world</div>
+    return (
+        <div>
+            <Hot />
+        </div>
+    )
 }
 
 export default Home

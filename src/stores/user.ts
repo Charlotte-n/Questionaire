@@ -1,5 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { getUserInfo } from '../apis/user/login'
+import {
+    getLocalStorage,
+    removeLocalStorage,
+    setLocalStorage,
+} from '../utils/localstorge'
 
 export interface UserStateType {
     _id: string
@@ -17,7 +22,7 @@ interface initialStateType {
 }
 
 const initialState: initialStateType = {
-    userInfo: null,
+    userInfo: getLocalStorage('userInfo') || null,
     token: localStorage.getItem('token') || '',
     isLogin: JSON.parse(localStorage.getItem('isLogin') as string) || false,
 }
@@ -27,27 +32,24 @@ const userSlice = createSlice({
     reducers: {
         setToken(state, props) {
             localStorage.setItem('token', props.payload)
-            state.token = props.payload
         },
         setIsLogin(state, props) {
             localStorage.setItem('isLogin', props.payload)
-            state.isLogin = props.payload
         },
         loginout(state) {
             state.userInfo = null
             state.token = ''
-            localStorage.removeItem('token')
-            localStorage.removeItem('phone')
-            localStorage.removeItem('isLogin')
+            removeLocalStorage('token')
+            removeLocalStorage('userInfo')
+            removeLocalStorage('phone')
         },
     },
     extraReducers: (builder) => {
         builder.addCase(getUserInfoAsync.fulfilled, (state, props: any) => {
             if (props.meta.arg) {
-                localStorage.setItem('phone', props.meta.arg)
+                setLocalStorage('phone', props.meta.arg)
             }
-            state.isLogin = true
-            state.userInfo = props.payload
+            setLocalStorage('userInfo', props.payload)
         })
     },
 })

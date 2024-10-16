@@ -15,12 +15,8 @@ class HYRequest {
                 const newConfig = config as AxiosRequestConfig & {
                     opName: string
                 }
-                console.log(store)
-
-                if (state.userSlice.token && state.userSlice.isLogin) {
+                if (state.userSlice.token) {
                     config.headers.Authorization = `Bearer ${state.userSlice.token}`
-                    // 获取用户信息
-                    store.dispatch(getUserInfoAsync(''))
                 }
 
                 store.dispatch(setError({ status: false, message: '' }))
@@ -51,6 +47,8 @@ class HYRequest {
                 return res.data
             },
             (error) => {
+                console.log(error)
+
                 store.dispatch(
                     setError({ status: true, message: '服务器内部错误' }),
                 )

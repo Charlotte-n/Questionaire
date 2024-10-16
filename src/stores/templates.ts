@@ -1,7 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { getTemplateList } from '../apis/work/work'
 
 interface initialStateType {
-    templates: []
+    templates: Array<any>
 }
 
 const initialState: initialStateType = {
@@ -14,14 +15,30 @@ export const templatesSlice = createSlice({
         fetchTemplates(state, props) {},
     },
     extraReducers: (builder) => {
-        builder.addCase(fetchTemplatesAsync.fulfilled, (state, props) => {})
+        builder.addCase(fetchTemplatesAsync.fulfilled, (state, props) => {
+            state.templates = props.payload.list
+        })
     },
 })
 
-const fetchTemplatesAsync = createAsyncThunk(
+export const fetchTemplatesAsync = createAsyncThunk(
     'template/fetchTemplate',
-    (id: string, { rejectWithValue }) => {
-        console.log(id)
+    async (
+        {
+            pageSize,
+            pageIndex,
+        }: {
+            pageSize: number
+            pageIndex: number
+        },
+        { rejectWithValue },
+    ) => {
+        try {
+            const res = await getTemplateList({ pageSize, pageIndex })
+            return res.data
+        } catch (error) {
+            return rejectWithValue(error)
+        }
     },
 )
 

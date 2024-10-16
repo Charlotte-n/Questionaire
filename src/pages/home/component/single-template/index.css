@@ -1,0 +1,29 @@
+.hover-container {
+    position: relative;
+    height: 40vh;
+    z-index: 10;
+    overflow: hidden;
+}
+.hover-container:hover .hover-item {
+    display: flex; /* 改为 flex 布局 */
+    align-items: center; /* 垂直居中 */
+    justify-content: center; /* 水平居中 */
+}
+.hover-container img {
+    transition: transform 0.3s ease; /* 定义动画效果：0.3秒内平滑过渡 */
+    transform-origin: center;
+}
+/* 写一个hover之后就放大的动画 */
+.hover-container:hover img {
+    transform: scale(1.1);
+}
+
+.hover-item {
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: none;
+    width: 100%;
+    height: 100%;
+}

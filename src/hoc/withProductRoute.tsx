@@ -30,7 +30,7 @@ export default function withProductRoute(
             } else {
                 if (token) {
                     //重新获取用户信息
-                    store.dispatch(setIsLogin(true))
+                    store.dispatch(getUserInfoAsync(''))
                     if (
                         route.find((item) => item.path === location.pathname)
                             ?.redirectLogin
@@ -51,7 +51,7 @@ export default function withProductRoute(
                     }
                 }
             }
-        }, [location.pathname, navigate])
+        }, [location.pathname])
 
         return <WrapperComponent {...props}></WrapperComponent>
     }
