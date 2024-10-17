@@ -1,8 +1,6 @@
 import React from 'react'
 import Editor from '../pages/edit/index.tsx'
 import { lazy } from 'react'
-import RequireSaveConfirmation from '../hoc/RequiredSave.tsx'
-import { RouterType } from './index.ts'
 import { createBrowserRouter } from 'react-router-dom'
 import RootPage from '../RootPage.tsx'
 

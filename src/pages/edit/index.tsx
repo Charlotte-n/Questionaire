@@ -146,6 +146,7 @@ const Editor: FC = () => {
                     <div className="w-[20vw] px-[15px] pt-[20px]  h-[100%] bg-[white] max-w-[20vw]">
                         <LeftEditor />
                         {/* <ComponentList onItemClick={addItem}></ComponentList> */}
+                        <img className="test-img" />
                     </div>
                     {/* 中间画布 */}
                     {/* TODO:这里的样式再进行琢磨一下，涉及定位之类的 */}
@@ -158,7 +159,7 @@ const Editor: FC = () => {
                                 onClick={() => handleChangePageTab()}
                             >
                                 <div
-                                    className={`px-[10px] py-[10px] bg-[white] shadow-[#0000001f] shadow-md  overflow-auto  ${currentElementID === 'page' ? 'border-[2px] border-[#1890ff] border-solid' : ''}`}
+                                    className={`edit-canvas px-[10px]  py-[10px] bg-[white] shadow-[#0000001f] shadow-md  overflow-auto  ${currentElementID === 'page' ? 'border-[2px] border-[#1890ff] border-solid' : ''}`}
                                     style={page.props}
                                 >
                                     <div className="">

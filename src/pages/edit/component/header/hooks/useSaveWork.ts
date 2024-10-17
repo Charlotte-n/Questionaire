@@ -3,12 +3,13 @@ import { Modal } from 'antd'
 import { saveTemplateAsync, setIsDirty } from '../../../../../stores/editor'
 import { useNavigate, useParams, useBlocker } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../../../../stores'
+
 export const useSaveWork = () => {
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
     const { id } = useParams<{ id: string }>()
     const { isDirty } = useAppSelector((state) => state.editorSlice)
-    const blocker = useBlocker(!isDirty)
+    const blocker = useBlocker(isDirty)
 
     const saveWorkApi = () => {
         dispatch(saveTemplateAsync(id as string))

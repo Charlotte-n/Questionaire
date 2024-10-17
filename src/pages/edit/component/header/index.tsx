@@ -2,10 +2,10 @@ import React, { FC } from 'react'
 import { Button, Dropdown, MenuProps, message } from 'antd'
 import { useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../../../stores'
-
 import { menuList } from '../../../layout/header/config'
 import { loginout } from '../../../../stores/user'
 import { useSaveWork } from './hooks/useSaveWork'
+import { takeScreenshotAndUpload } from '../../../utils/util'
 
 const EditHeader: FC = () => {
     const dispatch = useAppDispatch()
@@ -24,6 +24,20 @@ const EditHeader: FC = () => {
         }
     }
 
+    const handelSaveWork = () => {
+        saveWorkApi()
+    }
+
+    const publish = () => {
+        const editWrapper = document.querySelector(
+            '.edit-canvas',
+        ) as HTMLElement
+
+        const res = takeScreenshotAndUpload(editWrapper)
+        if (res) {
+            console.log(res)
+        }
+    }
     return (
         <div className="flex justify-between">
             <div
@@ -43,12 +57,17 @@ const EditHeader: FC = () => {
                 <Button
                     type="primary"
                     className={buttonClassName}
-                    onClick={() => saveWorkApi()}
+                    onClick={() => handelSaveWork()}
                     loading={opName['saveWorks']}
                 >
                     保存
                 </Button>
-                <Button type="primary" className={buttonClassName}>
+                <Button
+                    type="primary"
+                    className={buttonClassName}
+                    onClick={() => publish()}
+                    loading={opName['uploadFile']}
+                >
                     发布
                 </Button>
                 <Dropdown.Button
