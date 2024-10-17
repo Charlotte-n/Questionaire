@@ -5,7 +5,7 @@ import { cloneDeep } from 'lodash-es'
 import { v4 as uuidv4 } from 'uuid'
 import { getSingleTemplate, saveWorks } from '../apis/work/work'
 import { createAsyncThunkWrapper } from '../hoc/AsyncThunkWrapper'
-import { singleEditorTypes } from './editorTypes'
+import { singleEditorTypes } from './types/editorTypes'
 import { ResponseType } from '../apis/interface'
 
 interface HistoryDataType {
@@ -36,6 +36,7 @@ export interface EditorDataProps {
     historyIndex: number
     cacheOldValues: any
     maxHistoryNumber: number
+    isDirty: boolean
 }
 export interface ComponentData {
     // 这个元素的 属性，属性请详见下面
@@ -115,6 +116,7 @@ export const initialState: EditorDataProps = {
     historyIndex: -1,
     cacheOldValues: null,
     maxHistoryNumber: 5,
+    isDirty: false,
 }
 
 //将这些内容放到redux里面管理
@@ -126,13 +128,13 @@ export const EditorSlice = createSlice({
             state.components.push(props.payload)
 
             //添加添加历史记录
-
             state.histories.push({
                 id: uuidv4(),
                 componentId: props.payload.id,
                 type: 'add',
                 data: cloneDeep(props.payload),
             })
+            state.isDirty = true
         },
         setActive(state, props) {
             const { id, type } = props.payload
@@ -155,6 +157,7 @@ export const EditorSlice = createSlice({
                 return
             }
 
+            state.isDirty = true
             if (props.payload.isRoot) {
                 ;(component as any)[key] = props.payload.value
                 if (props.payload.key === 'isHidden') {
@@ -189,12 +192,14 @@ export const EditorSlice = createSlice({
         },
         handleSortAction(state, props) {
             state.components = props.payload
+            state.isDirty = true
         },
         ChangePagePropsAction(state, props) {
             state.page.props = {
                 ...state.page.props,
                 ...props.payload,
             }
+            state.isDirty = true
         },
         copyComponent(state, props) {
             const component = getCom(state.components, props.payload.id)
@@ -224,6 +229,7 @@ export const EditorSlice = createSlice({
                 data: cloneDeep(pastedCom),
             })
             message.success('粘贴成功')
+            state.isDirty = true
         },
         deleteComponent(state, props) {
             const { id } = props.payload
@@ -246,6 +252,7 @@ export const EditorSlice = createSlice({
                 index: componentIndex,
             })
             message.success('删除成功')
+            state.isDirty = true
         },
         moveComponent(state, props) {
             const { id, amount, type } = props.payload
@@ -336,6 +343,7 @@ export const EditorSlice = createSlice({
                     message.error('移动失败')
                     break
             }
+            state.isDirty = true
         },
 
         /**
@@ -394,6 +402,10 @@ export const EditorSlice = createSlice({
                     break
             }
             state.historyIndex++
+        },
+
+        setIsDirty(state, props) {
+            state.isDirty = props.payload
         },
     },
     extraReducers: (builder) => {
@@ -518,5 +530,6 @@ export const {
     undo,
     redo,
     pushHistoryAction,
+    setIsDirty,
 } = EditorSlice.actions
 export default EditorSlice.reducer

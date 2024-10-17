@@ -20,7 +20,7 @@ const SingleTemplate: FC<Props> = (props) => {
     const navigate = useNavigate()
 
     const handleGoToTemplate = (id: number) => {
-        navigate(`/edit/${id}`)
+        navigate(`/gxt/edit/${id}`)
     }
 
     return (

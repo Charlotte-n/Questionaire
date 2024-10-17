@@ -4,14 +4,15 @@ import './styles/base.css'
 import 'normalize.css'
 import { Provider } from 'react-redux'
 import store from './stores/index.ts'
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter, RouterProvider } from 'react-router-dom'
+import { Suspense } from 'react'
 
 createRoot(document.getElementById('root')!).render(
     // <StrictMode>
     <Provider store={store}>
-        <BrowserRouter>
+        <Suspense>
             <App></App>
-        </BrowserRouter>
+        </Suspense>
     </Provider>,
     // </StrictMode>,
 )
