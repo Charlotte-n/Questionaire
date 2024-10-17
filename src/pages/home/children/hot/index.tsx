@@ -2,7 +2,6 @@ import React, { FC, useEffect, useState } from 'react'
 import SingleTemplate from '../../component/single-template/single-template'
 import { useAppDispatch, useAppSelector } from '../../../../stores'
 import { fetchTemplatesAsync } from '../../../../stores/templates'
-import { produce } from 'immer'
 import { Col, Row } from 'antd'
 
 const Hot: FC = () => {

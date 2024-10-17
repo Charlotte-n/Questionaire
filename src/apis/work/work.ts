@@ -33,3 +33,19 @@ export const saveWorks = (id: string) => {
         opName: 'saveWorks',
     })
 }
+
+//发布模板
+export const publishTemplate = (id: string) => {
+    return hyRequest.post({
+        url: `/works/publishTemplate/${id}`,
+        opName: 'publishTemplate',
+    })
+}
+
+//发布我的作品
+export const publishMyWork = (id: string) => {
+    return hyRequest.post({
+        url: `/works/publishWork/${id}`,
+        opName: 'publishMyWork',
+    })
+}

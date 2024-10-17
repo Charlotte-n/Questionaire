@@ -3,7 +3,12 @@ import { ImageProperties } from './commonproperties'
 import { message } from 'antd'
 import { cloneDeep } from 'lodash-es'
 import { v4 as uuidv4 } from 'uuid'
-import { getSingleTemplate, saveWorks } from '../apis/work/work'
+import {
+    getSingleTemplate,
+    saveWorks,
+    publishMyWork,
+    publishTemplate,
+} from '../apis/work/work'
 import { createAsyncThunkWrapper } from '../hoc/AsyncThunkWrapper'
 import { singleEditorTypes } from './types/editorTypes'
 import { ResponseType } from '../apis/interface'
@@ -23,6 +28,7 @@ interface HistoriesType {
 interface PageDataType {
     props: any
     title: string
+    coverImg: string
 }
 export interface EditorDataProps {
     // 供中间编辑器渲染的数组
@@ -110,6 +116,7 @@ export const initialState: EditorDataProps = {
     page: {
         props: defaultPageProps,
         title: '',
+        coverImg: '',
     },
     copedComponent: undefined,
     histories: [],
@@ -424,6 +431,7 @@ export const EditorSlice = createSlice({
                 )
                 state.page.title = prop.title
                 state.page.props = prop.content.props
+                state.page.coverImg = prop.coverImg
             }
         })
         builder.addCase(saveTemplateAsync.fulfilled, (state, props) => {
@@ -505,6 +513,7 @@ const pushHistory = (
     state.cacheOldValues = ''
 }
 
+//Thunk
 export const getCurrentTemplateAsync = createAsyncThunkWrapper<
     singleEditorTypes,
     string

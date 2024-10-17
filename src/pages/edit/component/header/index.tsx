@@ -1,11 +1,13 @@
 import React, { FC } from 'react'
 import { Button, Dropdown, MenuProps, message } from 'antd'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../../../stores'
 import { menuList } from '../../../layout/header/config'
 import { loginout } from '../../../../stores/user'
 import { useSaveWork } from './hooks/useSaveWork'
 import { takeScreenshotAndUpload } from '../../../utils/util'
+import { ChangePagePropsAction } from '../../../../stores/editor'
+import { publishMyWork } from '../../../../apis/work/work'
 
 const EditHeader: FC = () => {
     const dispatch = useAppDispatch()
@@ -13,6 +15,7 @@ const EditHeader: FC = () => {
     const { saveWorkApi } = useSaveWork()
     const { opName } = useAppSelector((state) => state.globalSlice)
     const buttonClassName = 'rounded-full mr-[25px]'
+    const { id } = useParams()
 
     const onMenuClick: MenuProps['onClick'] = (e) => {
         if (e.key === '2') {
@@ -28,14 +31,19 @@ const EditHeader: FC = () => {
         saveWorkApi()
     }
 
-    const publish = () => {
+    const publish = async () => {
         const editWrapper = document.querySelector(
             '.edit-canvas',
         ) as HTMLElement
 
-        const res = takeScreenshotAndUpload(editWrapper)
+        const res = await takeScreenshotAndUpload(editWrapper)
         if (res) {
-            console.log(res)
+            //更新coverImg
+            dispatch(ChangePagePropsAction({ coverImg: res.url }))
+            //保存
+            saveWorkApi()
+            //发布
+            publishMyWork(id as string)
         }
     }
     return (
