@@ -25,14 +25,26 @@ const protectedRoutes = [
 function App() {
     const elementRouter = useRoutes(router)
     const location = useLocation()
+    //想要实现的效果是：/edit/:id, /login路由下不展示header
+    const noHeaderRoutes = ['/edit/:id', '/login']
+
+    // 检查当前路径是否在 noHeaderRoutes 中定义
+    const showHeader = !noHeaderRoutes.some((path) => {
+        // 如果路径中包含参数（如：:id），你可能需要更复杂的匹配逻辑
+        // 这里只是一个简单的示例，仅适用于静态路径
+        return (
+            location.pathname === path ||
+            location.pathname.match(path.replace(':id', '\\d+'))
+        )
+    })
 
     return (
         <div className="App">
-            {location.pathname !== '/login' ? (
+            {showHeader && (
                 <Layout.Header>
                     <Header></Header>
                 </Layout.Header>
-            ) : null}
+            )}
 
             <Layout.Content>{elementRouter}</Layout.Content>
             <Layout.Footer>

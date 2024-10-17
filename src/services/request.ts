@@ -41,10 +41,10 @@ class HYRequest {
                 const { errno, message: msg } = res.data
 
                 //登陆到期了
-                if (errno && errno === 1005) {
+                if (errno && errno === 101001) {
                     message.error('登录过期，请重新登录')
                     store.dispatch(loginout())
-                    window.location.href = '/'
+                    window.location.href = '/login'
                 } else if (errno) {
                     message.error(msg)
                     store.dispatch(setError({ status: true, message: msg }))

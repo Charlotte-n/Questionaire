@@ -15,7 +15,7 @@ import {
 } from '../../stores/editor'
 import { ComponentConfType, getComponentConfByType } from '../../components'
 import EditWrapper from './children/edit-wrapper'
-import { Tabs } from 'antd'
+import { Layout, Tabs } from 'antd'
 import LayerList from './component/layer-list'
 import EditGroup from './component/edit-group'
 import PageSetting from './component/page-setting'
@@ -25,6 +25,7 @@ import LeftEditor from './children/left-edit'
 import { debounce } from '../utils/util'
 import initContextMenu from './component/context-menu/initContextMenu'
 import { useParams } from 'react-router-dom'
+import EditHeader from './component/header'
 
 function getComponent(c: ComponentData) {
     const { props, name }: { props: LTextPropsType; name: string } = c
@@ -135,107 +136,121 @@ const Editor: FC = () => {
     }, [])
 
     return (
-        <div className="flex text-center h-[100vh] bg-[#f2f2f5]">
-            {/* 左侧 */}
-            <div className="w-[20vw] px-[15px] pt-[20px]  h-[100%] bg-[white] max-w-[20vw]">
-                <LeftEditor />
-                {/* <ComponentList onItemClick={addItem}></ComponentList> */}
-            </div>
-            {/* 中间画布 */}
-            {/* TODO:这里的样式再进行琢磨一下，涉及定位之类的 */}
-            <div className="flex flex-auto py-[20px]">
-                <div className="flex flex-col items-center flex-auto relative">
-                    <p>画布区域</p>
-                    <HistoryArea />
-                    <div
-                        className={`canvas-area fixed overflow-hidden mt-[50px] max-h-[80vh] min-w-[20vw] cursor-pointer rounded-md`}
-                        onClick={() => handleChangePageTab()}
-                    >
-                        <div
-                            className={`px-[10px] py-[10px] bg-[white] shadow-[#0000001f] shadow-md  overflow-auto  ${currentElementID === 'page' ? 'border-[2px] border-[#1890ff] border-solid' : ''}`}
-                            style={page.props}
-                        >
-                            <div className="">
-                                {components.map((item) => {
-                                    return (
-                                        <EditWrapper
-                                            key={item.id}
-                                            setActive={setActiveClick}
-                                            id={item.id}
-                                            props={item.props}
-                                            onChange={handleChange}
-                                            isActive={
-                                                currentElement?.id === item.id
-                                            }
-                                        >
-                                            {{
-                                                content: (
-                                                    <div
-                                                        className={
-                                                            !item.isHidden &&
-                                                            currentElement?.id ===
-                                                                item.id
-                                                                ? 'border-[1px] border-[#1890ff] border-solid'
-                                                                : ''
-                                                        }
-                                                    >
-                                                        {getComponent(item)}
-                                                    </div>
-                                                ),
-                                            }}
-                                        </EditWrapper>
-                                    )
-                                })}
+        <Layout>
+            <Layout.Header>
+                <EditHeader />
+            </Layout.Header>
+            <Layout.Content>
+                <div className="flex text-center h-[100vh] bg-[#f2f2f5]">
+                    {/* 左侧 */}
+                    <div className="w-[20vw] px-[15px] pt-[20px]  h-[100%] bg-[white] max-w-[20vw]">
+                        <LeftEditor />
+                        {/* <ComponentList onItemClick={addItem}></ComponentList> */}
+                    </div>
+                    {/* 中间画布 */}
+                    {/* TODO:这里的样式再进行琢磨一下，涉及定位之类的 */}
+                    <div className="flex flex-auto py-[20px]">
+                        <div className="flex flex-col items-center flex-auto relative">
+                            <p>画布区域</p>
+                            <HistoryArea />
+                            <div
+                                className={`canvas-area fixed overflow-hidden mt-[50px] max-h-[80vh] min-w-[20vw] cursor-pointer rounded-md`}
+                                onClick={() => handleChangePageTab()}
+                            >
+                                <div
+                                    className={`px-[10px] py-[10px] bg-[white] shadow-[#0000001f] shadow-md  overflow-auto  ${currentElementID === 'page' ? 'border-[2px] border-[#1890ff] border-solid' : ''}`}
+                                    style={page.props}
+                                >
+                                    <div className="">
+                                        {components.map((item) => {
+                                            return (
+                                                <EditWrapper
+                                                    key={item.id}
+                                                    setActive={setActiveClick}
+                                                    id={item.id}
+                                                    props={item.props}
+                                                    onChange={handleChange}
+                                                    isActive={
+                                                        currentElement?.id ===
+                                                        item.id
+                                                    }
+                                                >
+                                                    {{
+                                                        content: (
+                                                            <div
+                                                                className={
+                                                                    !item.isHidden &&
+                                                                    currentElement?.id ===
+                                                                        item.id
+                                                                        ? 'border-[1px] border-[#1890ff] border-solid'
+                                                                        : ''
+                                                                }
+                                                            >
+                                                                {getComponent(
+                                                                    item,
+                                                                )}
+                                                            </div>
+                                                        ),
+                                                    }}
+                                                </EditWrapper>
+                                            )
+                                        })}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            {/* 右侧设置属性 */}
-            <div className="w-[20vw]  h-[100%] flex flex-col bg-[white] max-w-[20vw]">
-                <Tabs
-                    type="card"
-                    defaultActiveKey={currentElementID === 'page' ? '3' : '1'}
-                    onChange={handleChangeTab}
-                    activeKey={activeKey}
-                >
-                    <Tabs.TabPane key={'1'} tab={'属性设置'}>
-                        <div className=" h-[90vh] overflow-y-auto">
-                            {!currentElement ? (
-                                <div>没有选中元素</div>
-                            ) : currentElement.isBlock ? (
-                                <div className="flex flex-col items-center justify-center">
-                                    <img
-                                        src={`/public/suoding`}
-                                        className="w-[200px] h-[200px]"
-                                        alt="图片被锁定了"
-                                    />
-                                    <span>该元素被锁定了</span>
+                    {/* 右侧设置属性 */}
+                    <div className="w-[20vw]  h-[100%] flex flex-col bg-[white] max-w-[20vw]">
+                        <Tabs
+                            type="card"
+                            defaultActiveKey={
+                                currentElementID === 'page' ? '3' : '1'
+                            }
+                            onChange={handleChangeTab}
+                            activeKey={activeKey}
+                        >
+                            <Tabs.TabPane key={'1'} tab={'属性设置'}>
+                                <div className=" h-[90vh] overflow-y-auto">
+                                    {!currentElement ? (
+                                        <div>没有选中元素</div>
+                                    ) : currentElement.isBlock ? (
+                                        <div className="flex flex-col items-center justify-center">
+                                            <img
+                                                src={`/public/suoding`}
+                                                className="w-[200px] h-[200px]"
+                                                alt="图片被锁定了"
+                                            />
+                                            <span>该元素被锁定了</span>
+                                        </div>
+                                    ) : (
+                                        <EditGroup
+                                            handleChange={handleChange}
+                                        ></EditGroup>
+                                    )}
                                 </div>
-                            ) : (
-                                <EditGroup
-                                    handleChange={handleChange}
-                                ></EditGroup>
-                            )}
-                        </div>
-                    </Tabs.TabPane>
-                    <Tabs.TabPane key={'2'} tab={'图层设置'}>
-                        <LayerList
-                            list={components}
-                            change={handleChange}
-                            setActive={setActiveClick}
-                            currentElement={currentElement && currentElement.id}
-                            handleSort={handleSort}
-                        ></LayerList>
-                    </Tabs.TabPane>
-                    <Tabs.TabPane key={'3'} tab={'页面设置'}>
-                        <PageSetting
-                            url={page.props.backgroundImage}
-                        ></PageSetting>
-                    </Tabs.TabPane>
-                </Tabs>
-            </div>
-        </div>
+                            </Tabs.TabPane>
+                            <Tabs.TabPane key={'2'} tab={'图层设置'}>
+                                <LayerList
+                                    list={components}
+                                    change={handleChange}
+                                    setActive={setActiveClick}
+                                    currentElement={
+                                        currentElement && currentElement.id
+                                    }
+                                    handleSort={handleSort}
+                                ></LayerList>
+                            </Tabs.TabPane>
+                            <Tabs.TabPane key={'3'} tab={'页面设置'}>
+                                <PageSetting
+                                    url={page.props.backgroundImage}
+                                ></PageSetting>
+                            </Tabs.TabPane>
+                        </Tabs>
+                    </div>
+                </div>
+            </Layout.Content>
+        </Layout>
     )
 }
 
