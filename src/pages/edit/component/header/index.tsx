@@ -1,11 +1,12 @@
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 import { Button, Dropdown, MenuProps, message } from 'antd'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../../../stores'
 import { menuList } from '../../../layout/header/config'
 import { loginout } from '../../../../stores/user'
 import { useSaveWork } from './hooks/useSaveWork'
 import { usePublish } from './hooks/usePublish'
+import PublishModal from '../publish-modal'
 
 const EditHeader: FC = () => {
     const dispatch = useAppDispatch()
@@ -14,6 +15,15 @@ const EditHeader: FC = () => {
     const { opName } = useAppSelector((state) => state.globalSlice)
     const buttonClassName = 'rounded-full mr-[25px]'
     const { publish } = usePublish()
+    const [publishModalVisible, setPublishModalVisible] = useState(false)
+
+    const handlePublishVisible = () => {
+        setPublishModalVisible(true)
+    }
+
+    const handlePublishVisibleCancel = () => {
+        setPublishModalVisible(false)
+    }
 
     const onMenuClick: MenuProps['onClick'] = (e) => {
         if (e.key === '2') {
@@ -26,6 +36,7 @@ const EditHeader: FC = () => {
     }
 
     const handelSaveWork = () => {
+        handlePublishVisible()
         saveWorkApi()
     }
 
@@ -56,7 +67,7 @@ const EditHeader: FC = () => {
                 <Button
                     type="primary"
                     className={buttonClassName}
-                    onClick={() => publish()}
+                    onClick={() => publish(handlePublishVisible)}
                     loading={opName['uploadFile']}
                 >
                     发布
@@ -68,6 +79,7 @@ const EditHeader: FC = () => {
                     merikle
                 </Dropdown.Button>
             </div>
+            <PublishModal isModalOpen={publishModalVisible} />
         </div>
     )
 }

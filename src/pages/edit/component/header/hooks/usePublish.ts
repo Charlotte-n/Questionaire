@@ -13,7 +13,7 @@ export const usePublish = () => {
 
     const { saveWorkApi } = useSaveWork(true)
 
-    const publish = async () => {
+    const publish = async (handlePublishVisible:()=>void) => {
         const editWrapper = document.querySelector(
             '.edit-canvas',
         ) as HTMLElement
@@ -31,6 +31,7 @@ export const usePublish = () => {
             if (channels.length === 0) {
                 createChannel({ workId: id as string, name: '' })
             }
+            handlePublishVisible()
         }
     }
 

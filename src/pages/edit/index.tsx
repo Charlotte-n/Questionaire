@@ -255,7 +255,6 @@ const Editor: FC = () => {
                     </div>
                 </div>
             </Layout.Content>
-            <PublishModal />
         </Layout>
     )
 }
