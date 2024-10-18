@@ -44,7 +44,7 @@ export interface singleEditorTypes {
 }
 
 export interface ChannelType {
-    id: number
+    id: string
     name: string
 }
 

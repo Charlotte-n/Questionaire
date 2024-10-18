@@ -79,7 +79,10 @@ const EditHeader: FC = () => {
                     merikle
                 </Dropdown.Button>
             </div>
-            <PublishModal isModalOpen={publishModalVisible} />
+            <PublishModal
+                isModalOpen={publishModalVisible}
+                onClose={handlePublishVisibleCancel}
+            />
         </div>
     )
 }

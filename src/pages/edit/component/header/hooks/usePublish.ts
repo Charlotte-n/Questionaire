@@ -13,7 +13,7 @@ export const usePublish = () => {
 
     const { saveWorkApi } = useSaveWork(true)
 
-    const publish = async (handlePublishVisible:()=>void) => {
+    const publish = async (handlePublishVisible: () => void) => {
         const editWrapper = document.querySelector(
             '.edit-canvas',
         ) as HTMLElement
@@ -28,6 +28,8 @@ export const usePublish = () => {
             //获取渠道列表
             await dispatch(getChannelListAsync(id as string))
             //如果没有渠道列表就生成默认的渠道
+            console.log(channels, '获取到的渠道值')
+
             if (channels.length === 0) {
                 createChannel({ workId: id as string, name: '' })
             }

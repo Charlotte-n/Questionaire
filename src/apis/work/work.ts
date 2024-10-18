@@ -1,5 +1,6 @@
 import hyRequest from '../../services'
 import { getLocalStorage } from '../../utils/localstorge'
+import { ResponseType } from '../interface'
 
 //获取模板
 export const getTemplateList = ({
@@ -49,7 +50,7 @@ export const saveWorks = (id: string) => {
 
 //发布模板
 export const publishTemplate = (id: string) => {
-    return hyRequest.post({
+    return hyRequest.post<ResponseType<any>>({
         url: `/works/publishTemplate/${id}`,
         opName: 'publishTemplate',
     })
@@ -79,7 +80,7 @@ export const createChannel = ({
     workId: string
     name: string
 }) => {
-    return hyRequest.post({
+    return hyRequest.post<ResponseType<any>>({
         url: '/channels/createChannel',
         opName: 'createChannel',
         data: {
@@ -114,7 +115,7 @@ export const updateChannelName = ({
 
 //删除渠道
 export const deleteChannel = (id: string) => {
-    return hyRequest.post({
+    return hyRequest.delete({
         url: `/channels/deleteChannel/${id}`,
         opName: 'deleteChannel',
     })

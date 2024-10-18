@@ -6,20 +6,24 @@ import { TabItems } from './config'
 
 interface PublishModalProps {
     isModalOpen: boolean
+    onClose: () => void
 }
 const defaultProp: PublishModalProps = {
     isModalOpen: true,
+    onClose: () => {},
 }
 const PublishModal: FC<PublishModalProps> = (props) => {
     const defaultProps = MergeProps(defaultProp, props)
-    const { isModalOpen } = defaultProps as any
+    const { isModalOpen, onClose } = defaultProps as any
+    console.log(onClose)
+
     const { page } = useAppSelector((state) => state.editorSlice)
     return (
         <Modal
             title="发布成功"
             open={isModalOpen}
             footer={false}
-            width={'35vw'}
+            onCancel={() => onClose()}
         >
             <Divider></Divider>
             <div className="w-[100%] flex items-stretch">
@@ -30,8 +34,8 @@ const PublishModal: FC<PublishModalProps> = (props) => {
                     </div>
                 </div>
                 <div className="flex-1 flex flex-col">
-                    <div className="flex">
-                        <div className="h-[35%]">
+                    <div className="flex h-[50px]">
+                        <div className="">
                             <p>{page.title}</p>
                         </div>
                     </div>
