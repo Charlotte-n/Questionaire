@@ -18,7 +18,7 @@ const Header: FC = () => {
             dispatch(loginout())
             message.success('退出成功')
             setTimeout(() => {
-                navigate('/login')
+                navigate('/gxt/login')
             }, 1000)
         }
     }

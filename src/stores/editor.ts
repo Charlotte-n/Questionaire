@@ -8,9 +8,16 @@ import {
     saveWorks,
     publishMyWork,
     publishTemplate,
+    getChannelList,
+    copyWork,
+    getMySingleWork,
 } from '../apis/work/work'
 import { createAsyncThunkWrapper } from '../hoc/AsyncThunkWrapper'
-import { singleEditorTypes } from './types/editorTypes'
+import {
+    channelDataType,
+    ChannelType,
+    singleEditorTypes,
+} from './types/editorTypes'
 import { ResponseType } from '../apis/interface'
 
 interface HistoryDataType {
@@ -30,6 +37,7 @@ interface PageDataType {
     title: string
     coverImg: string
 }
+
 export interface EditorDataProps {
     // 供中间编辑器渲染的数组
     components: ComponentData[]
@@ -43,6 +51,7 @@ export interface EditorDataProps {
     cacheOldValues: any
     maxHistoryNumber: number
     isDirty: boolean
+    channels: ChannelType[]
 }
 export interface ComponentData {
     // 这个元素的 属性，属性请详见下面
@@ -124,6 +133,7 @@ export const initialState: EditorDataProps = {
     cacheOldValues: null,
     maxHistoryNumber: 5,
     isDirty: false,
+    channels: [],
 }
 
 //将这些内容放到redux里面管理
@@ -440,6 +450,29 @@ export const EditorSlice = createSlice({
                 message.success('保存成功')
             }
         })
+        builder.addCase(copyWorkAsync.fulfilled, (state, props) => {}),
+            builder.addCase(getMySingleWorkAsync.fulfilled, (state, props) => {
+                let prop = props.payload as singleEditorTypes
+                if (prop) {
+                    state.components = prop.content.components.map(
+                        (item: any, index: number) => {
+                            return {
+                                ...item,
+                                isHidden: false,
+                                isLocked: false,
+                                layerName: '图层' + index + 1,
+                            }
+                        },
+                    )
+                    state.page.title = prop.title
+                    state.page.props = prop.content.props
+                    state.page.coverImg = prop.coverImg
+                }
+            })
+        builder.addCase(getChannelListAsync.fulfilled, (state, props) => {
+            const prop = props.payload as channelDataType
+            state.channels = prop.list
+        })
     },
 })
 
@@ -523,6 +556,23 @@ export const saveTemplateAsync = createAsyncThunkWrapper<any, string>(
     'editor/saveTemplateAsync',
     saveWorks,
     true,
+)
+
+export const getChannelListAsync = createAsyncThunkWrapper<
+    channelDataType,
+    string
+>('editor/getChannelListAsync', getChannelList, false)
+
+export const copyWorkAsync = createAsyncThunkWrapper<any, string>(
+    'editor/copyWorkAsync',
+    copyWork,
+    false,
+)
+
+export const getMySingleWorkAsync = createAsyncThunkWrapper<any, string>(
+    'editor/getMySingleWorkAsync',
+    getMySingleWork,
+    false,
 )
 
 export const {

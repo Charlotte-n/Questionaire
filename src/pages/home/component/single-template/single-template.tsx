@@ -3,6 +3,7 @@ import React, { FC } from 'react'
 import Ellipsis from '../../../../components/Ellipsis/ellipsis'
 import './index.css'
 import { useNavigate } from 'react-router-dom'
+import { copyWork } from '../../../../apis/work/work'
 
 interface Props {
     baseInfo: {
@@ -19,8 +20,9 @@ const SingleTemplate: FC<Props> = (props) => {
     const { id } = props
     const navigate = useNavigate()
 
-    const handleGoToTemplate = (id: number) => {
-        navigate(`/gxt/edit/${id}`)
+    const handleGoToTemplate = async (id: string) => {
+        const res = await copyWork(id)
+        navigate(`/gxt/edit/${res.data.id}`)
     }
 
     return (
@@ -32,7 +34,7 @@ const SingleTemplate: FC<Props> = (props) => {
                         type="primary"
                         size="large"
                         className="rounded-full"
-                        onClick={() => handleGoToTemplate(id)}
+                        onClick={() => handleGoToTemplate(JSON.stringify(id))}
                     >
                         使用此模板创建
                     </Button>

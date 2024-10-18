@@ -42,3 +42,13 @@ export interface singleEditorTypes {
     isPublic: boolean
     coverImg: string
 }
+
+export interface ChannelType {
+    id: number
+    name: string
+}
+
+export interface channelDataType {
+    count: number
+    list: ChannelType[]
+}

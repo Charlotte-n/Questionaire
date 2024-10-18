@@ -23,7 +23,7 @@ export default function withProductRoute(
                     route.find((item) => item.path === location.pathname)
                         ?.redirectLogin
                 ) {
-                    navigate('/login', { replace: true })
+                    navigate('/gxt/login', { replace: true })
                 } else {
                     navigate(location.pathname, { replace: true })
                 }
@@ -37,7 +37,7 @@ export default function withProductRoute(
                         route.find((item) => item.path === location.pathname)
                             ?.redirectLogin
                     ) {
-                        navigate('/login', { replace: true })
+                        navigate('/gxt/login', { replace: true })
                     } else {
                         navigate(location.pathname, { replace: true })
                     }
@@ -47,7 +47,7 @@ export default function withProductRoute(
                         route.find((item) => item.path === location.pathname)
                             ?.isLogin
                     ) {
-                        navigate('/login', { replace: true })
+                        navigate('/gxt/login', { replace: true })
                     } else {
                         navigate(location.pathname, { replace: true })
                     }

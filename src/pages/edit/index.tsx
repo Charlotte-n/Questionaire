@@ -5,8 +5,10 @@ import {
     addComponent,
     clearSelected,
     ComponentData,
+    copyWorkAsync,
     getCurrentElement,
     getCurrentTemplateAsync,
+    getMySingleWorkAsync,
     handleChangeComponent,
     handleSortAction,
     pushHistoryAction,
@@ -26,6 +28,7 @@ import { debounce } from '../utils/util'
 import initContextMenu from './component/context-menu/initContextMenu'
 import { useParams } from 'react-router-dom'
 import EditHeader from './component/header'
+import { getMySingleWork } from '../../apis/work/work'
 
 function getComponent(c: ComponentData) {
     const { props, name }: { props: LTextPropsType; name: string } = c
@@ -132,7 +135,7 @@ const Editor: FC = () => {
     initContextMenu(setActiveClick as any)
 
     useEffect(() => {
-        dispatch(getCurrentTemplateAsync(id as string))
+        dispatch(getMySingleWorkAsync(id as string))
     }, [])
 
     return (

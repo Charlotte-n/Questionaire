@@ -42,9 +42,9 @@ class HYRequest {
 
                 //登陆到期了
                 if (errno && errno === 101001) {
-                    message.error('登录过期，请重新登录')
-                    store.dispatch(loginout())
-                    window.location.href = '/login'
+                    // message.error('登录过期，请重新登录')
+                    // store.dispatch(loginout())
+                    // window.location.href = '/gxt/login'
                 } else if (errno) {
                     message.error(msg)
                     store.dispatch(setError({ status: true, message: msg }))

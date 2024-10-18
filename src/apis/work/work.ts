@@ -1,4 +1,5 @@
 import hyRequest from '../../services'
+import { getLocalStorage } from '../../utils/localstorge'
 
 //获取模板
 export const getTemplateList = ({
@@ -26,6 +27,18 @@ export const getSingleTemplate = (id: string) => {
     })
 }
 
+//复制模板
+export const copyWork = (id: string) => {
+    return hyRequest.post({
+        url: `/works/copyWork`,
+        opName: 'copyTemplate',
+        data: {
+            id,
+            author: getLocalStorage('userInfo')?.username || '',
+        },
+    })
+}
+
 //保存单个模板
 export const saveWorks = (id: string) => {
     return hyRequest.post({
@@ -47,5 +60,62 @@ export const publishMyWork = (id: string) => {
     return hyRequest.post({
         url: `/works/publishWork/${id}`,
         opName: 'publishMyWork',
+    })
+}
+
+//获取我的单个作品
+export const getMySingleWork = (id: string) => {
+    return hyRequest.get({
+        url: `/works/myWork/${id}`,
+        opName: 'getMySingleWork',
+    })
+}
+
+//创建渠道
+export const createChannel = ({
+    workId,
+    name,
+}: {
+    workId: string
+    name: string
+}) => {
+    return hyRequest.post({
+        url: '/channels/createChannel',
+        opName: 'createChannel',
+        data: {
+            workId,
+            name,
+        },
+    })
+}
+
+//获取渠道列表
+export const getChannelList = (id: string) => {
+    return hyRequest.get({
+        url: `/channels/getChannelList/${id}`,
+        opName: 'getChannelList',
+    })
+}
+
+//更新渠道名字
+export const updateChannelName = ({
+    id,
+    data,
+}: {
+    id: string
+    data: { name: string }
+}) => {
+    return hyRequest.post({
+        url: `/channels/updateChannelName/${id}`,
+        opName: 'updateChannelName',
+        data,
+    })
+}
+
+//删除渠道
+export const deleteChannel = (id: string) => {
+    return hyRequest.post({
+        url: `/channels/deleteChannel/${id}`,
+        opName: 'deleteChannel',
     })
 }
