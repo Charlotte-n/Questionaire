@@ -1,11 +1,11 @@
 import { Form, InputNumber, Select } from 'antd'
 import React, { FC, useEffect, useMemo } from 'react'
-import Uploader from '../../../../components/Uploader'
+import Uploader from '../../../../../components/Uploader'
 import { UploadImgRes } from '../cropper'
-import ColorPicker from '../../../../components/ColorPicker'
-import { useAppDispatch, useAppSelector } from '../../../../stores'
+import ColorPicker from '../../../../../components/ColorPicker'
+import { useAppDispatch, useAppSelector } from '../../../../../stores'
 import CropperCom from '../cropper/index'
-import { ChangePagePropsAction } from '../../../../stores/editor'
+import { ChangePagePropsAction } from '../../../../../stores/editor'
 
 interface IProps {
     url?: string

@@ -2,11 +2,11 @@ import React, { FC } from 'react'
 import {
     ComponentConfType,
     getComponentConfByType,
-} from '../../../../components'
-import { useAppSelector } from '../../../../stores'
-import { getCurrentElement } from '../../../../stores/editor'
-import NoPage from '../no-page'
-import { propsComponentMap } from '../../../../utils/propsMap'
+} from '../../../../../components'
+import { useAppSelector } from '../../../../../stores'
+import { getCurrentElement } from '../../../../../stores/editor'
+import NoPage from '../../../component/no-page'
+import { propsComponentMap } from '../../../../../utils/propsMap'
 
 const PropsTable: FC<{
     subName: string

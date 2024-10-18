@@ -1,7 +1,7 @@
 import { Button, Input, Tooltip } from 'antd'
 import React, { memo, useState, useRef, useEffect, useCallback } from 'react'
 import type { FC, ReactNode } from 'react'
-import { ComponentData } from '../../../../stores/editor'
+import { ComponentData } from '../../../../../stores/editor'
 import {
     DragOutlined,
     EyeInvisibleOutlined,
@@ -9,8 +9,8 @@ import {
     LockOutlined,
     UnlockOutlined,
 } from '@ant-design/icons'
-import { useKeyPress } from '../../../../hooks/useKeyPress'
-import { useClickOutside } from '../../../../hooks/useClickOutside'
+import { useKeyPress } from '../../../../../hooks/useKeyPress'
+import { useClickOutside } from '../../../../../hooks/useClickOutside'
 import {
     SortableContainer as sortableContainer,
     SortableElement,

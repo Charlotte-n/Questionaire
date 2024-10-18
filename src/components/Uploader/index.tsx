@@ -19,7 +19,7 @@ import {
 } from '@ant-design/icons'
 import { last } from 'lodash-es'
 import { Button, Progress } from 'antd'
-import { UploadImgRes } from '../../pages/edit/component/cropper'
+import { UploadImgRes } from '../../pages/edit/children/right-edit/cropper'
 
 interface IProps {
     children?: {

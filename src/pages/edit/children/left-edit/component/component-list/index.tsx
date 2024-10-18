@@ -1,12 +1,12 @@
 import React, { FC, useCallback } from 'react'
-import { defaultTemplates } from '../../../../data/defaultTemplates'
-import LText from '../../../../components/LText/Component'
-import Uploader from '../../../../components/Uploader'
+import { defaultTemplates } from '../../../../../../data/defaultTemplates'
+import LText from '../../../../../../components/LText/Component'
+import Uploader from '../../../../../../components/Uploader'
 import { LoadingOutlined, UploadOutlined } from '@ant-design/icons'
 import { Button } from 'antd'
 import { commonUploadCheck, getImageSize } from './helper'
 import { v4 as uuidv4 } from 'uuid'
-import { imageStylePropName } from '../../../../stores/commonproperties'
+import { imageStylePropName } from '../../../../../../stores/commonproperties'
 
 const ComponentList: FC<{
     onItemClick: (item: any) => void

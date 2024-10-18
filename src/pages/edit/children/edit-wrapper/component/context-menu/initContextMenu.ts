@@ -1,14 +1,13 @@
 import { useEffect } from 'react'
 import { ActionItem } from './index'
 import { createContextMenu } from './createContextMenu'
-import { useAppDispatch } from '../../../../stores'
+import { useAppDispatch } from '../../../../../../stores'
 import {
     clearSelected,
     copyComponent,
     deleteComponent,
     pasteComponent,
-    redo,
-} from '../../../../stores/editor'
+} from '../../../../../../stores/editor'
 
 const initContextMenu = (
     seatActive: (

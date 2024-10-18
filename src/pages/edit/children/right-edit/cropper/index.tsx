@@ -2,7 +2,7 @@ import React, { memo, useState, useRef, useEffect } from 'react'
 import type { FC, ReactNode } from 'react'
 import Modal from 'antd/es/modal/Modal'
 import Cropper from 'cropperjs'
-import Uploader from '../../../../components/Uploader'
+import Uploader from '../../../../../components/Uploader'
 import { Button } from 'antd'
 import 'cropperjs/dist/cropper.css'
 

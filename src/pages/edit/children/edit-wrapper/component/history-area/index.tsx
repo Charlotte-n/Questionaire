@@ -2,8 +2,8 @@ import { RedoOutlined, UndoOutlined } from '@ant-design/icons'
 import { Button, Tooltip } from 'antd'
 import React, { memo, useEffect } from 'react'
 import type { FC, ReactNode } from 'react'
-import { useAppDispatch, useAppSelector } from '../../../../stores'
-import { redo, undo } from '../../../../stores/editor'
+import { useAppDispatch, useAppSelector } from '../../../../../../stores'
+import { redo, undo } from '../../../../../../stores/editor'
 
 interface IProps {
     children?: ReactNode

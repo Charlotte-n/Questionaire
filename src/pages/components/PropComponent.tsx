@@ -10,7 +10,7 @@ import {
 } from '../../components/LText/constance'
 import ColorPicker from '../../components/ColorPicker'
 import { sizeOptions } from './config'
-import CropperCom from '../edit/component/cropper'
+import CropperCom from '../edit/children/right-edit/cropper'
 import { useAppSelector } from '../../stores'
 import { getCurrentElement } from '../../stores/editor'
 import { omit } from 'lodash-es'

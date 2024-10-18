@@ -17,18 +17,19 @@ import {
 } from '../../stores/editor'
 import { ComponentConfType, getComponentConfByType } from '../../components'
 import EditWrapper from './children/edit-wrapper'
-import { Layout, Tabs } from 'antd'
-import LayerList from './component/layer-list'
-import EditGroup from './component/edit-group'
-import PageSetting from './component/page-setting'
+import { Layout, Modal, Tabs } from 'antd'
+import LayerList from './children/right-edit/layer-list'
+import EditGroup from './children/right-edit/edit-group'
+import PageSetting from './children/right-edit/page-setting'
 import { initHotKeys } from '../../plugins/hotKeys'
-import HistoryArea from './component/history-area'
+import HistoryArea from './children/edit-wrapper/component/history-area'
 import LeftEditor from './children/left-edit'
 import { debounce } from '../utils/util'
-import initContextMenu from './component/context-menu/initContextMenu'
+import initContextMenu from './children/edit-wrapper/component/context-menu/initContextMenu'
 import { useParams } from 'react-router-dom'
 import EditHeader from './component/header'
 import { getMySingleWork } from '../../apis/work/work'
+import PublishModal from './component/publish-modal'
 
 function getComponent(c: ComponentData) {
     const { props, name }: { props: LTextPropsType; name: string } = c
@@ -254,6 +255,7 @@ const Editor: FC = () => {
                     </div>
                 </div>
             </Layout.Content>
+            <PublishModal />
         </Layout>
     )
 }

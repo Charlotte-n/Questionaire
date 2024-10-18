@@ -1,5 +1,5 @@
 import { Collapse } from 'antd'
-import React, { FC, useEffect } from 'react'
+import React, { FC } from 'react'
 import PropsTable from '../props-table'
 
 import { defaultEditGroups } from './config'
