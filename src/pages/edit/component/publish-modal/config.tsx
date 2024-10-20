@@ -10,6 +10,7 @@ import { useAppDispatch, useAppSelector } from '../../../../stores'
 import { getChannelListAsync } from '../../../../stores/editor'
 import QRCode from 'qrcode'
 import { BaseUrl } from '../../../../constances'
+import ClipboardJS from 'clipboard'
 
 const TabContent: FC<{
     isWork: boolean
@@ -21,7 +22,8 @@ const TabContent: FC<{
     const { opName } = useAppSelector((state) => state.globalSlice)
 
     const generateQRCode = useMemo(
-        () => (channelId: string) => {
+        () => (isTemplate: boolean, channelId?: string) => {
+            if (isTemplate) return `${BaseUrl}/p/${id}-${page.uuid}`
             return `${BaseUrl}/p/${id}-${page.uuid}?channels=${channelId}`
         },
         [id],
@@ -79,6 +81,14 @@ const TabContent: FC<{
         })
     }, [channels])
 
+    useEffect(() => {
+        const clipboard = new ClipboardJS('.copy-btn')
+        clipboard.on('success', function (e) {
+            e.clearSelection()
+            message.success('复制成功')
+        })
+    }, [])
+
     return (
         <div className="flex flex-col justify-between w-[100%] h-[100%]">
             <div>
@@ -116,12 +126,15 @@ const TabContent: FC<{
                                                 <Input
                                                     className="mr-[5px] rounded-full"
                                                     value={generateQRCode(
+                                                        false,
                                                         item.id,
                                                     )}
+                                                    id={`btn-${item.id}`}
                                                 ></Input>
                                                 <Button
                                                     size="middle"
-                                                    className="rounded-full"
+                                                    className="rounded-full copy-btn"
+                                                    data-clipboard-target={`#btn-${item.id}`}
                                                 >
                                                     复制
                                                 </Button>
@@ -141,8 +154,16 @@ const TabContent: FC<{
                         <div className="flex-1 flex-col mb-[20px] ">
                             <div className="font-bold mb-[5px]">模板信息</div>
                             <div className="flex items-center">
-                                <Input className="mr-[5px] rounded-full"></Input>
-                                <Button size="middle" className="rounded-full">
+                                <Input
+                                    className="mr-[5px] rounded-full"
+                                    id="template-info"
+                                    value={generateQRCode(true)}
+                                ></Input>
+                                <Button
+                                    size="middle"
+                                    className="rounded-full copy-btn"
+                                    data-clipboard-target="#template-info"
+                                >
                                     复制
                                 </Button>
                             </div>
