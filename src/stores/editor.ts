@@ -35,6 +35,7 @@ interface PageDataType {
     title: string
     coverImg: string
     uuid: string
+    subTitle: string
 }
 
 export interface EditorDataProps {
@@ -126,6 +127,7 @@ export const initialState: EditorDataProps = {
         title: '',
         coverImg: '',
         uuid: '',
+        subTitle: '未命名的作品',
     },
     copedComponent: undefined,
     histories: [],
@@ -469,6 +471,9 @@ export const EditorSlice = createSlice({
                 state.page.props = prop.content.props
                 state.page.coverImg = prop.coverImg
                 state.page.uuid = prop.uuid
+                state.page.subTitle = prop?.subTitle
+                    ? prop.subTitle
+                    : '未命名的作品'
             }
         })
         builder.addCase(getChannelListAsync.fulfilled, (state, props) => {

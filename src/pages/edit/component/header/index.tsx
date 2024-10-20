@@ -8,7 +8,10 @@ import { useSaveWork } from './hooks/useSaveWork'
 import { usePublish } from './hooks/usePublish'
 import PublishModal from '../publish-modal'
 
-const EditHeader: FC = () => {
+interface Props {
+    handleOpenPreviewForm: () => void
+}
+const EditHeader: FC<Props> = ({ handleOpenPreviewForm }) => {
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
     const { saveWorkApi } = useSaveWork()
@@ -52,7 +55,11 @@ const EditHeader: FC = () => {
             <div className="text-white">未命名的作品</div>
 
             <div className="flex justify-center items-center">
-                <Button type="primary" className={buttonClassName}>
+                <Button
+                    type="primary"
+                    className={buttonClassName}
+                    onClick={handleOpenPreviewForm}
+                >
                     预览和设置
                 </Button>
 

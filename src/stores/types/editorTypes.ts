@@ -41,6 +41,7 @@ export interface singleEditorTypes {
     isTemplate: boolean
     isPublic: boolean
     coverImg: string
+    subTitle: string
 }
 
 export interface ChannelType {

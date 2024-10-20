@@ -14,7 +14,7 @@ export const usePublish = () => {
 
     const { saveWorkApi } = useSaveWork(true)
 
-    const publish = async (handlePublishVisible: () => void) => {
+    const publish = async (handlePublishVisible?: () => void) => {
         const editWrapper = document.querySelector(
             '.edit-canvas',
         ) as HTMLElement
@@ -29,7 +29,7 @@ export const usePublish = () => {
             //获取渠道列表
             await dispatch(getChannelListAsync(id as string))
 
-            handlePublishVisible()
+            handlePublishVisible && handlePublishVisible()
         }
     }
 

@@ -23,8 +23,8 @@ const TabContent: FC<{
 
     const generateQRCode = useMemo(
         () => (isTemplate: boolean, channelId?: string) => {
-            if (isTemplate) return `${BaseUrl}/p/${id}-${page.uuid}`
-            return `${BaseUrl}/p/${id}-${page.uuid}?channels=${channelId}`
+            if (isTemplate) return `${BaseUrl}/api/pages/p/${id}-${page.uuid}`
+            return `${BaseUrl}/api/pages/p/${id}-${page.uuid}?channels=${channelId}`
         },
         [id],
     )

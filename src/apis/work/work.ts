@@ -120,3 +120,18 @@ export const deleteChannel = (id: string) => {
         opName: 'deleteChannel',
     })
 }
+
+//更新作品名称
+export const updateName = (
+    id: string,
+    data: {
+        title: string
+        subTitle: string
+    },
+) => {
+    return hyRequest.post({
+        url: `/works/update/${id}`,
+        opName: 'updateName',
+        data,
+    })
+}

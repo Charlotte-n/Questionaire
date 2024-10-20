@@ -28,8 +28,7 @@ import { debounce } from '../utils/util'
 import initContextMenu from './children/edit-wrapper/component/context-menu/initContextMenu'
 import { useParams } from 'react-router-dom'
 import EditHeader from './component/header'
-import { getMySingleWork } from '../../apis/work/work'
-import PublishModal from './component/publish-modal'
+import PreviewForm from './component/preview-form'
 
 function getComponent(c: ComponentData) {
     const { props, name }: { props: LTextPropsType; name: string } = c
@@ -52,6 +51,15 @@ const Editor: FC = () => {
     const [activeKey, setActiveKey] = useState('1')
     //获取router的id
     const { id } = useParams<{ id: string }>()
+    const [previewFormVisible, setPreviewFormVisible] = useState(false)
+
+    const handleClosePreviewForm = () => {
+        setPreviewFormVisible(false)
+    }
+
+    const handleOpenPreviewForm = () => {
+        setPreviewFormVisible(true)
+    }
 
     const addItem = (props: any) => {
         dispatch(addComponent(props))
@@ -142,7 +150,7 @@ const Editor: FC = () => {
     return (
         <Layout>
             <Layout.Header>
-                <EditHeader />
+                <EditHeader handleOpenPreviewForm={handleOpenPreviewForm} />
             </Layout.Header>
             <Layout.Content>
                 <div className="flex text-center h-[100vh] bg-[#f2f2f5]">
@@ -255,6 +263,12 @@ const Editor: FC = () => {
                     </div>
                 </div>
             </Layout.Content>
+            (
+            <PreviewForm
+                drawerVisible={previewFormVisible}
+                onClose={handleClosePreviewForm}
+            ></PreviewForm>
+            )
         </Layout>
     )
 }

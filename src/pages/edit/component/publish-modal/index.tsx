@@ -1,5 +1,5 @@
 import { Divider, Modal, Tabs } from 'antd'
-import React, { FC } from 'react'
+import React, { FC, memo } from 'react'
 import { MergeProps } from '../../../../stores/commonproperties'
 import { useAppSelector } from '../../../../stores'
 import { TabItems } from './config'
@@ -47,4 +47,4 @@ const PublishModal: FC<PublishModalProps> = (props) => {
     )
 }
 
-export default PublishModal
+export default memo(PublishModal)

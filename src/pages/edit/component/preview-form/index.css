@@ -1,0 +1,21 @@
+.final-preview {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: transparent;
+    z-index: 1500;
+    width: calc(100% - 400px);
+    height: 100%;
+}
+
+.final-preview .final-inner {
+    width: 430px;
+    height: 870px;
+    padding: 60px 28px;
+    position: relative;
+    background: url('../../../../assets/phone-back.png') no-repeat;
+    background-size: cover;
+}
