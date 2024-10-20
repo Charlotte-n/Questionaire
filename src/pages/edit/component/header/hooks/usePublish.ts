@@ -5,6 +5,7 @@ import { publishMyWork, createChannel } from '../../../../../apis/work/work'
 import { getChannelListAsync } from '../../../../../stores/editor'
 import { useParams } from 'react-router-dom'
 import { useSaveWork } from './useSaveWork'
+import { useEffect } from 'react'
 
 export const usePublish = () => {
     const dispatch = useAppDispatch()
@@ -27,16 +28,21 @@ export const usePublish = () => {
             await publishMyWork(id as string)
             //获取渠道列表
             await dispatch(getChannelListAsync(id as string))
-            //如果没有渠道列表就生成默认的渠道
-            console.log(channels, '获取到的渠道值')
 
-            if (channels.length === 0) {
-                createChannel({ workId: id as string, name: '' })
-            }
             handlePublishVisible()
         }
     }
 
+    useEffect(() => {
+        dispatch(getChannelListAsync(id as string))
+    }, [])
+
+    useEffect(() => {
+        //如果没有渠道列表就生成默认的渠道
+        if (channels && channels.length === 0) {
+            createChannel({ workId: id as string, name: '' })
+        }
+    }, [channels])
     return {
         publish,
     }

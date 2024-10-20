@@ -48,7 +48,6 @@ export const isLoading = (state: any) => {
 }
 
 export const opNameIsLoading = (state: any, opName: any): boolean => {
-    console.log(state.getState().globalSlice.opName[opName], opName)
     return state.getState().globalSlice.opName[opName]
 }
 export const { finishLoading, startLoading, setError } = globalSlice.actions

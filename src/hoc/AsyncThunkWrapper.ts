@@ -25,7 +25,6 @@ export function createAsyncThunkWrapper<Returned, ThunkArg = void>(
     >(typePrefix, async (arg: ThunkArg, { rejectWithValue }) => {
         try {
             const res = await apiCall(arg)
-            console.log(res, `${typePrefix} 的返回值为`)
             return returnedAll ? res : res.data
         } catch (err) {
             console.log(err)

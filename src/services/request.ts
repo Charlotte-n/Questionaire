@@ -18,7 +18,6 @@ class HYRequest {
                     opName: string
                 }
                 if (getLocalStorage('token')) {
-                    console.log(state.userSlice.token)
                     config.headers.Authorization = `Bearer ${getLocalStorage('token')}`
                 }
                 store.dispatch(setError({ status: false, message: '' }))

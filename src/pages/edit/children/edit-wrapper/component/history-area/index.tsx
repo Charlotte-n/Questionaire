@@ -15,10 +15,6 @@ const HistoryArea: FC<IProps> = () => {
         (state) => state.editorSlice,
     )
 
-    useEffect(() => {
-        console.log(histories)
-    }, [histories])
-
     const handleUndo = () => {
         dispatch(undo())
     }
@@ -27,9 +23,6 @@ const HistoryArea: FC<IProps> = () => {
         dispatch(redo())
     }
 
-    useEffect(() => {
-        console.log(histories)
-    }, [histories])
     return (
         <div className="absolute right-[30px] top-[0px]">
             <div>

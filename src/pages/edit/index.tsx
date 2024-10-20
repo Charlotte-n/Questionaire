@@ -159,7 +159,7 @@ const Editor: FC = () => {
                             <p>画布区域</p>
                             <HistoryArea />
                             <div
-                                className={`canvas-area fixed overflow-hidden mt-[50px] max-h-[80vh] min-w-[20vw] cursor-pointer rounded-md`}
+                                className={`canvas-area fixed overflow-hidden mt-[50px] max-h-[80vh] min-w-[375px] cursor-pointer rounded-md`}
                                 onClick={() => handleChangePageTab()}
                             >
                                 <div

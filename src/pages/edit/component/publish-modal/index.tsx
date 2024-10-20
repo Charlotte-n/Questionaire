@@ -15,7 +15,6 @@ const defaultProp: PublishModalProps = {
 const PublishModal: FC<PublishModalProps> = (props) => {
     const defaultProps = MergeProps(defaultProp, props)
     const { isModalOpen, onClose } = defaultProps as any
-    console.log(onClose)
 
     const { page } = useAppSelector((state) => state.editorSlice)
     return (

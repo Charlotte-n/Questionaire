@@ -69,7 +69,7 @@ const Login: FC = () => {
                 setLocalStorage('phone', formData.phoneNumber)
 
                 setTimeout(() => {
-                    navigate('/')
+                    navigate('/gxt/home')
                 }, 1000)
             }
         } catch (e) {

@@ -30,8 +30,6 @@ export default function withProductRoute(
             } else {
                 if (token) {
                     //重新获取用户信息
-                    console.log('重新获取数据?')
-
                     store.dispatch(getUserInfoAsync(''))
                     if (
                         route.find((item) => item.path === location.pathname)

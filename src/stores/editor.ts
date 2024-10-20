@@ -6,8 +6,6 @@ import { v4 as uuidv4 } from 'uuid'
 import {
     getSingleTemplate,
     saveWorks,
-    publishMyWork,
-    publishTemplate,
     getChannelList,
     copyWork,
     getMySingleWork,
@@ -36,6 +34,7 @@ interface PageDataType {
     props: any
     title: string
     coverImg: string
+    uuid: string
 }
 
 export interface EditorDataProps {
@@ -51,7 +50,7 @@ export interface EditorDataProps {
     cacheOldValues: any
     maxHistoryNumber: number
     isDirty: boolean
-    channels: ChannelType[]
+    channels: ChannelType[] | null
 }
 export interface ComponentData {
     // 这个元素的 属性，属性请详见下面
@@ -126,6 +125,7 @@ export const initialState: EditorDataProps = {
         props: defaultPageProps,
         title: '',
         coverImg: '',
+        uuid: '',
     },
     copedComponent: undefined,
     histories: [],
@@ -133,7 +133,7 @@ export const initialState: EditorDataProps = {
     cacheOldValues: null,
     maxHistoryNumber: 5,
     isDirty: false,
-    channels: [],
+    channels: null,
 }
 
 //将这些内容放到redux里面管理
@@ -442,6 +442,7 @@ export const EditorSlice = createSlice({
                 state.page.title = prop.title
                 state.page.props = prop.content.props
                 state.page.coverImg = prop.coverImg
+                state.page.uuid = prop.uuid
             }
         })
         builder.addCase(saveTemplateAsync.fulfilled, (state, props) => {
@@ -450,25 +451,26 @@ export const EditorSlice = createSlice({
                 message.success('保存成功')
             }
         })
-        builder.addCase(copyWorkAsync.fulfilled, (state, props) => {}),
-            builder.addCase(getMySingleWorkAsync.fulfilled, (state, props) => {
-                let prop = props.payload as singleEditorTypes
-                if (prop) {
-                    state.components = prop.content.components.map(
-                        (item: any, index: number) => {
-                            return {
-                                ...item,
-                                isHidden: false,
-                                isLocked: false,
-                                layerName: '图层' + index + 1,
-                            }
-                        },
-                    )
-                    state.page.title = prop.title
-                    state.page.props = prop.content.props
-                    state.page.coverImg = prop.coverImg
-                }
-            })
+        builder.addCase(copyWorkAsync.fulfilled, (state, props) => {})
+        builder.addCase(getMySingleWorkAsync.fulfilled, (state, props) => {
+            let prop = props.payload as singleEditorTypes
+            if (prop) {
+                state.components = prop.content.components.map(
+                    (item: any, index: number) => {
+                        return {
+                            ...item,
+                            isHidden: false,
+                            isLocked: false,
+                            layerName: '图层' + index + 1,
+                        }
+                    },
+                )
+                state.page.title = prop.title
+                state.page.props = prop.content.props
+                state.page.coverImg = prop.coverImg
+                state.page.uuid = prop.uuid
+            }
+        })
         builder.addCase(getChannelListAsync.fulfilled, (state, props) => {
             const prop = props.payload as channelDataType
             state.channels = prop.list
@@ -528,7 +530,6 @@ const pushHistory = (
 
     //最大保存的历史记录数目
     if (state.histories.length > state.maxHistoryNumber) {
-        console.log(1)
         state.histories.shift()
         return
     }
