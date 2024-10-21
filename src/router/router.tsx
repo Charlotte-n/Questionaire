@@ -6,6 +6,7 @@ import RootPage from '../RootPage.tsx'
 
 const Login = lazy(() => import('../pages/login/index.tsx'))
 const Home = lazy(() => import('../pages/home/index.tsx'))
+const MyWorks = lazy(() => import('../pages/my-works/index.tsx'))
 const router = createBrowserRouter(
     [
         {
@@ -28,6 +29,10 @@ const router = createBrowserRouter(
                         <Editor></Editor>
                         // </RequireSaveConfirmation>
                     ),
+                },
+                {
+                    path: 'myWorks',
+                    element: <MyWorks />,
                 },
             ],
         },

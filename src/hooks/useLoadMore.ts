@@ -35,7 +35,7 @@ export const useLoadMore = (
 
     //是否为最后一页
     const isLastPage = useMemo(() => {
-        return Math.ceil(total / params.pageSize) === pageIndex
+        return Math.ceil(total / params.pageSize) === pageIndex + 1
     }, [total, params.pageSize, pageIndex])
 
     return {

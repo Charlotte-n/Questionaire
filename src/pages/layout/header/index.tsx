@@ -31,7 +31,13 @@ const Header: FC = () => {
                     创建设计
                 </Button>
 
-                <Button type="primary" className={buttonClassName}>
+                <Button
+                    type="primary"
+                    className={buttonClassName}
+                    onClick={() => {
+                        navigate('/gxt/myWorks')
+                    }}
+                >
                     我的作品
                 </Button>
 

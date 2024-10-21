@@ -26,9 +26,12 @@ const SingleTemplate: FC<Props> = (props) => {
     }
 
     return (
-        <div className="rounded-md  bg-[#fdfdfd] border-[1px] border-solid h-[100%]">
-            <div className="hover-container">
-                <img src={coverImage} className="w-[100%] h-[100%]" />
+        <div className="rounded-md  bg-[#fdfdfd]  h-[100%]">
+            <div className="hover-container overflow-hidden">
+                <img
+                    src={coverImage}
+                    className="w-[100%] h-[100%] single-template-img"
+                />
                 <div className="hover-item">
                     <Button
                         type="primary"
@@ -40,7 +43,7 @@ const SingleTemplate: FC<Props> = (props) => {
                     </Button>
                 </div>
             </div>
-            <div>
+            <div className="border-[1px] border-solid">
                 <h2 className="px-[10px] py-[10px] border-b-[1px] border-solid">
                     {title}
                 </h2>
