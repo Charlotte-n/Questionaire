@@ -5,9 +5,9 @@ export const CommonProperties = {
     //事件功能
     actionType: '',
     url: '',
-    //尺寸
-    height: '80px',
-    width: '100px',
+    // //尺寸
+    // height: '80px',
+    // width: '100px',
     //边框
     borderStyle: 'none',
     borderColor: '#000',

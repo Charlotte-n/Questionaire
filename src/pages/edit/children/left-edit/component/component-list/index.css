@@ -1,0 +1,5 @@
+.text-show > * {
+    position: static !important;
+    display: flex;
+    justify-content: center;
+}
