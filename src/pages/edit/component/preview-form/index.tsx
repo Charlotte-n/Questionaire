@@ -16,7 +16,6 @@ import './index.css'
 import { produce } from 'immer'
 import { updateName } from '../../../../apis/work/work'
 import { usePublish } from '../header/hooks/usePublish'
-import { useSaveWork } from '../header/hooks/useSaveWork'
 
 interface IProps {
     children?: ReactNode

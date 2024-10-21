@@ -4,6 +4,7 @@ import { useAppDispatch } from '../stores'
 interface IParams {
     pageIndex: number
     pageSize: number
+    [key: string]: string | number
 }
 
 export const useLoadMore = (
@@ -27,10 +28,12 @@ export const useLoadMore = (
     const loadMore = () => {
         setPageIndex(pageIndex + 1)
     }
+
+    const gotoPage = (page: number) => {
+        setPageIndex(page)
+    }
     useEffect(() => {
-        if (pageIndex >= 1) {
-            dispatch(api(requestParam) as any)
-        }
+        dispatch(api(requestParam) as any)
     }, [pageIndex])
 
     //是否为最后一页
@@ -42,5 +45,6 @@ export const useLoadMore = (
         loadMore,
         pageIndex,
         isLastPage,
+        gotoPage,
     }
 }

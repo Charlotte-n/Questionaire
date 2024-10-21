@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { getTemplateList } from '../apis/work/work'
+import { getMyList, getTemplateList } from '../apis/work/work'
+import { createAsyncThunkWrapper } from '../hoc/AsyncThunkWrapper'
 
 interface initialStateType {
     templates: Array<any>
@@ -25,6 +26,13 @@ export const templatesSlice = createSlice({
                 state.templates = [...state.templates, ...props.payload?.list]
             }
         })
+        builder.addCase(
+            fetchMyWorkOrTemplate.fulfilled,
+            (state, props: any) => {
+                state.templates = props.payload?.list ? props.payload.list : []
+                state.total = props.payload?.count ? props.payload.count : 0
+            },
+        )
     },
 })
 
@@ -48,6 +56,12 @@ export const fetchTemplatesAsync = createAsyncThunk(
             return rejectWithValue(error)
         }
     },
+)
+
+export const fetchMyWorkOrTemplate = createAsyncThunkWrapper(
+    'template/fetchMyWorkOrTemplate',
+    getMyList,
+    false,
 )
 
 export const { fetchTemplates } = templatesSlice.actions

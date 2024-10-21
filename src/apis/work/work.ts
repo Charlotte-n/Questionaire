@@ -64,6 +64,20 @@ export const publishMyWork = (id: string) => {
     })
 }
 
+//获取我的作品列表
+export const getMyList = (data: {
+    pageSize: number
+    pageIndex: number
+    title?: string
+    isTemplate: number
+}) => {
+    return hyRequest.get({
+        url: '/works/getMyList',
+        opName: 'getMyList',
+        params: data,
+    })
+}
+
 //获取我的单个作品
 export const getMySingleWork = (id: string) => {
     return hyRequest.get({

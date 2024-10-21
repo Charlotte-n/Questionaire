@@ -18,8 +18,9 @@ const Hot: FC = () => {
             {templates.length &&
                 templates.map((item: any) => {
                     return (
-                        <Col key={item._id} span={6}>
+                        <Col key={item._id} span={item.length > 2 ? 6 : 24}>
                             <SingleTemplate
+                                type="template"
                                 baseInfo={{
                                     coverImage: item.coverImg,
                                     author: item.author,
