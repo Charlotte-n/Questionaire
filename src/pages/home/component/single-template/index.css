@@ -1,8 +1,8 @@
 .hover-container {
     position: relative;
-    height: 40vh;
     z-index: 10;
     overflow: hidden;
+    height: 30vh;
 }
 .hover-container:hover .hover-item {
     display: flex; /* 改为 flex 布局 */

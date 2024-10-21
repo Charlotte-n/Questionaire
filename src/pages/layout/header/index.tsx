@@ -2,14 +2,12 @@ import { Button, Dropdown, MenuProps, message } from 'antd'
 import React, { FC } from 'react'
 import { menuList } from './config'
 import { loginout } from '../../../stores/user'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import { saveTemplateAsync } from '../../../stores/editor'
+import { useNavigate } from 'react-router-dom'
 import { useAppDispatch } from '../../../stores'
 
 const Header: FC = () => {
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
-    const { id } = useParams<{ id: string }>()
     const buttonClassName = 'rounded-full mr-[25px]'
 
     const onMenuClick: MenuProps['onClick'] = (e) => {

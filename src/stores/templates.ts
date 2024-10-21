@@ -16,7 +16,7 @@ export const templatesSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(fetchTemplatesAsync.fulfilled, (state, props) => {
-            state.templates = props.payload.list
+            state.templates = props.payload?.list ? props.payload.list : []
         })
     },
 })

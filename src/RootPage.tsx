@@ -4,6 +4,7 @@ import { Layout, message } from 'antd'
 import Footer from './pages/layout/footer/index.tsx'
 import { Outlet, useLocation } from 'react-router-dom'
 import withProductRoute from './hoc/withProductRoute.tsx'
+import './index.css'
 
 const ProductRoute = [
     {
@@ -35,7 +36,7 @@ const RootPage: FC = () => {
     return (
         <div>
             {showHeader && (
-                <Layout.Header>
+                <Layout.Header className="root-header z-[10000] relative">
                     <Header></Header>
                 </Layout.Header>
             )}

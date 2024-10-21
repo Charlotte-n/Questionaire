@@ -26,7 +26,7 @@ const SingleTemplate: FC<Props> = (props) => {
     }
 
     return (
-        <div className="rounded-md w-[20vw] h-[35vh] bg-[#fdfdfd] border-[1px] border-solid">
+        <div className="rounded-md  bg-[#fdfdfd] border-[1px] border-solid h-[100%]">
             <div className="hover-container">
                 <img src={coverImage} className="w-[100%] h-[100%]" />
                 <div className="hover-item">

@@ -10,7 +10,7 @@ const Hot: FC = () => {
 
     //获取当前用户
     useEffect(() => {
-        dispatch(fetchTemplatesAsync({ pageSize: 10, pageIndex: 0 }))
+        dispatch(fetchTemplatesAsync({ pageSize: 8, pageIndex: 0 }))
     }, [])
 
     useEffect(() => {
@@ -20,11 +20,11 @@ const Hot: FC = () => {
         }
     }, [templates])
     return (
-        <Row gutter={16}>
+        <Row gutter={[20, 20]}>
             {templates.length &&
                 templates.map((item: any) => {
                     return (
-                        <Col key={item._id} span={5}>
+                        <Col key={item._id} span={6}>
                             <SingleTemplate
                                 baseInfo={{
                                     coverImage: item.coverImg,
