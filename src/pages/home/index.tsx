@@ -1,19 +1,33 @@
 import React, { FC, useEffect } from 'react'
 
 import Hot from './children/hot'
-import { useAppDispatch } from '../../stores'
+import { useAppDispatch, useAppSelector } from '../../stores'
 import { getUserInfoAsync } from '../../stores/user'
 import { getLocalStorage } from '../../utils/localstorge'
 import { Button, Col, Input, Row, Space } from 'antd'
+import { fetchTemplatesAsync } from '../../stores/templates'
 import './index.css'
+import { useLoadMore } from '../../hooks/useLoadMore'
 
 const Home: FC = () => {
     const dispatch = useAppDispatch()
-    const { Search } = Input
+    const { total } = useAppSelector((state) => state.templateSlice)
+    const pageSize = 8
+    const { opName } = useAppSelector((state) => state.globalSlice)
+
     useEffect(() => {
         // 获取用户信息
         dispatch(getUserInfoAsync(getLocalStorage('phone')))
+        //获取模板数量
+        dispatch(fetchTemplatesAsync({ pageSize, pageIndex: 0 }))
     }, [])
+
+    //加载更多
+    const { loadMore, isLastPage } = useLoadMore(fetchTemplatesAsync, total, {
+        pageSize,
+        pageIndex: 0,
+    })
+
     return (
         <div className="relative top-[-80px]">
             {/* banner */}
@@ -131,6 +145,18 @@ const Home: FC = () => {
                         <div>只需替换文字和图片，一键自动生成H5</div>
                     </div>
                     <Hot />
+                    {!isLastPage && (
+                        <Row className="mt-[20px]">
+                            <Button
+                                type="primary"
+                                className="rounded-full"
+                                onClick={loadMore}
+                                loading={opName['getTemplateList']}
+                            >
+                                加载更多
+                            </Button>
+                        </Row>
+                    )}
                 </div>
             </div>
 

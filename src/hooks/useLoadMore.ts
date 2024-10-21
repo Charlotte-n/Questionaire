@@ -1,4 +1,5 @@
-import { useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { useAppDispatch } from '../stores'
 
 interface IParams {
     pageIndex: number
@@ -6,28 +7,36 @@ interface IParams {
 }
 
 export const useLoadMore = (
-    api: (params: IParams) => void,
+    api: (params: any) => void,
     total: number,
     params: IParams,
 ) => {
-    const pageIndex = useRef((params && params.pageIndex) || 0)
+    const dispatch = useAppDispatch()
+    const [pageIndex, setPageIndex] = useState(
+        (params && params.pageIndex) || 0,
+    )
+
     const requestParam = useMemo(() => {
         return {
             ...params,
-            pageIndex: pageIndex.current,
+            pageIndex: pageIndex,
         }
-    }, [params])
+    }, [params, pageIndex])
 
     //加载更多
     const loadMore = () => {
-        pageIndex.current++
-        api(requestParam)
+        setPageIndex(pageIndex + 1)
     }
+    useEffect(() => {
+        if (pageIndex >= 1) {
+            dispatch(api(requestParam) as any)
+        }
+    }, [pageIndex])
 
     //是否为最后一页
     const isLastPage = useMemo(() => {
-        return Math.ceil(total / params.pageSize) === pageIndex.current + 1
-    }, [total, params.pageSize, pageIndex.current])
+        return Math.ceil(total / params.pageSize) === pageIndex
+    }, [total, params.pageSize, pageIndex])
 
     return {
         loadMore,

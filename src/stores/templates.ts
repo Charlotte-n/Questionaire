@@ -3,10 +3,12 @@ import { getTemplateList } from '../apis/work/work'
 
 interface initialStateType {
     templates: Array<any>
+    total: number
 }
 
 const initialState: initialStateType = {
     templates: [],
+    total: 0,
 }
 export const templatesSlice = createSlice({
     name: 'template',
@@ -16,7 +18,12 @@ export const templatesSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(fetchTemplatesAsync.fulfilled, (state, props) => {
-            state.templates = props.payload?.list ? props.payload.list : []
+            if (props.meta.arg.pageIndex === 0) {
+                state.templates = props.payload?.list ? props.payload.list : []
+                state.total = props.payload?.count ? props.payload.count : 0
+            } else {
+                state.templates = [...state.templates, ...props.payload?.list]
+            }
         })
     },
 })
@@ -35,6 +42,7 @@ export const fetchTemplatesAsync = createAsyncThunk(
     ) => {
         try {
             const res = await getTemplateList({ pageSize, pageIndex })
+
             return res.data
         } catch (error) {
             return rejectWithValue(error)
