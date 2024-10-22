@@ -75,3 +75,7 @@ export const takeScreenshotAndUpload = async (el: HTMLElement) => {
         return data
     }
 }
+
+// 下载的原理
+
+// 下载图片

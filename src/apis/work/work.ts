@@ -1,6 +1,7 @@
 import hyRequest from '../../services'
 import { getLocalStorage } from '../../utils/localstorge'
 import { ResponseType } from '../interface'
+import { TemplateType } from './interface'
 
 //获取模板
 export const getTemplateList = ({
@@ -22,7 +23,7 @@ export const getTemplateList = ({
 
 //获取单个模板
 export const getSingleTemplate = (id: string) => {
-    return hyRequest.get({
+    return hyRequest.get<ResponseType<TemplateType>>({
         url: `/works/template/${id}`,
         opName: 'getSingleTemplate',
     })

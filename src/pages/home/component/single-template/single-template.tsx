@@ -22,8 +22,8 @@ const SingleTemplate: FC<Props> = (props) => {
     const navigate = useNavigate()
 
     const handleGoToTemplate = async (id: string) => {
-        const res = await copyWork(id)
-        navigate(`/gxt/edit/${res.data.id}`)
+        // const res = await copyWork(id)
+        navigate(`/gxt/template/${id}`)
     }
 
     // 编辑该作品

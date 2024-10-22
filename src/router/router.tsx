@@ -7,6 +7,7 @@ import RootPage from '../RootPage.tsx'
 const Login = lazy(() => import('../pages/login/index.tsx'))
 const Home = lazy(() => import('../pages/home/index.tsx'))
 const MyWorks = lazy(() => import('../pages/my-works/index.tsx'))
+const Template = lazy(() => import('../pages/template/index.tsx'))
 const router = createBrowserRouter(
     [
         {
@@ -33,6 +34,10 @@ const router = createBrowserRouter(
                 {
                     path: 'myWorks',
                     element: <MyWorks />,
+                },
+                {
+                    path: 'template/:id',
+                    element: <Template />,
                 },
             ],
         },

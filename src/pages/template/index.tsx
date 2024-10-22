@@ -1,0 +1,71 @@
+import { Avatar, Button, Col, Layout, Row } from 'antd'
+import React, { FC, useEffect, useState, useLayoutEffect, useMemo } from 'react'
+import { getSingleTemplate } from '../../apis/work/work'
+import { useParams } from 'react-router-dom'
+import { TemplateType } from '../../apis/work/interface'
+import QRCode from 'qrcode'
+import { BaseUrl } from '../../constances'
+
+const Template: FC = () => {
+    const { id } = useParams()
+    const [template, setTemplate] = useState<TemplateType>()
+
+    //创建二维码
+    const qrcodeUrl = useMemo(() => {
+        return `${BaseUrl}/api/pages/p/${id}-${template?.uuid}`
+    }, [template])
+
+    useLayoutEffect(() => {
+        const qrcodeElement = document.getElementById('template-canvas')
+        if (qrcodeElement) {
+            QRCode.toCanvas(qrcodeElement, qrcodeUrl, { width: 150 })
+        }
+    }, [])
+
+    const getTemplateApi = async () => {
+        const res = await getSingleTemplate(id as string)
+        setTemplate(res.data)
+    }
+
+    useEffect(() => {
+        getTemplateApi()
+    }, [])
+    return (
+        <Layout.Content className="flex justify-center items-center h-[85vh]">
+            <Row className="max-w-[1200px] flex" gutter={20}>
+                <Col span={10}>
+                    <img src={template?.coverImg} alt="图片" />
+                </Col>
+                <Col className="flex flex-col">
+                    <div className="font-bold text-[20px] mb-[10px]">
+                        {template?.title}
+                    </div>
+                    <div className="mb-[10px]">
+                        {template?.subTitle ? template.subTitle : '未命名作品'}
+                    </div>
+                    <div className="mb-[30px]">
+                        <Avatar className="mr-[10px]" />
+                        该模板由 {template?.author} 创作
+                    </div>
+                    <div className="mb-[20px]">
+                        <div className="mb-[3px]">扫一扫，手机预览</div>
+                        <div>
+                            <canvas id="template-canvas"></canvas>
+                        </div>
+                    </div>
+                    <div>
+                        <Button
+                            type="primary"
+                            className="mr-[15px] rounded-full"
+                        >
+                            使用模板
+                        </Button>
+                        <Button className="rounded-full">下载图片海报</Button>
+                    </div>
+                </Col>
+            </Row>
+        </Layout.Content>
+    )
+}
+
+export default Template
