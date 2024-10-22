@@ -41,10 +41,10 @@ const RootPage: FC = () => {
                 </Layout.Header>
             )}
 
-            <Layout.Content>
+            <Layout.Content className="min-h-[75vh]">
                 <Outlet></Outlet>
             </Layout.Content>
-            <Layout.Footer>
+            <Layout.Footer className="bg-[#333333] w-[100%] px-0 py-[10px]">
                 <Footer></Footer>
             </Layout.Footer>
         </div>

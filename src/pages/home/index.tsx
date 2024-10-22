@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 
 import Hot from './children/hot'
 import { useAppDispatch, useAppSelector } from '../../stores'
@@ -8,18 +8,32 @@ import { Button, Col, Input, Row, Space } from 'antd'
 import { fetchTemplatesAsync } from '../../stores/templates'
 import './index.css'
 import { useLoadMore } from '../../hooks/useLoadMore'
+import { Link } from 'react-router-dom'
+import { getMyList } from '../../apis/work/work'
+import { TemplateType } from '../../apis/work/interface'
+import SingleTemplate from './component/single-template/single-template'
 
 const Home: FC = () => {
     const dispatch = useAppDispatch()
     const { total } = useAppSelector((state) => state.templateSlice)
     const pageSize = 8
     const { opName } = useAppSelector((state) => state.globalSlice)
+    const [myWorkList, setMyWorkList] = useState<TemplateType[] | []>([])
+
+    //获取我的作品
+    const getMyWorkListApi = async () => {
+        const res = await getMyList({ pageSize, pageIndex: 0, isTemplate: 0 })
+        console.log(res.data.list)
+
+        setMyWorkList(res.data.list)
+    }
 
     useEffect(() => {
         // 获取用户信息
         dispatch(getUserInfoAsync(getLocalStorage('phone')))
         //获取模板数量
         dispatch(fetchTemplatesAsync({ pageSize, pageIndex: 0 }))
+        getMyWorkListApi()
     }, [])
 
     //加载更多
@@ -133,7 +147,7 @@ const Home: FC = () => {
             </div>
             {/* 热门海报 */}
             <div className="flex justify-center">
-                <div className="flex flex-col items-center py-[20px] px-[24px] max-w-[1200px]">
+                <div className="flex flex-col items-center py-[20px] px-[24px] max-w-[1200px] w-[1200px]">
                     <div className="flex flex-col items-center  mb-[10px] ">
                         <div className="flex items-center mb-[10px]">
                             <div className="w-[50px] h-[1px] bg-[red] mr-[10px]"></div>
@@ -161,7 +175,54 @@ const Home: FC = () => {
             </div>
 
             {/* 我的作品 */}
-            <div></div>
+            <div className="flex  flex-col items-center">
+                <div className="max-w-[1200px] w-[1200px]">
+                    <div className="flex justify-between items-center py-[15px]">
+                        <div className="font-bold text-[20px]">我的作品</div>
+                        <Link
+                            to="/gxt/myWorks"
+                            className="text-[#4c81fc] cursor-pointer"
+                        >
+                            查看我的所有作品
+                        </Link>
+                    </div>
+                    <div>
+                        {myWorkList.length > 4
+                            ? myWorkList.slice(0, 4).map((item) => {
+                                  return (
+                                      <Col span={6}>
+                                          <SingleTemplate
+                                              id={item.id}
+                                              type="myWork"
+                                              baseInfo={{
+                                                  copiedCount: item.copiedCount,
+                                                  coverImage: item.coverImg,
+                                                  author: item.author,
+                                                  title: item.title,
+                                              }}
+                                          ></SingleTemplate>
+                                      </Col>
+                                  )
+                              })
+                            : myWorkList.map((item) => {
+                                  return (
+                                      <Col span={6}>
+                                          <SingleTemplate
+                                              id={item.id}
+                                              type="myWork"
+                                              baseInfo={{
+                                                  copiedCount: item.copiedCount,
+                                                  coverImage: item.coverImg,
+                                                  author: item.author,
+                                                  title: item.title,
+                                              }}
+                                          ></SingleTemplate>
+                                      </Col>
+                                  )
+                              })}
+                    </div>
+                </div>
+            </div>
         </div>
     )
 }

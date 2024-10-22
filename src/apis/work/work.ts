@@ -72,7 +72,14 @@ export const getMyList = (data: {
     title?: string
     isTemplate: number
 }) => {
-    return hyRequest.get({
+    return hyRequest.get<
+        ResponseType<{
+            count: number
+            list: TemplateType[]
+            pageIndex: number
+            pageSize: number
+        }>
+    >({
         url: '/works/getMyList',
         opName: 'getMyList',
         params: data,
