@@ -2,6 +2,7 @@ import html2canvas from 'html2canvas'
 import hyRequest from '../../services'
 import { ResponseType } from '../../apis/interface'
 import { uploadFileRes } from './interface'
+import { saveAs } from 'file-saver'
 
 // 防抖方法
 export const debounce = (callback: any, timeout = 1000) => {
@@ -79,3 +80,8 @@ export const takeScreenshotAndUpload = async (el: HTMLElement) => {
 // 下载的原理
 
 // 下载图片
+
+export const downloadImage = (url: string) => {
+    const fileName = url.substring(url.lastIndexOf('/') + 1)
+    saveAs(url, fileName)
+}

@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom'
 import { TemplateType } from '../../apis/work/interface'
 import QRCode from 'qrcode'
 import { BaseUrl } from '../../constances'
+import { downloadImage } from '../utils/util'
 
 const Template: FC = () => {
     const { id } = useParams()
@@ -60,7 +61,14 @@ const Template: FC = () => {
                         >
                             使用模板
                         </Button>
-                        <Button className="rounded-full">下载图片海报</Button>
+                        <Button
+                            className="rounded-full"
+                            onClick={() =>
+                                downloadImage(template!.coverImg as string)
+                            }
+                        >
+                            下载图片海报
+                        </Button>
                     </div>
                 </Col>
             </Row>
