@@ -257,7 +257,7 @@ const Uploader: FC<IProps> = (props) => {
 
     return (
         <>
-            <div className="flex">
+            <div className="flex w-[100%]">
                 <div className="w-[100%]">
                     <div
                         className={`is-dragover ${isDragOver ? 'drag' : ''} w-[100%]`}

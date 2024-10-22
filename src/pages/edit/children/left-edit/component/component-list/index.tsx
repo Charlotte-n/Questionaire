@@ -1,5 +1,5 @@
 import React, { FC, useCallback } from 'react'
-import { defaultTemplates } from '../../../../../../data/defaultTemplates'
+import { defaultTemplates } from './config'
 import LText from '../../../../../../components/LText/Component'
 import './index.css'
 

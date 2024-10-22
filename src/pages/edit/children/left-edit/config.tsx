@@ -18,3 +18,14 @@ export const TabItem = [
         children: <Text />,
     },
 ]
+
+export const Images = [
+    'https://static.imooc-lego.com/upload-files/528w-0ilmEQMomZ8-108048.png',
+    'https://static.imooc-lego.com/upload-files/frame-096161.png',
+    'https://static.imooc-lego.com/upload-files/text-449964.png',
+    'https://static.imooc-lego.com/upload-files/text2-288504.png',
+    'https://static.imooc-lego.com/upload-files/money-664239.png',
+    'https://static.imooc-lego.com/upload-files/bag-904186.png',
+    'https://static.imooc-lego.com/upload-files/text3-086652.png',
+    'https://static.imooc-lego.com/upload-files/text4-145592.png',
+]

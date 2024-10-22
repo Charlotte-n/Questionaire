@@ -23,6 +23,7 @@ const RootPage: FC = () => {
     const location = useLocation()
     //想要实现的效果是：/edit/:id, /login路由下不展示header
     const noHeaderRoutes = ['/edit/:id', '/login']
+    const noFooterRoutes = ['/login', '/edit/:id']
 
     // 检查当前路径是否在 noHeaderRoutes 中定义
     const showHeader = !noHeaderRoutes.some((path) => {
@@ -33,6 +34,16 @@ const RootPage: FC = () => {
             location.pathname.match(path.replace(':id', '\\d+'))
         )
     })
+
+    const showFooter = !noHeaderRoutes.some((path) => {
+        // 如果路径中包含参数（如：:id），你可能需要更复杂的匹配逻辑
+        // 这里只是一个简单的示例，仅适用于静态路径
+        return (
+            location.pathname === path ||
+            location.pathname.match(path.replace(':id', '\\d+'))
+        )
+    })
+
     return (
         <div>
             {showHeader && (
@@ -44,9 +55,12 @@ const RootPage: FC = () => {
             <Layout.Content className="min-h-[75vh]">
                 <Outlet></Outlet>
             </Layout.Content>
-            <Layout.Footer className="bg-[#333333] w-[100%] px-0 py-[10px]">
-                <Footer></Footer>
-            </Layout.Footer>
+
+            {showFooter && (
+                <Layout.Footer className="bg-[#333333] w-[100%] px-0 py-[10px]">
+                    <Footer></Footer>
+                </Layout.Footer>
+            )}
         </div>
     )
 }

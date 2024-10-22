@@ -155,10 +155,8 @@ const Editor: FC = () => {
             <Layout.Content>
                 <div className="flex text-center h-[100vh] bg-[#f2f2f5]">
                     {/* 左侧 */}
-                    <div className="w-[20vw] px-[15px] pt-[20px]  h-[100%] bg-[white] max-w-[20vw]">
+                    <div className="w-[16vw] px-[15px] pt-[20px]  h-[100%] bg-[white] max-w-[20vw]">
                         <LeftEditor />
-                        {/* <ComponentList onItemClick={addItem}></ComponentList> */}
-                        <img className="test-img" />
                     </div>
                     {/* 中间画布 */}
                     {/* TODO:这里的样式再进行琢磨一下，涉及定位之类的 */}
