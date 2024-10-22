@@ -1,7 +1,7 @@
 import { Avatar, Button, Col, Layout, Row } from 'antd'
 import React, { FC, useEffect, useState, useLayoutEffect, useMemo } from 'react'
-import { getSingleTemplate } from '../../apis/work/work'
-import { useParams } from 'react-router-dom'
+import { copyWork, getSingleTemplate } from '../../apis/work/work'
+import { useNavigate, useParams } from 'react-router-dom'
 import { TemplateType } from '../../apis/work/interface'
 import QRCode from 'qrcode'
 import { BaseUrl } from '../../constances'
@@ -10,6 +10,7 @@ import { downloadImage } from '../utils/util'
 const Template: FC = () => {
     const { id } = useParams()
     const [template, setTemplate] = useState<TemplateType>()
+    const navigation = useNavigate()
 
     //创建二维码
     const qrcodeUrl = useMemo(() => {
@@ -26,6 +27,11 @@ const Template: FC = () => {
     const getTemplateApi = async () => {
         const res = await getSingleTemplate(id as string)
         setTemplate(res.data)
+    }
+
+    const handleGoToTemplate = async () => {
+        const res = await copyWork(id as string)
+        navigation(`/gxt/edit/${res.data.id}`)
     }
 
     useEffect(() => {
@@ -58,6 +64,7 @@ const Template: FC = () => {
                         <Button
                             type="primary"
                             className="mr-[15px] rounded-full"
+                            onClick={handleGoToTemplate}
                         >
                             使用模板
                         </Button>
