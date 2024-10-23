@@ -173,9 +173,22 @@ export const EditorSlice = createSlice({
             state.isDirty = true
         },
         ChangePagePropsAction(state, props) {
-            state.page.props = {
-                ...state.page.props,
-                ...props.payload,
+            const { type } = props.payload
+            console.log(props.payload)
+            if (type === 'root') {
+                //不要讲type放进去
+                delete props.payload.type
+                state.page = {
+                    ...state.page,
+                    ...props.payload,
+                }
+                console.log(state.page)
+            } else {
+                delete props.payload.type
+                state.page.props = {
+                    ...state.page.props,
+                    ...props.payload,
+                }
             }
             state.isDirty = true
         },
@@ -402,7 +415,10 @@ export const EditorSlice = createSlice({
                           },
                       )
                     : []
-                state.page.title = prop.title
+                state.page.subTitle = prop.subTitle
+                    ? prop.subTitle
+                    : '未命名作品'
+                state.page.title = prop.title ? prop.title : ''
                 state.page.props = prop.content?.props ? prop.content.props : {}
                 state.page.coverImg = prop.coverImg
                 state.page.uuid = prop.uuid
@@ -427,14 +443,14 @@ export const EditorSlice = createSlice({
                           },
                       )
                     : []
-                state.page.title = prop.title
                 state.page.props = prop.content?.props ? prop.content.props : {}
                 state.page.coverImg = prop.coverImg
                 state.page.uuid = prop.uuid
                 //TODO:更新数据库数据后更新
-                state.page.subTitle = prop?.subTitle
+                state.page.subTitle = prop.subTitle
                     ? prop.subTitle
-                    : '未命名的作品'
+                    : '未命名作品'
+                state.page.title = prop.title ? prop.title : ''
             }
         })
         builder.addCase(getChannelListAsync.fulfilled, (state, props) => {

@@ -22,8 +22,8 @@ export const useSaveWork = (sideEffect = false) => {
                         components,
                         props: page.props,
                     },
-                    coverImg: page.props.coverImg,
-                    title: page.props.title,
+                    coverImg: page.coverImg,
+                    title: page.title,
                 },
             }),
         )
