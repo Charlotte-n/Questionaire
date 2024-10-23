@@ -159,3 +159,11 @@ export const updateName = (data: {
         },
     })
 }
+
+//创建空作品
+export const createEmptyWork = () => {
+    return hyRequest.post<ResponseType<any>>({
+        url: `/works/createEmptyWork`,
+        opName: 'createEmptyWork',
+    })
+}

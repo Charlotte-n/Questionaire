@@ -165,11 +165,11 @@ const Editor: FC = () => {
                             <p>画布区域</p>
                             <HistoryArea />
                             <div
-                                className={`canvas-area fixed overflow-hidden mt-[50px] max-h-[80vh] min-w-[375px] cursor-pointer rounded-md`}
+                                className={`canvas-area fixed overflow-hidden mt-[50px] max-h-[80vh] min-w-[375px]  cursor-pointer rounded-md`}
                                 onClick={() => handleChangePageTab()}
                             >
                                 <div
-                                    className={`edit-canvas px-[10px]  py-[10px] bg-[white] shadow-[#0000001f] shadow-md  overflow-auto  ${currentElementID === 'page' ? 'border-[2px] border-[#1890ff] border-solid' : ''}`}
+                                    className={`edit-canvas px-[10px]  py-[10px] bg-[white] shadow-[#0000001f] shadow-md min-h-[68vh]  overflow-auto  ${currentElementID === 'page' ? 'border-[2px] border-[#1890ff] border-solid' : ''}`}
                                     style={page.props}
                                 >
                                     <div className="">

@@ -10,6 +10,7 @@ import {
     copyWork,
     getMySingleWork,
     updateName,
+    createEmptyWork,
 } from '../apis/work/work'
 import { createAsyncThunkWrapper } from '../hoc/AsyncThunkWrapper'
 import {
@@ -69,9 +70,8 @@ export interface ComponentData {
 }
 
 const defaultPageProps = {
-    backgroundColor: 'red',
-    backgroundImage:
-        'url("https://merikle-backend.oss-cn-beijing.aliyuncs.com/test/09mjkt.png")',
+    backgroundColor: '',
+    backgroundImage: '',
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
     height: '560px',
@@ -390,46 +390,48 @@ export const EditorSlice = createSlice({
         builder.addCase(getCurrentTemplateAsync.fulfilled, (state, props) => {
             let prop = props.payload as singleEditorTypes
             if (prop) {
-                state.components = prop.content.components.map(
-                    (item: any, index: number) => {
-                        return {
-                            ...item,
-                            isHidden: false,
-                            isLocked: false,
-                            layerName: '图层' + index + 1,
-                        }
-                    },
-                )
+                state.components = prop.content?.components
+                    ? prop.content.components.map(
+                          (item: any, index: number) => {
+                              return {
+                                  ...item,
+                                  isHidden: false,
+                                  isLocked: false,
+                                  layerName: '图层' + index + 1,
+                              }
+                          },
+                      )
+                    : []
                 state.page.title = prop.title
-                state.page.props = prop.content.props
+                state.page.props = prop.content?.props ? prop.content.props : {}
                 state.page.coverImg = prop.coverImg
                 state.page.uuid = prop.uuid
             }
         })
         builder.addCase(saveTemplateAsync.fulfilled, (state, props) => {
-            const actions = props.payload as ResponseType<singleEditorTypes>
-            if (actions.code === 0) {
-                message.success('保存成功')
-            }
+            props.payload as ResponseType<singleEditorTypes>
         })
         builder.addCase(copyWorkAsync.fulfilled, (state, props) => {})
         builder.addCase(getMySingleWorkAsync.fulfilled, (state, props) => {
             let prop = props.payload as singleEditorTypes
             if (prop) {
-                state.components = prop.content.components.map(
-                    (item: any, index: number) => {
-                        return {
-                            ...item,
-                            isHidden: false,
-                            isLocked: false,
-                            layerName: '图层' + index + 1,
-                        }
-                    },
-                )
+                state.components = prop.content?.components
+                    ? prop.content.components.map(
+                          (item: any, index: number) => {
+                              return {
+                                  ...item,
+                                  isHidden: false,
+                                  isLocked: false,
+                                  layerName: '图层' + index + 1,
+                              }
+                          },
+                      )
+                    : []
                 state.page.title = prop.title
-                state.page.props = prop.content.props
+                state.page.props = prop.content?.props ? prop.content.props : {}
                 state.page.coverImg = prop.coverImg
                 state.page.uuid = prop.uuid
+                //TODO:更新数据库数据后更新
                 state.page.subTitle = prop?.subTitle
                     ? prop.subTitle
                     : '未命名的作品'
@@ -442,11 +444,8 @@ export const EditorSlice = createSlice({
 
         builder.addCase(updateNameAsync.fulfilled, (state, props) => {
             const prop = props.payload as ResponseType<any>
-            console.log(prop)
-
             if (prop.code === 0) {
                 message.success('更新成功')
-                console.log(prop.data)
                 state.page.title = prop.data.title
             }
         })
@@ -523,10 +522,11 @@ const pushHistory = (
 }
 
 //Thunk
-export const getCurrentTemplateAsync = createAsyncThunkWrapper<
-    singleEditorTypes,
-    string
->('editor/getCurrentTemplateAsync', getSingleTemplate, false)
+export const getCurrentTemplateAsync = createAsyncThunkWrapper<any, any>(
+    'editor/getCurrentTemplateAsync',
+    getSingleTemplate,
+    false,
+)
 
 export const saveTemplateAsync = createAsyncThunkWrapper<any, any>(
     'editor/saveTemplateAsync',

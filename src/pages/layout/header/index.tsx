@@ -4,6 +4,7 @@ import { menuList } from './config'
 import { loginout } from '../../../stores/user'
 import { useNavigate } from 'react-router-dom'
 import { useAppDispatch } from '../../../stores'
+import { createEmptyWork } from '../../../apis/work/work'
 
 const Header: FC = () => {
     const dispatch = useAppDispatch()
@@ -18,6 +19,13 @@ const Header: FC = () => {
             setTimeout(() => {
                 navigate('/gxt/login')
             }, 1000)
+        }
+    }
+
+    const handleCreateWork = async () => {
+        const res = await createEmptyWork()
+        if (res.code === 0) {
+            navigate(`/gxt/edit/${res.data.id}`)
         }
     }
 
@@ -48,7 +56,11 @@ const Header: FC = () => {
             </h2>
 
             <div className="flex justify-center items-center">
-                <Button type="primary" className={buttonClassName}>
+                <Button
+                    type="primary"
+                    className={buttonClassName}
+                    onClick={handleCreateWork}
+                >
                     创建设计
                 </Button>
 
@@ -66,7 +78,7 @@ const Header: FC = () => {
                     className="rounded-full"
                     menu={{ items: menuList, onClick: onMenuClick }}
                 >
-                    merikle
+                    Merikle
                 </Dropdown.Button>
             </div>
         </div>

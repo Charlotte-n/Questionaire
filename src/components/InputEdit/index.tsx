@@ -1,5 +1,5 @@
 import { FC, ReactNode, memo, useState, useRef, useEffect } from 'react'
-import { Input } from 'antd'
+import { Input, message } from 'antd'
 import { useClickOutside } from '../../hooks/useClickOutside'
 import { useKeyPress } from '../../hooks/useKeyPress'
 
@@ -34,6 +34,11 @@ export const InputEdit: FC<IInputEditProps> = memo(
         const inputRef = useRef(null)
 
         useKeyPress('Enter', () => {
+            //判断这个值不能为空
+            if (!innerValue) {
+                message.error('文本不能为空')
+                return
+            }
             changeValue(id, 'layerName', innerValue)
             setCurrentEditId(null)
         })
@@ -50,6 +55,10 @@ export const InputEdit: FC<IInputEditProps> = memo(
 
         useEffect(() => {
             if (isClickOutSide && currentEditId) {
+                if (!innerValue) {
+                    message.error('文本不能为空')
+                    return
+                }
                 setCurrentEditId(null)
                 changeValue(id, changeType, innerValue)
             }

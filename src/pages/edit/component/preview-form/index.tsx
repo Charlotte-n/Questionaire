@@ -69,7 +69,6 @@ const PreviewForm: FC<IProps> = ({ drawerVisible, onClose }) => {
                     }),
                 )
             }
-            message.success('保存成功')
             onClose()
         } catch (err) {
             console.error(err)
@@ -110,7 +109,11 @@ const PreviewForm: FC<IProps> = ({ drawerVisible, onClose }) => {
                             <iframe
                                 src={qrcodeUrl}
                                 width="375"
-                                height={page.props.height}
+                                height={
+                                    page.props.height
+                                        ? page.props.height
+                                        : '680px'
+                                }
                             ></iframe>
                         </div>
                     </div>
