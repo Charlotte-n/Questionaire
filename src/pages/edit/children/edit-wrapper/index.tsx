@@ -1,19 +1,9 @@
-import React, {
-    FC,
-    memo,
-    MouseEvent,
-    useCallback,
-    useEffect,
-    useRef,
-} from 'react'
+import React, { FC, memo, MouseEvent, useCallback, useRef } from 'react'
 import useComponentCommon from '../../../../hooks/useComponentCommon'
 import './index.css'
 import { useAppSelector } from '../../../../stores'
 import { getCurrentElement } from '../../../../stores/editor'
-import {
-    TextProperties,
-    textStylePropName,
-} from '../../../../stores/commonproperties'
+import { TextProperties } from '../../../../stores/commonproperties'
 
 interface Props {
     setActive: (
@@ -129,6 +119,7 @@ const EditWrapper: FC<Props> = (props) => {
                     currentElement.style.left = `${left}px`
                     currentElement.style.top = `${top}px`
                 })
+                //更新到store里面
             }
 
             const handleMoveUp = () => {

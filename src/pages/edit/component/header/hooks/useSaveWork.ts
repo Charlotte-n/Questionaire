@@ -30,8 +30,10 @@ export const useSaveWork = (sideEffect = false) => {
         dispatch(setIsDirty(false))
     }
 
+    console.log('是否有影响', sideEffect)
+
     if (!sideEffect) {
-        //定时保存
+        //定时保存：TODO:记录这里，useEffect的使用的坑点，要加上isDirty
         useEffect(() => {
             const timer = setInterval(() => {
                 if (isDirty) {
@@ -41,7 +43,7 @@ export const useSaveWork = (sideEffect = false) => {
             return () => {
                 clearInterval(timer)
             }
-        }, [])
+        }, [isDirty])
 
         useEffect(() => {
             // 当离开此页面的时候，如果没有保存就弹窗
