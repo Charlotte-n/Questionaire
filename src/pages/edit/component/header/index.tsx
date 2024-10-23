@@ -1,12 +1,14 @@
 import React, { FC, useState } from 'react'
 import { Button, Dropdown, MenuProps, message } from 'antd'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../../../stores'
 import { menuList } from '../../../layout/header/config'
 import { loginout } from '../../../../stores/user'
 import { useSaveWork } from './hooks/useSaveWork'
 import { usePublish } from './hooks/usePublish'
 import PublishModal from '../publish-modal'
+import { InputEdit } from '../../../../components/InputEdit'
+import { updateNameAsync } from '../../../../stores/editor'
 
 interface Props {
     handleOpenPreviewForm: () => void
@@ -14,11 +16,15 @@ interface Props {
 const EditHeader: FC<Props> = ({ handleOpenPreviewForm }) => {
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
-    const { saveWorkApi } = useSaveWork()
+    const { page } = useAppSelector((state) => state.editorSlice)
+
     const { opName } = useAppSelector((state) => state.globalSlice)
+    const { id } = useParams()
+    const { saveWorkApi } = useSaveWork()
     const buttonClassName = 'rounded-full mr-[25px]'
     const { publish } = usePublish()
     const [publishModalVisible, setPublishModalVisible] = useState(false)
+    const [currentEditId, setCurrentEditId] = useState('')
 
     const handlePublishVisible = () => {
         setPublishModalVisible(true)
@@ -40,6 +46,14 @@ const EditHeader: FC<Props> = ({ handleOpenPreviewForm }) => {
 
     const handelSaveWork = () => {
         saveWorkApi()
+    }
+
+    const updateName = (
+        id: string,
+        changeType: string,
+        changeValue: string,
+    ) => {
+        dispatch(updateNameAsync({ id, title: changeValue }))
     }
 
     return (
@@ -68,7 +82,20 @@ const EditHeader: FC<Props> = ({ handleOpenPreviewForm }) => {
                         ></path>
                     </svg>
                 </div>
-                <div className="text-white">未命名的作品</div>
+                <div className="text-white">
+                    <InputEdit
+                        value={page.title}
+                        id={id as string}
+                        currentEditId={currentEditId}
+                        setCurrentEditId={setCurrentEditId}
+                        changeValue={updateName}
+                        changeType="subTitle"
+                    >
+                        {{
+                            default: <div>{page.title}</div>,
+                        }}
+                    </InputEdit>
+                </div>
             </div>
 
             <div className="flex justify-center items-center">

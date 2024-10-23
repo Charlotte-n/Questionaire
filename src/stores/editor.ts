@@ -9,6 +9,7 @@ import {
     getChannelList,
     copyWork,
     getMySingleWork,
+    updateName,
 } from '../apis/work/work'
 import { createAsyncThunkWrapper } from '../hoc/AsyncThunkWrapper'
 import {
@@ -436,9 +437,18 @@ export const EditorSlice = createSlice({
         })
         builder.addCase(getChannelListAsync.fulfilled, (state, props) => {
             const prop = props.payload as channelDataType
-            console.log(props.payload)
-
             state.channels = prop.list
+        })
+
+        builder.addCase(updateNameAsync.fulfilled, (state, props) => {
+            const prop = props.payload as ResponseType<any>
+            console.log(prop)
+
+            if (prop.code === 0) {
+                message.success('更新成功')
+                console.log(prop.data)
+                state.page.title = prop.data.title
+            }
         })
     },
 })
@@ -539,6 +549,12 @@ export const getMySingleWorkAsync = createAsyncThunkWrapper<any, string>(
     'editor/getMySingleWorkAsync',
     getMySingleWork,
     false,
+)
+
+export const updateNameAsync = createAsyncThunkWrapper<any, any>(
+    'editor/updateNameAsync',
+    updateName,
+    true,
 )
 
 export const {
