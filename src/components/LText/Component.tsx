@@ -17,6 +17,7 @@ const LText: FC<OptionalLTextPropsType> = (props) => {
                 mergeProps.tag,
                 {
                     style: styleProps,
+                    class: mergeProps.name,
                 },
                 mergeProps.text,
             )}

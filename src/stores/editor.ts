@@ -76,51 +76,7 @@ const defaultPageProps = {
     height: '560px',
 }
 export const initialState: EditorDataProps = {
-    components: [
-        {
-            props: {
-                text: 'Hello World',
-                fontSize: '20px',
-                color: 'red',
-            },
-            id: 'version',
-            name: 'l-text',
-            isHidden: false,
-            isBlock: false,
-            layerName: '图层一',
-        },
-        {
-            props: {
-                text: 'Hello Worldnihao',
-            },
-            id: 'version1',
-            name: 'l-text',
-            isHidden: false,
-            isBlock: false,
-            layerName: '图层二',
-        },
-        {
-            props: {
-                text: 'Hello Worldbuhao',
-            },
-            id: 'version2',
-            name: 'l-text',
-            isHidden: false,
-            isBlock: false,
-            layerName: '图层三',
-        },
-        {
-            props: {
-                ...ImageProperties,
-                url: 'https://merikle-backend.oss-cn-beijing.aliyuncs.com/test/09mjkt.png',
-            },
-            id: 'version3',
-            name: 'l-image',
-            isHidden: false,
-            isBlock: false,
-            layerName: '图层四',
-        },
-    ],
+    components: [],
     currentElement: 'version',
     page: {
         props: defaultPageProps,
@@ -144,6 +100,8 @@ export const EditorSlice = createSlice({
     initialState,
     reducers: {
         addComponent(state, props): void {
+            console.log(props.payload)
+
             state.components.push(props.payload)
 
             //添加添加历史记录
@@ -478,6 +436,8 @@ export const EditorSlice = createSlice({
         })
         builder.addCase(getChannelListAsync.fulfilled, (state, props) => {
             const prop = props.payload as channelDataType
+            console.log(props.payload)
+
             state.channels = prop.list
         })
     },
@@ -558,7 +518,7 @@ export const getCurrentTemplateAsync = createAsyncThunkWrapper<
     string
 >('editor/getCurrentTemplateAsync', getSingleTemplate, false)
 
-export const saveTemplateAsync = createAsyncThunkWrapper<any, string>(
+export const saveTemplateAsync = createAsyncThunkWrapper<any, any>(
     'editor/saveTemplateAsync',
     saveWorks,
     true,

@@ -1,3 +1,6 @@
+.move-wrapper .l-text {
+    position: static !important;
+}
 .resizes .resize {
     position: absolute;
     display: block;

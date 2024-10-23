@@ -6,8 +6,8 @@ export const CommonProperties = {
     actionType: '',
     url: '',
     // //尺寸
-    // height: '80px',
-    // width: '100px',
+    height: '80px',
+    width: '125px',
     //边框
     borderStyle: 'none',
     borderColor: '#000',
@@ -40,6 +40,7 @@ export const TextProperties = {
     lineHeight: '1',
     textAlign: 'left',
     tag: 'div',
+    name: 'l-text',
     ...CommonProperties,
 }
 
@@ -54,6 +55,7 @@ export const textStylePropName = without(
     'url',
     'tag',
     'onItemClick',
+    'name',
 )
 
 export const imageStylePropName = without(
@@ -70,3 +72,13 @@ export const MergeProps = <T>(defaultProps: any, props: any): T => {
         }
     }, [props])
 }
+
+export const ShapeProperties = {
+    backgroundColor: '',
+    ...CommonProperties,
+}
+export const ShapeStylePropName = without(
+    Object.keys(ShapeProperties),
+    'onItemClick',
+    'tag',
+)

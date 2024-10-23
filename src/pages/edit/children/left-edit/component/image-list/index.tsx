@@ -5,31 +5,48 @@ import { Button, Col, Row } from 'antd'
 import { commonUploadCheck, getImageSize } from '../component-list/helper'
 import { v4 as uuidv4 } from 'uuid'
 import { imageStylePropName } from '../../../../../../stores/commonproperties'
-import { Images } from '../../config'
 import { defaultImage } from './config'
 import LImage from '../../../../../../components/LImage/Component'
+import { useAppDispatch } from '../../../../../../stores'
+import { addComponent } from '../../../../../../stores/editor'
 
-interface IProps {
-    onItemClick: (item: any) => void
-}
+interface IProps {}
 
-const ImageList: FC<IProps> = ({ onItemClick }) => {
+const ImageList: FC<IProps> = () => {
+    const dispatch = useAppDispatch()
     const addImageComponent = useCallback((res: any) => {
         const { url } = res.data
         getImageSize(url).then(({ width }) => {
             const maxWidth = 373
-            onItemClick({
+            dispatch(
+                addComponent({
+                    name: 'l-image',
+                    id: uuidv4(),
+                    props: {
+                        ...imageStylePropName,
+                        url,
+                        width: `${width > maxWidth ? maxWidth : width}px`,
+                        height: `100%`,
+                    },
+                }),
+            )
+        })
+    }, [])
+
+    const onItemClick = (item: any) => {
+        dispatch(
+            addComponent({
                 name: 'l-image',
                 id: uuidv4(),
                 props: {
                     ...imageStylePropName,
-                    url,
-                    width: `${width > maxWidth ? maxWidth : width}px`,
-                    height: `100%`,
+                    url: item.url,
+                    width: item.width,
+                    height: item.height,
                 },
-            })
-        })
-    }, [])
+            }),
+        )
+    }
     return (
         <div className="w-[100%] px-[20px]">
             <Row className="w-[100%] flex">
@@ -67,7 +84,10 @@ const ImageList: FC<IProps> = ({ onItemClick }) => {
                 {defaultImage.map((item) => {
                     return (
                         <Col key={item.id}>
-                            <LImage {...item}></LImage>
+                            <LImage
+                                {...item}
+                                onItemClick={() => onItemClick(item)}
+                            ></LImage>
                         </Col>
                     )
                 })}

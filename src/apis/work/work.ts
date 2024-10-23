@@ -42,10 +42,17 @@ export const copyWork = (id: string) => {
 }
 
 //保存单个模板
-export const saveWorks = (id: string) => {
+export const saveWorks = ({
+    id,
+    data,
+}: {
+    id: string
+    data:any
+}) => {
     return hyRequest.post({
         url: `/works/update/${id}`,
         opName: 'saveWorks',
+        data
     })
 }
 

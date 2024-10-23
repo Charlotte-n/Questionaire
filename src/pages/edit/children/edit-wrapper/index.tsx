@@ -1,6 +1,19 @@
-import React, { FC, memo, MouseEvent, useCallback, useRef } from 'react'
+import React, {
+    FC,
+    memo,
+    MouseEvent,
+    useCallback,
+    useEffect,
+    useRef,
+} from 'react'
 import useComponentCommon from '../../../../hooks/useComponentCommon'
 import './index.css'
+import { useAppSelector } from '../../../../stores'
+import { getCurrentElement } from '../../../../stores/editor'
+import {
+    TextProperties,
+    textStylePropName,
+} from '../../../../stores/commonproperties'
 
 interface Props {
     setActive: (
@@ -22,14 +35,15 @@ interface PositionType {
 }
 
 const EditWrapper: FC<Props> = (props) => {
+    const currentElement = useAppSelector(getCurrentElement)
     const { setActive, id, children, isActive } = props
-    const { styleProps } = useComponentCommon(props.props, [
-        'position',
-        'top',
-        'left',
-        'width',
-        'height',
-    ])
+    const { styleProps } = useComponentCommon(
+        {
+            ...TextProperties,
+            ...props.props,
+        },
+        ['position', 'top', 'left', 'width', 'height'],
+    )
     const editWrapperRef = useRef(null)
     const moveWrapperRef = useRef(null)
     const gap = useRef({ x: 0, y: 0 })
@@ -196,7 +210,7 @@ const EditWrapper: FC<Props> = (props) => {
 
     return (
         <div
-            className="edit-wrapper relative"
+            className="edit-wrapper relative "
             ref={editWrapperRef}
             onClick={(event: MouseEvent) => {
                 // event.stopPropagation()
@@ -206,7 +220,7 @@ const EditWrapper: FC<Props> = (props) => {
             data-id={id}
         >
             <div
-                className="move-wrapper z-[100] cursor-pointer"
+                className="move-wrapper z-[100] cursor-pointer w-[100%] h-[100%]"
                 ref={moveWrapperRef}
                 onMouseDown={(e) => MoveStart(e)}
             >

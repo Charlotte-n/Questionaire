@@ -194,7 +194,7 @@ const Editor: FC = () => {
                                                                     currentElement?.id ===
                                                                         item.id
                                                                         ? 'border-[1px] border-[#1890ff] border-solid'
-                                                                        : ''
+                                                                        : 'hover:border-[1px] hover:border-dashed cursor-pointer'
                                                                 }
                                                             >
                                                                 {getComponent(

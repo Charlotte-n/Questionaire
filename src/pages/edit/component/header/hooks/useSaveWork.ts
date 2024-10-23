@@ -8,11 +8,25 @@ export const useSaveWork = (sideEffect = false) => {
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
     const { id } = useParams<{ id: string }>()
-    const { isDirty } = useAppSelector((state) => state.editorSlice)
+    const { isDirty, components, page } = useAppSelector(
+        (state) => state.editorSlice,
+    )
     const blocker = useBlocker(isDirty)
 
     const saveWorkApi = () => {
-        dispatch(saveTemplateAsync(id as string))
+        dispatch(
+            saveTemplateAsync({
+                id,
+                data: {
+                    content: {
+                        components,
+                        props: page.props,
+                    },
+                    coverImg: page.props.coverImg,
+                    title: page.props.title,
+                },
+            }),
+        )
         dispatch(setIsDirty(false))
     }
 
