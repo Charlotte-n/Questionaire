@@ -187,39 +187,43 @@ const Home: FC = () => {
                         </Link>
                     </div>
                     <div>
-                        {myWorkList.length > 4
-                            ? myWorkList.slice(0, 4).map((item) => {
-                                  return (
-                                      <Col span={6}>
-                                          <SingleTemplate
-                                              id={item.id}
-                                              type="myWork"
-                                              baseInfo={{
-                                                  copiedCount: item.copiedCount,
-                                                  coverImage: item.coverImg,
-                                                  author: item.author,
-                                                  title: item.title,
-                                              }}
-                                          ></SingleTemplate>
-                                      </Col>
-                                  )
-                              })
-                            : myWorkList.map((item) => {
-                                  return (
-                                      <Col span={6}>
-                                          <SingleTemplate
-                                              id={item.id}
-                                              type="myWork"
-                                              baseInfo={{
-                                                  copiedCount: item.copiedCount,
-                                                  coverImage: item.coverImg,
-                                                  author: item.author,
-                                                  title: item.title,
-                                              }}
-                                          ></SingleTemplate>
-                                      </Col>
-                                  )
-                              })}
+                        <Row gutter={20}>
+                            {myWorkList.length > 4
+                                ? myWorkList.slice(0, 4).map((item) => {
+                                      return (
+                                          <Col span={6} key={item.id}>
+                                              <SingleTemplate
+                                                  id={item.id}
+                                                  type="myWork"
+                                                  baseInfo={{
+                                                      copiedCount:
+                                                          item.copiedCount,
+                                                      coverImage: item.coverImg,
+                                                      author: item.author,
+                                                      title: item.title,
+                                                  }}
+                                              ></SingleTemplate>
+                                          </Col>
+                                      )
+                                  })
+                                : myWorkList.map((item) => {
+                                      return (
+                                          <Col span={6} key={item.id}>
+                                              <SingleTemplate
+                                                  id={item.id}
+                                                  type="myWork"
+                                                  baseInfo={{
+                                                      copiedCount:
+                                                          item.copiedCount,
+                                                      coverImage: item.coverImg,
+                                                      author: item.author,
+                                                      title: item.title,
+                                                  }}
+                                              ></SingleTemplate>
+                                          </Col>
+                                      )
+                                  })}
+                        </Row>
                     </div>
                 </div>
             </div>
