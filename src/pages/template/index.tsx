@@ -4,7 +4,7 @@ import { copyWork, getSingleTemplate } from '../../apis/work/work'
 import { useNavigate, useParams } from 'react-router-dom'
 import { TemplateType } from '../../apis/work/interface'
 import QRCode from 'qrcode'
-import { BaseUrl } from '../../constances'
+import { BaseH5Url } from '../../constances'
 import { downloadImage } from '../utils/util'
 
 const Template: FC = () => {
@@ -14,7 +14,7 @@ const Template: FC = () => {
 
     //创建二维码
     const qrcodeUrl = useMemo(() => {
-        return `${BaseUrl}/api/pages/p/${id}-${template?.uuid}`
+        return `${BaseH5Url}/api/pages/p/${id}-${template?.uuid}`
     }, [template])
 
     useLayoutEffect(() => {

@@ -4,4 +4,5 @@ const BaseUrl =
         ? 'http://localhost:7001'
         : 'https://egg.merikle.top'
 
-export { BaseUrl }
+const BaseH5Url = 'https://mh5.hk.merikle.top'
+export { BaseUrl, BaseH5Url }
