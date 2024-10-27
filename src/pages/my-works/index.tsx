@@ -1,6 +1,6 @@
 import React, { FC, memo, useEffect, useState } from 'react'
 import Input from 'antd/es/input/Input'
-import { Layout, Row, Tabs, Col, Pagination } from 'antd'
+import { Layout, Row, Tabs, Col, Pagination, Spin } from 'antd'
 import SingleTemplate from '../home/component/single-template/single-template'
 import { useLoadMore } from '../../hooks/useLoadMore'
 import { useAppDispatch, useAppSelector } from '../../stores'
@@ -12,6 +12,7 @@ const Work: React.FC<{
     const dispatch = useAppDispatch()
     const { total, templates } = useAppSelector((state) => state.templateSlice)
     const pageSize = 8
+    const { opName } = useAppSelector((state) => state.globalSlice)
 
     const getMyListApi = async () => {
         const params = {
@@ -32,25 +33,28 @@ const Work: React.FC<{
     }, [type])
 
     return (
-        <div>
-            <Row gutter={[20, 20]}>
-                {templates?.map((item: any) => {
-                    return (
-                        <Col key={item._id} span={6}>
-                            <SingleTemplate
-                                type="myWork"
-                                id={item._id}
-                                baseInfo={{
-                                    coverImage: item.coverImg,
-                                    author: item.author,
-                                    title: item.title,
-                                    copiedCount: item.copiedCount,
-                                }}
-                            ></SingleTemplate>
-                        </Col>
-                    )
-                })}
-            </Row>
+        <div className="">
+            <Spin spinning={opName['getMyList']}>
+                <Row gutter={[20, 20]}>
+                    {templates?.map((item: any) => {
+                        return (
+                            <Col key={item._id} span={6}>
+                                <SingleTemplate
+                                    type="myWork"
+                                    id={item._id}
+                                    baseInfo={{
+                                        coverImage: item.coverImg,
+                                        author: item.author,
+                                        title: item.title,
+                                        copiedCount: item.copiedCount,
+                                    }}
+                                ></SingleTemplate>
+                            </Col>
+                        )
+                    })}
+                </Row>
+            </Spin>
+
             {total !== 0 && (
                 <Row className="mt-[15px]">
                     <Pagination

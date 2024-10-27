@@ -4,6 +4,7 @@ import { menuList } from './config'
 import { loginout } from '../../../stores/user'
 import { useNavigate } from 'react-router-dom'
 import { useAppDispatch } from '../../../stores'
+import { createEmptyWork } from '../../../apis/work/work'
 
 const Header: FC = () => {
     const dispatch = useAppDispatch()
@@ -21,13 +22,45 @@ const Header: FC = () => {
         }
     }
 
+    const handleCreateWork = async () => {
+        const res = await createEmptyWork()
+        if (res.code === 0) {
+            navigate(`/gxt/edit/${res.data.id}`)
+        }
+    }
+
     return (
         <div className="flex justify-between">
             {/* 这个location.pathname匹配/edit/1,/edit/2 */}
-            <h2 className="text-white">Merikle低代码海报制作</h2>
+            <h2
+                className="text-white cursor-pointer flex items-center"
+                onClick={() => navigate('/gxt/home')}
+            >
+                <svg
+                    t="1729652009286"
+                    class="icon"
+                    viewBox="0 0 1024 1024"
+                    version="1.1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    p-id="12586"
+                    width="50"
+                    height="50"
+                >
+                    <path
+                        d="M270.628571 307.2c21.942857-7.314286 51.2 0 65.828572 14.628571L512 533.942857l175.542857-204.8c14.628571-21.942857 43.885714-21.942857 65.828572-14.628571 21.942857 7.314286 36.571429 29.257143 36.571428 58.514285v292.571429c0 29.257143-29.257143 58.514286-58.514286 58.514286-29.257143-7.314286-58.514286-36.571429-58.514285-65.828572V526.628571L555.885714 658.285714c-7.314286 14.628571-29.257143 21.942857-43.885714 21.942857s-36.571429-7.314286-43.885714-21.942857L351.085714 526.628571V658.285714c0 29.257143-29.257143 58.514286-58.514285 58.514286s-58.514286-29.257143-58.514286-58.514286V365.714286c0-21.942857 14.628571-43.885714 36.571428-58.514286z"
+                        p-id="12587"
+                        fill="#1296db"
+                    ></path>
+                </svg>
+                海报易创
+            </h2>
 
             <div className="flex justify-center items-center">
-                <Button type="primary" className={buttonClassName}>
+                <Button
+                    type="primary"
+                    className={buttonClassName}
+                    onClick={handleCreateWork}
+                >
                     创建设计
                 </Button>
 
@@ -45,7 +78,7 @@ const Header: FC = () => {
                     className="rounded-full"
                     menu={{ items: menuList, onClick: onMenuClick }}
                 >
-                    merikle
+                    Merikle
                 </Dropdown.Button>
             </div>
         </div>

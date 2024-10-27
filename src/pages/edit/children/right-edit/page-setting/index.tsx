@@ -11,25 +11,34 @@ interface IProps {
     url?: string
 }
 
-const PageSetting: FC<IProps> = ({ url }) => {
+const PageSetting: FC<IProps> = () => {
     const { page } = useAppSelector((state) => state.editorSlice)
+
     const { props } = page
     const dispatch = useAppDispatch()
 
+    //看这个正则表达式
     const urlProcess = useMemo(() => {
-        if (!url) return ''
-        const reg = /\(["'](.+)["']\)/g
-        const matches = reg.exec(url)
+        if (!page.props.backgroundImage) return ''
+        const reg = /url\((.*?)\)/
+        const matches = reg.exec(page.props.backgroundImage)
         if (matches && matches.length > 1) {
             return matches[1]
         }
-    }, [url])
+    }, [page.props.backgroundImage])
 
     const handleUploadSuccess = (data: UploadImgRes) => {
         dispatch(
-            ChangePagePropsAction({ backgroundImage: `url(${data.data.url})` }),
+            ChangePagePropsAction({
+                backgroundImage: `url(${data.data.url})`,
+                type: 'props',
+            }),
+        )
+        dispatch(
+            ChangePagePropsAction({ coverImg: data.data.url, type: 'root' }),
         )
     }
+
     const handleChange = (value: any) => {
         dispatch(ChangePagePropsAction(value))
     }

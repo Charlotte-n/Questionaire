@@ -8,16 +8,32 @@ export const useSaveWork = (sideEffect = false) => {
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
     const { id } = useParams<{ id: string }>()
-    const { isDirty } = useAppSelector((state) => state.editorSlice)
+    const { isDirty, components, page } = useAppSelector(
+        (state) => state.editorSlice,
+    )
     const blocker = useBlocker(isDirty)
 
     const saveWorkApi = () => {
-        dispatch(saveTemplateAsync(id as string))
+        dispatch(
+            saveTemplateAsync({
+                id,
+                data: {
+                    content: {
+                        components,
+                        props: page.props,
+                    },
+                    coverImg: page.coverImg,
+                    title: page.title,
+                },
+            }),
+        )
         dispatch(setIsDirty(false))
     }
 
+    console.log('是否有影响', sideEffect)
+
     if (!sideEffect) {
-        //定时保存
+        //定时保存：TODO:记录这里，useEffect的使用的坑点，要加上isDirty
         useEffect(() => {
             const timer = setInterval(() => {
                 if (isDirty) {
@@ -27,7 +43,7 @@ export const useSaveWork = (sideEffect = false) => {
             return () => {
                 clearInterval(timer)
             }
-        }, [])
+        }, [isDirty])
 
         useEffect(() => {
             // 当离开此页面的时候，如果没有保存就弹窗

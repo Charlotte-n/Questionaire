@@ -8,14 +8,14 @@ import React, {
 } from 'react'
 import type { FC, ReactNode } from 'react'
 import QRCode from 'qrcode'
-import { useAppSelector } from '../../../../stores'
+import { useAppDispatch, useAppSelector } from '../../../../stores'
 import { BaseUrl } from '../../../../constances'
 import { useParams } from 'react-router-dom'
 import Uploader from '../../../../components/Uploader'
 import './index.css'
 import { produce } from 'immer'
-import { updateName } from '../../../../apis/work/work'
 import { usePublish } from '../header/hooks/usePublish'
+import { updateNameAsync } from '../../../../stores/editor'
 
 interface IProps {
     children?: ReactNode
@@ -28,6 +28,7 @@ type FieldType = {
     subTitle: string
 }
 const PreviewForm: FC<IProps> = ({ drawerVisible, onClose }) => {
+    const dispatch = useAppDispatch()
     const { page } = useAppSelector((state) => state.editorSlice)
     const { id } = useParams()
     const [form] = Form.useForm()
@@ -60,12 +61,14 @@ const PreviewForm: FC<IProps> = ({ drawerVisible, onClose }) => {
                 page.title !== formData.title ||
                 page.subTitle !== formData.subTitle
             ) {
-                updateName(id as string, {
-                    title: formData.title,
-                    subTitle: formData.subTitle,
-                })
+                dispatch(
+                    updateNameAsync({
+                        id,
+                        title: formData.title,
+                        subTitle: formData.subTitle,
+                    }),
+                )
             }
-            message.success('保存成功')
             onClose()
         } catch (err) {
             console.error(err)
@@ -106,7 +109,11 @@ const PreviewForm: FC<IProps> = ({ drawerVisible, onClose }) => {
                             <iframe
                                 src={qrcodeUrl}
                                 width="375"
-                                height={page.props.height}
+                                height={
+                                    page.props.height
+                                        ? page.props.height
+                                        : '680px'
+                                }
                             ></iframe>
                         </div>
                     </div>

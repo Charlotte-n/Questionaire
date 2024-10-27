@@ -42,10 +42,11 @@ export const copyWork = (id: string) => {
 }
 
 //保存单个模板
-export const saveWorks = (id: string) => {
+export const saveWorks = ({ id, data }: { id: string; data: any }) => {
     return hyRequest.post({
         url: `/works/update/${id}`,
         opName: 'saveWorks',
+        data,
     })
 }
 
@@ -144,16 +145,25 @@ export const deleteChannel = (id: string) => {
 }
 
 //更新作品名称
-export const updateName = (
-    id: string,
-    data: {
-        title: string
-        subTitle: string
-    },
-) => {
+export const updateName = (data: {
+    id: string
+    title: string
+    subTitle?: string
+}) => {
     return hyRequest.post({
-        url: `/works/update/${id}`,
+        url: `/works/update/${data.id}`,
         opName: 'updateName',
-        data,
+        data: {
+            title: data.title,
+            subTitle: data.subTitle,
+        },
+    })
+}
+
+//创建空作品
+export const createEmptyWork = () => {
+    return hyRequest.post<ResponseType<any>>({
+        url: `/works/createEmptyWork`,
+        opName: 'createEmptyWork',
     })
 }

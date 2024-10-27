@@ -69,7 +69,7 @@ const defaultProp = {
 }
 const Uploader: FC<IProps> = (props) => {
     const { children } = props
-    const defaultProps = MergeProps(defaultProp, props)
+    const defaultProps = MergeProps(defaultProp, props) as any
     const inputRef = useRef<HTMLInputElement>(null)
     const [uploadedFiles, setUploadedFiles] = useState<FileUploadType[]>([])
     const [isDragOver, setDragOver] = useState(false)

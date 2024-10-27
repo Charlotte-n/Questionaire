@@ -11,7 +11,6 @@ export const usePublish = () => {
     const dispatch = useAppDispatch()
     const { id } = useParams<{ id: string }>()
     const { channels } = useAppSelector((state) => state.editorSlice)
-
     const { saveWorkApi } = useSaveWork(true)
 
     const publish = async (handlePublishVisible?: () => void) => {
@@ -26,9 +25,11 @@ export const usePublish = () => {
             await saveWorkApi()
             //发布
             await publishMyWork(id as string)
-            //获取渠道列表
-            await dispatch(getChannelListAsync(id as string))
-
+            //如果没有渠道列表就生成默认的渠道
+            if (channels && channels.length === 0) {
+                createChannel({ workId: id as string, name: '' })
+                dispatch(getChannelListAsync(id as string))
+            }
             handlePublishVisible && handlePublishVisible()
         }
     }
@@ -37,12 +38,6 @@ export const usePublish = () => {
         dispatch(getChannelListAsync(id as string))
     }, [])
 
-    useEffect(() => {
-        //如果没有渠道列表就生成默认的渠道
-        if (channels && channels.length === 0) {
-            createChannel({ workId: id as string, name: '' })
-        }
-    }, [channels])
     return {
         publish,
     }

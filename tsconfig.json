@@ -23,5 +23,5 @@
         "src/*.tsx",
         "src/**/*.ts",
         "src/**/*.tsx"
-    ]
+, "custom.d.ts"    ]
 }

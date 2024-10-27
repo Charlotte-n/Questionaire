@@ -61,7 +61,7 @@ const PropsComponent: FC<{
         <Form
             form={form}
             layout="horizontal"
-            initialValues={mergeProps}
+            initialValues={mergeProps as any}
             onValuesChange={handleValuesChange}
         >
             {currentElement &&
@@ -107,13 +107,13 @@ const PropsComponent: FC<{
                         <Form.Item label="文本颜色" name="color">
                             <ColorPicker
                                 onItemClick={onChangeColor}
-                                color={mergeProps.color}
+                                color={(mergeProps as any).color}
                             ></ColorPicker>
                         </Form.Item>
                         <Form.Item label="背景颜色" name="backgroundColor">
                             <ColorPicker
                                 onItemClick={onChangeBackgroundColor}
-                                color={mergeProps.backgroundColor}
+                                color={(mergeProps as any).backgroundColor}
                             ></ColorPicker>
                         </Form.Item>
                     </div>

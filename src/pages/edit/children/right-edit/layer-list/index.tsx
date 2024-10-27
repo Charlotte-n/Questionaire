@@ -9,8 +9,7 @@ import {
     LockOutlined,
     UnlockOutlined,
 } from '@ant-design/icons'
-import { useKeyPress } from '../../../../../hooks/useKeyPress'
-import { useClickOutside } from '../../../../../hooks/useClickOutside'
+import { InputEdit } from '../../../../../components/InputEdit'
 import {
     SortableContainer as sortableContainer,
     SortableElement,
@@ -29,16 +28,6 @@ interface IProps {
     handleSort: (list: ComponentData[]) => void
 }
 
-interface IInputEditProps {
-    children: {
-        default: ReactNode
-    }
-    value: string
-    changeValue: (id: string, key: string, value: string) => void
-    id: string
-    currentEditId: any
-    setCurrentEditId: (id: any) => void
-}
 interface ISortableItemProps {
     change: (data: { id: string; key: string; value: any }) => void
     setActive: (
@@ -49,66 +38,6 @@ interface ISortableItemProps {
     item: ComponentData
     sortIndex: number
 }
-
-// 文本编辑
-const InputEdit: FC<IInputEditProps> = memo(
-    ({ children, value, changeValue, id, setCurrentEditId, currentEditId }) => {
-        const [innerValue, setInnerValue] = useState(value)
-        const wrapperRef = useRef(null)
-        const { isClickOutSide, setIsClickOutSide } = useClickOutside(
-            wrapperRef.current as any,
-        )
-        const inputRef = useRef(null)
-
-        useKeyPress('Enter', () => {
-            changeValue(id, 'layerName', innerValue)
-            setCurrentEditId(null)
-        })
-
-        useKeyPress('Escape', () => {
-            setCurrentEditId(null)
-        })
-
-        useEffect(() => {
-            if (currentEditId === id) {
-                ;(inputRef.current as unknown as HTMLElement)?.focus()
-            }
-        }, [currentEditId])
-
-        useEffect(() => {
-            if (isClickOutSide && currentEditId) {
-                setCurrentEditId(null)
-                changeValue(id, 'layerName', innerValue)
-            }
-            setIsClickOutSide(false)
-        }, [isClickOutSide])
-
-        return (
-            <div>
-                <div
-                    onClick={(e) => {
-                        e.nativeEvent.stopImmediatePropagation()
-                        setCurrentEditId(id)
-                    }}
-                    ref={wrapperRef}
-                >
-                    {currentEditId === id ? (
-                        <Input
-                            ref={inputRef}
-                            placeholder="文本不能为空"
-                            value={innerValue}
-                            onChange={(event) =>
-                                setInnerValue(event.target.value)
-                            }
-                        ></Input>
-                    ) : (
-                        children.default
-                    )}
-                </div>
-            </div>
-        )
-    },
-)
 
 //拖拽图标
 const DragHandler = SortableHandle(() => {
@@ -146,11 +75,8 @@ const List = ({
         change(data)
     }
 
-    useEffect(() => {
-        console.log(item)
-    }, [item.layerName])
-
     return (
+        // TODO:想一想这里tailWindcss太长导致的问题有什么，以及tailWindCss是怎么运行的
         <li
             key={item.id}
             className={`flex flex-1 justify-between px-[10px] pt-[10px] pb-[10px] border-b-[1px] border-solid cursor-pointer hover:bg-[#eaf7fe] ${item.id === currentElement ? 'border-[1px] border-[#1890ff]' : ''}`}
@@ -196,6 +122,7 @@ const List = ({
                     id={item.id}
                     currentEditId={currentEditId}
                     setCurrentEditId={setCurrentEditId}
+                    changeType="layerName"
                 >
                     {{
                         default: <div>{item.layerName}</div>,

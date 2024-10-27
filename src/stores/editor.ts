@@ -9,6 +9,8 @@ import {
     getChannelList,
     copyWork,
     getMySingleWork,
+    updateName,
+    createEmptyWork,
 } from '../apis/work/work'
 import { createAsyncThunkWrapper } from '../hoc/AsyncThunkWrapper'
 import {
@@ -68,59 +70,14 @@ export interface ComponentData {
 }
 
 const defaultPageProps = {
-    backgroundColor: 'red',
-    backgroundImage:
-        'url("https://merikle-backend.oss-cn-beijing.aliyuncs.com/test/09mjkt.png")',
+    backgroundColor: '',
+    backgroundImage: '',
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
     height: '560px',
 }
 export const initialState: EditorDataProps = {
-    components: [
-        {
-            props: {
-                text: 'Hello World',
-                fontSize: '20px',
-                color: 'red',
-            },
-            id: 'version',
-            name: 'l-text',
-            isHidden: false,
-            isBlock: false,
-            layerName: '图层一',
-        },
-        {
-            props: {
-                text: 'Hello Worldnihao',
-            },
-            id: 'version1',
-            name: 'l-text',
-            isHidden: false,
-            isBlock: false,
-            layerName: '图层二',
-        },
-        {
-            props: {
-                text: 'Hello Worldbuhao',
-            },
-            id: 'version2',
-            name: 'l-text',
-            isHidden: false,
-            isBlock: false,
-            layerName: '图层三',
-        },
-        {
-            props: {
-                ...ImageProperties,
-                url: 'https://merikle-backend.oss-cn-beijing.aliyuncs.com/test/09mjkt.png',
-            },
-            id: 'version3',
-            name: 'l-image',
-            isHidden: false,
-            isBlock: false,
-            layerName: '图层四',
-        },
-    ],
+    components: [],
     currentElement: 'version',
     page: {
         props: defaultPageProps,
@@ -144,6 +101,8 @@ export const EditorSlice = createSlice({
     initialState,
     reducers: {
         addComponent(state, props): void {
+            console.log(props.payload)
+
             state.components.push(props.payload)
 
             //添加添加历史记录
@@ -214,9 +173,22 @@ export const EditorSlice = createSlice({
             state.isDirty = true
         },
         ChangePagePropsAction(state, props) {
-            state.page.props = {
-                ...state.page.props,
-                ...props.payload,
+            const { type } = props.payload
+            console.log(props.payload)
+            if (type === 'root') {
+                //不要讲type放进去
+                delete props.payload.type
+                state.page = {
+                    ...state.page,
+                    ...props.payload,
+                }
+                console.log(state.page)
+            } else {
+                delete props.payload.type
+                state.page.props = {
+                    ...state.page.props,
+                    ...props.payload,
+                }
             }
             state.isDirty = true
         },
@@ -431,54 +403,67 @@ export const EditorSlice = createSlice({
         builder.addCase(getCurrentTemplateAsync.fulfilled, (state, props) => {
             let prop = props.payload as singleEditorTypes
             if (prop) {
-                state.components = prop.content.components.map(
-                    (item: any, index: number) => {
-                        return {
-                            ...item,
-                            isHidden: false,
-                            isLocked: false,
-                            layerName: '图层' + index + 1,
-                        }
-                    },
-                )
-                state.page.title = prop.title
-                state.page.props = prop.content.props
+                state.components = prop.content?.components
+                    ? prop.content.components.map(
+                          (item: any, index: number) => {
+                              return {
+                                  ...item,
+                                  isHidden: false,
+                                  isLocked: false,
+                                  layerName: '图层' + index + 1,
+                              }
+                          },
+                      )
+                    : []
+                state.page.subTitle = prop.subTitle
+                    ? prop.subTitle
+                    : '未命名作品'
+                state.page.title = prop.title ? prop.title : ''
+                state.page.props = prop.content?.props ? prop.content.props : {}
                 state.page.coverImg = prop.coverImg
                 state.page.uuid = prop.uuid
             }
         })
         builder.addCase(saveTemplateAsync.fulfilled, (state, props) => {
-            const actions = props.payload as ResponseType<singleEditorTypes>
-            if (actions.code === 0) {
-                message.success('保存成功')
-            }
+            props.payload as ResponseType<singleEditorTypes>
         })
         builder.addCase(copyWorkAsync.fulfilled, (state, props) => {})
         builder.addCase(getMySingleWorkAsync.fulfilled, (state, props) => {
             let prop = props.payload as singleEditorTypes
             if (prop) {
-                state.components = prop.content.components.map(
-                    (item: any, index: number) => {
-                        return {
-                            ...item,
-                            isHidden: false,
-                            isLocked: false,
-                            layerName: '图层' + index + 1,
-                        }
-                    },
-                )
-                state.page.title = prop.title
-                state.page.props = prop.content.props
+                state.components = prop.content?.components
+                    ? prop.content.components.map(
+                          (item: any, index: number) => {
+                              return {
+                                  ...item,
+                                  isHidden: false,
+                                  isLocked: false,
+                                  layerName: '图层' + index + 1,
+                              }
+                          },
+                      )
+                    : []
+                state.page.props = prop.content?.props ? prop.content.props : {}
                 state.page.coverImg = prop.coverImg
                 state.page.uuid = prop.uuid
-                state.page.subTitle = prop?.subTitle
+                //TODO:更新数据库数据后更新
+                state.page.subTitle = prop.subTitle
                     ? prop.subTitle
-                    : '未命名的作品'
+                    : '未命名作品'
+                state.page.title = prop.title ? prop.title : ''
             }
         })
         builder.addCase(getChannelListAsync.fulfilled, (state, props) => {
             const prop = props.payload as channelDataType
             state.channels = prop.list
+        })
+
+        builder.addCase(updateNameAsync.fulfilled, (state, props) => {
+            const prop = props.payload as ResponseType<any>
+            if (prop.code === 0) {
+                message.success('更新成功')
+                state.page.title = prop.data.title
+            }
         })
     },
 })
@@ -553,12 +538,13 @@ const pushHistory = (
 }
 
 //Thunk
-export const getCurrentTemplateAsync = createAsyncThunkWrapper<
-    singleEditorTypes,
-    string
->('editor/getCurrentTemplateAsync', getSingleTemplate, false)
+export const getCurrentTemplateAsync = createAsyncThunkWrapper<any, any>(
+    'editor/getCurrentTemplateAsync',
+    getSingleTemplate,
+    false,
+)
 
-export const saveTemplateAsync = createAsyncThunkWrapper<any, string>(
+export const saveTemplateAsync = createAsyncThunkWrapper<any, any>(
     'editor/saveTemplateAsync',
     saveWorks,
     true,
@@ -579,6 +565,12 @@ export const getMySingleWorkAsync = createAsyncThunkWrapper<any, string>(
     'editor/getMySingleWorkAsync',
     getMySingleWork,
     false,
+)
+
+export const updateNameAsync = createAsyncThunkWrapper<any, any>(
+    'editor/updateNameAsync',
+    updateName,
+    true,
 )
 
 export const {
