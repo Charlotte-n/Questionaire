@@ -72,7 +72,7 @@ const TabContent: FC<{
                 document.getElementById(
                     `qrcode-${item.id}`,
                 ) as HTMLCanvasElement,
-                `http://localhost:3000/edit/${item.id}`,
+                `${BaseUrl}/edit/${item.id}`,
                 {
                     errorCorrectionLevel: 'H',
                     width: 80,
