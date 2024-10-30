@@ -9,7 +9,7 @@ import { FC, useEffect, useMemo, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../../../stores'
 import { getChannelListAsync } from '../../../../stores/editor'
 import QRCode from 'qrcode'
-import { BaseUrl } from '../../../../constances'
+import { BaseH5Url } from '../../../../constances'
 import ClipboardJS from 'clipboard'
 
 const TabContent: FC<{
@@ -23,8 +23,8 @@ const TabContent: FC<{
 
     const generateQRCode = useMemo(
         () => (isTemplate: boolean, channelId?: string) => {
-            if (isTemplate) return `${BaseUrl}/api/pages/p/${id}-${page.uuid}`
-            return `${BaseUrl}/api/pages/p/${id}-${page.uuid}?channels=${channelId}`
+            if (isTemplate) return `${BaseH5Url}/api/pages/p/${id}-${page.uuid}`
+            return `${BaseH5Url}/api/pages/p/${id}-${page.uuid}?channels=${channelId}`
         },
         [id],
     )
@@ -72,7 +72,7 @@ const TabContent: FC<{
                 document.getElementById(
                     `qrcode-${item.id}`,
                 ) as HTMLCanvasElement,
-                `http://localhost:3000/edit/${item.id}`,
+                `${BaseH5Url}/api/pages/p/${id}-${page.uuid}?channels=${item.id}`,
                 {
                     errorCorrectionLevel: 'H',
                     width: 80,

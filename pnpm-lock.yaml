@@ -47,9 +47,6 @@ importers:
       enzyme:
         specifier: ^3.11.0
         version: 3.11.0
-      extend-expect:
-        specifier: link:@testing-library/jest-dom/extend-expect
-        version: link:@testing-library/jest-dom/extend-expect
       file-saver:
         specifier: ^2.0.5
         version: 2.0.5

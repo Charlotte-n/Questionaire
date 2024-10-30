@@ -9,7 +9,7 @@ import React, {
 import type { FC, ReactNode } from 'react'
 import QRCode from 'qrcode'
 import { useAppDispatch, useAppSelector } from '../../../../stores'
-import { BaseUrl } from '../../../../constances'
+import { BaseH5Url } from '../../../../constances'
 import { useParams } from 'react-router-dom'
 import Uploader from '../../../../components/Uploader'
 import './index.css'
@@ -40,7 +40,7 @@ const PreviewForm: FC<IProps> = ({ drawerVisible, onClose }) => {
 
     //创建二维码
     const qrcodeUrl = useMemo(() => {
-        return `${BaseUrl}/api/pages/p/${id}-${page.uuid}`
+        return `${BaseH5Url}/api/pages/p/${id}-${page.uuid}`
     }, [page])
 
     useLayoutEffect(() => {
