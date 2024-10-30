@@ -38,10 +38,14 @@ const Template: FC = () => {
         getTemplateApi()
     }, [])
     return (
-        <Layout.Content className="flex justify-center items-center h-[85vh]">
-            <Row className="max-w-[1200px] flex" gutter={20}>
+        <Layout.Content className="flex justify-center  h-[85vh]">
+            <Row className="max-w-[1200px] h-[500px] mt-[30px]" gutter={30}>
                 <Col span={10}>
-                    <img src={template?.coverImg} alt="图片" />
+                    <img
+                        src={template?.coverImg}
+                        alt="图片"
+                        className="h-[100%]"
+                    />
                 </Col>
                 <Col className="flex flex-col">
                     <div className="font-bold text-[20px] mb-[10px]">

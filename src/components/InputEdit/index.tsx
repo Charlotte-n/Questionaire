@@ -1,4 +1,13 @@
-import { FC, ReactNode, memo, useState, useRef, useEffect } from 'react'
+import {
+    FC,
+    ReactNode,
+    memo,
+    useState,
+    useRef,
+    useEffect,
+    forwardRef,
+    useImperativeHandle,
+} from 'react'
 import { Input, message } from 'antd'
 import { useClickOutside } from '../../hooks/useClickOutside'
 import { useKeyPress } from '../../hooks/useKeyPress'
@@ -16,16 +25,19 @@ interface IInputEditProps {
 }
 
 // 文本编辑,TODO:记着添加默认值
-export const InputEdit: FC<IInputEditProps> = memo(
-    ({
-        children = { default: null },
-        value = '',
-        changeValue = () => {},
-        id = '',
-        currentEditId,
-        setCurrentEditId = () => {},
-        changeType = 'layerName',
-    }) => {
+export const InputEdit: FC<IInputEditProps> = forwardRef(
+    (
+        {
+            children = { default: null },
+            value = '',
+            changeValue = () => {},
+            id = '',
+            currentEditId,
+            setCurrentEditId = () => {},
+            changeType = 'layerName',
+        },
+        ref,
+    ) => {
         const [innerValue, setInnerValue] = useState(value)
         const wrapperRef = useRef(null)
         const { isClickOutSide, setIsClickOutSide } = useClickOutside(
@@ -33,7 +45,8 @@ export const InputEdit: FC<IInputEditProps> = memo(
         )
         const inputRef = useRef(null)
 
-        useKeyPress('Enter', () => {
+        //失去焦点并且更新title
+        const handleUpdateName = () => {
             //判断这个值不能为空
             if (!innerValue) {
                 message.error('文本不能为空')
@@ -41,6 +54,10 @@ export const InputEdit: FC<IInputEditProps> = memo(
             }
             changeValue(id, 'layerName', innerValue)
             setCurrentEditId(null)
+        }
+
+        useKeyPress('Enter', () => {
+            handleUpdateName()
         })
 
         useKeyPress('Escape', () => {
@@ -64,6 +81,10 @@ export const InputEdit: FC<IInputEditProps> = memo(
             }
             setIsClickOutSide(false)
         }, [isClickOutSide])
+
+        useImperativeHandle(ref, () => ({
+            handleUpdateName,
+        }))
 
         return (
             <div>

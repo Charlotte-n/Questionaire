@@ -23,7 +23,10 @@ export const templatesSlice = createSlice({
                 state.templates = props.payload?.list ? props.payload.list : []
                 state.total = props.payload?.count ? props.payload.count : 0
             } else {
-                state.templates = [...state.templates, ...props.payload?.list]
+                state.templates = [
+                    ...state.templates,
+                    ...(props.payload?.list ? props.payload.list : []),
+                ]
             }
         })
         builder.addCase(
@@ -50,7 +53,6 @@ export const fetchTemplatesAsync = createAsyncThunk(
     ) => {
         try {
             const res = await getTemplateList({ pageSize, pageIndex })
-
             return res.data
         } catch (error) {
             return rejectWithValue(error)

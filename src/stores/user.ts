@@ -57,6 +57,8 @@ export const getUserInfoAsync = createAsyncThunk(
     'user/setUserInfo',
     async (phone: string, { rejectWithValue }) => {
         try {
+            console.log(234)
+
             setLocalStorage('isLogin', true)
             const res = await getUserInfo(
                 phone ? phone : (getLocalStorage('phone') as string),

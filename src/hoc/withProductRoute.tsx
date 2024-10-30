@@ -1,10 +1,7 @@
 import React, { useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import router from '../router/router'
 import store from '../stores'
 import { getUserInfoAsync, setIsLogin } from '../stores/user'
-import { message } from 'antd'
 
 //改进一下，特定的路由来进行拦截
 export default function withProductRoute(
@@ -30,7 +27,7 @@ export default function withProductRoute(
             } else {
                 if (token) {
                     //重新获取用户信息
-                    store.dispatch(getUserInfoAsync(''))
+                    // store.dispatch(getUserInfoAsync(''))
                     if (
                         route.find((item) => item.path === location.pathname)
                             ?.redirectLogin

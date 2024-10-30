@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useState, useRef } from 'react'
 import { Button, Dropdown, MenuProps, message } from 'antd'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../../../stores'
@@ -17,7 +17,7 @@ const EditHeader: FC<Props> = ({ handleOpenPreviewForm }) => {
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
     const { page } = useAppSelector((state) => state.editorSlice)
-
+    const EditInputRef = useRef<any>(null)
     const { opName } = useAppSelector((state) => state.globalSlice)
     const { id } = useParams()
     const { saveWorkApi } = useSaveWork()
@@ -45,6 +45,9 @@ const EditHeader: FC<Props> = ({ handleOpenPreviewForm }) => {
     }
 
     const handelSaveWork = () => {
+        //让editInput进行更新
+        const res = EditInputRef.current?.handleUpdateName()
+        if (!res) return
         saveWorkApi()
     }
 
@@ -82,6 +85,7 @@ const EditHeader: FC<Props> = ({ handleOpenPreviewForm }) => {
                 </div>
                 <div className="text-white">
                     <InputEdit
+                        ref={EditInputRef}
                         value={page.title}
                         id={id as string}
                         currentEditId={currentEditId}

@@ -5,6 +5,7 @@ import Cropper from 'cropperjs'
 import Uploader from '../../../../../components/Uploader'
 import { Button } from 'antd'
 import 'cropperjs/dist/cropper.css'
+import { useAppSelector } from '../../../../../stores'
 
 export interface UploadImgRes {
     code: number
@@ -29,6 +30,8 @@ interface CropperDataType {
 }
 
 const CropperCom: FC<IProps> = ({ url, onSuccess }) => {
+    //当前模板
+    const { page } = useAppSelector((state) => state.editorSlice)
     //裁剪图片
     const [isCopperOpen, setIsCopperOpen] = useState(false)
     //图片上传成功获取到图片
@@ -54,6 +57,7 @@ const CropperCom: FC<IProps> = ({ url, onSuccess }) => {
         })
         setIsCopperOpen(false)
     }
+
     const handleCancel = () => {
         setIsCopperOpen(false)
     }
@@ -106,9 +110,19 @@ const CropperCom: FC<IProps> = ({ url, onSuccess }) => {
             <div className="flex">
                 {/* 预览 */}
                 {uploadImg !== '' ? (
-                    <div>
-                        <img src={uploadImg} className="h-[100px] rounded-md" />
-                    </div>
+                    <div
+                        className=""
+                        style={{
+                            height: '100px',
+                            width: '150px',
+                            backgroundImage: page.props?.backgroundImage
+                                ? page.props.backgroundImage
+                                : '',
+                            backgroundSize: 'contain',
+                            backgroundRepeat: 'no-repeat',
+                            backgroundPosition: 'center',
+                        }}
+                    ></div>
                 ) : null}
 
                 <div className="flex justify-center items-center flex-col ml-[20px]">

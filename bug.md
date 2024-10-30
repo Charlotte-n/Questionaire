@@ -1,0 +1,13 @@
+# 前端
+
+1. 创建设计或者编辑设计的时候控制台报错，获取不到list : 解决
+2. 当登陆了，但是又进入home页面报错，说userInfo为undefined :解决
+3. https://www.merikle.top/gxt/template/2页面图片展示问题
+4. 编辑页面的img展示问题 : 解决
+5. 保存的时候将这个EditInput框进行失去焦点 : 解决
+6. http://localhost:5174/gxt/edit/44 border发现有双层边框 : 解决
+7. 点击发布的时候当元素还是对焦着，截图会有该对焦的边框
+
+# 后端
+
+1. 创建设计或者编辑设计的时候控制台报错，获取不到list : 解决

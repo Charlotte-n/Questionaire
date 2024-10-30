@@ -5,19 +5,16 @@ import {
     addComponent,
     clearSelected,
     ComponentData,
-    copyWorkAsync,
     getCurrentElement,
-    getCurrentTemplateAsync,
     getMySingleWorkAsync,
     handleChangeComponent,
     handleSortAction,
     pushHistoryAction,
-    saveTemplateAsync,
     setActive,
 } from '../../stores/editor'
 import { ComponentConfType, getComponentConfByType } from '../../components'
 import EditWrapper from './children/edit-wrapper'
-import { Layout, Modal, Tabs } from 'antd'
+import { Layout, Tabs } from 'antd'
 import LayerList from './children/right-edit/layer-list'
 import EditGroup from './children/right-edit/edit-group'
 import PageSetting from './children/right-edit/page-setting'
@@ -169,7 +166,7 @@ const Editor: FC = () => {
                                 onClick={() => handleChangePageTab()}
                             >
                                 <div
-                                    className={`edit-canvas px-[10px]  py-[10px] bg-[white] shadow-[#0000001f] shadow-md min-h-[68vh]  overflow-auto  ${currentElementID === 'page' ? 'border-[2px] border-[#1890ff] border-solid' : ''}`}
+                                    className={`edit-canvas px-[10px]  py-[10px] bg-[white] shadow-[#0000001f] shadow-md min-h-[200px] overflow-auto  ${currentElementID === 'page' ? 'border-[2px] border-[#1890ff] border-solid' : ''}`}
                                     style={page.props}
                                 >
                                     <div className="">

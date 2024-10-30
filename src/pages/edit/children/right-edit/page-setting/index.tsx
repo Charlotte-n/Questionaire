@@ -1,4 +1,4 @@
-import { Form, InputNumber, Select } from 'antd'
+import { Form, InputNumber, message, Select } from 'antd'
 import React, { FC, useEffect, useMemo } from 'react'
 import Uploader from '../../../../../components/Uploader'
 import { UploadImgRes } from '../cropper'
@@ -28,15 +28,36 @@ const PageSetting: FC<IProps> = () => {
     }, [page.props.backgroundImage])
 
     const handleUploadSuccess = (data: UploadImgRes) => {
-        dispatch(
-            ChangePagePropsAction({
-                backgroundImage: `url(${data.data.url})`,
-                type: 'props',
-            }),
-        )
-        dispatch(
-            ChangePagePropsAction({ coverImg: data.data.url, type: 'root' }),
-        )
+        const img = new Image()
+        img.src = data.data.url
+        img.onload = () => {
+            // 获取图片的原始宽度和高度
+            const originalWidth = img.width
+            const originalHeight = img.height
+            // 计算按比例缩放后的渲染高度
+            const renderHeight = (350 / originalWidth) * originalHeight
+            dispatch(
+                ChangePagePropsAction({
+                    backgroundImage: `url(${data.data.url})`,
+                    height: renderHeight + 'px',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundSize: 'cover',
+                    type: 'props',
+                }),
+            )
+            dispatch(
+                ChangePagePropsAction({
+                    coverImg: data.data.url,
+                    type: 'root',
+                }),
+            )
+        }
+
+        img.onerror = () => {
+            console.error('图片加载失败')
+            // 处理图片加载失败的情况
+            message.error('图片加载失败')
+        }
     }
 
     const handleChange = (value: any) => {
