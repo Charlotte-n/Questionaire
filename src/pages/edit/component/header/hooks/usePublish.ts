@@ -1,5 +1,8 @@
 import { takeScreenshotAndUpload } from '../../../../utils/util'
-import { ChangePagePropsAction } from '../../../../../stores/editor'
+import {
+    ChangePagePropsAction,
+    clearSelected,
+} from '../../../../../stores/editor'
 import { useAppDispatch, useAppSelector } from '../../../../../stores'
 import { publishMyWork, createChannel } from '../../../../../apis/work/work'
 import { getChannelListAsync } from '../../../../../stores/editor'
@@ -25,6 +28,9 @@ export const usePublish = () => {
             await saveWorkApi()
             //发布
             await publishMyWork(id as string)
+            //失去焦点
+            dispatch(clearSelected())
+
             //如果没有渠道列表就生成默认的渠道
             if (channels && channels.length === 0) {
                 createChannel({ workId: id as string, name: '' })
