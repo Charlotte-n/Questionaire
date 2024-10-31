@@ -397,6 +397,20 @@ vue3的三种实例
 1. 拖拽开始
 2. 拖拽过程中
 3. 拖拽结束
+   //TODO：重要
+   第一阶段
+   使用 HTML 的 Drag 特性
+   如果想可以拖拽 可以设置为 draggable = ‘true’
+   使用 dragstart 事件监控拖动开始，并设置对应属性。
+   第二阶段给被拖拽的元素添加一个状态
+   使用dragStart事件来获取到当前拖拽的元素的索引，然后给拖动的元素添加样式
+   第三阶段松开鼠标的时候将样式进行清除
+   使用onDrop事件来清除样式，这个事件放在拖动区域上，因为默认网页上所有的放置的区域都是禁止的，要在dragOver事件上阻止默认事件
+   第四个阶段drop的时候进行交换索引
+   需要拿到拖拽元素的索引和释放元素的索引，然后交换两个元素的索引
+   然后可以使用array-remove来进行数组元素的移动
+   第四个阶段在交互过程中进行实时更新（进行交换索引）
+   使用dragEnter事件来获取释放元素的索引，之后进行交换索引使用array-remove来进行数组元素的移动
 
 ### 排序
 
@@ -512,9 +526,34 @@ https://regexr.com/
 2. 确定参数(要使用的参数)
 3. 写内部重复的逻辑
 
-#
-
 ## html2canvas实现截图上传功能
+
+### 原理
+
+目的：有一个canvas元素，上面有一系列的html节点
+局限：Canvas上面无法添加具体的HTMl节点，他只是一个画布
+
+解决方案：
+
+1. 创建一个canvas元素
+2. 创建svg文件，使用Blob构造函数
+3. 将svg中的值填充foreignObject，然后填充想要复制节点的html
+4. 创建image标签，将image.src = URL.createObjectURL(svg)
+5. 调用canvas的drawImage方法，把图片会知道画布上
+
+## 拷贝文本
+
+方案一：
+Clipboard API
+方案二：
+document.execCommand('copy')
+
+## 图片下载原理
+
+1. 创建一个a标签
+2. 设置a标签的href属性
+3. 设置a标签的download属性
+4. 触发a标签的click事件
 
 ## 创建渠道
 

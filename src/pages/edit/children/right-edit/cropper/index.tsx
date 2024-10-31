@@ -1,4 +1,4 @@
-import React, { memo, useState, useRef, useEffect } from 'react'
+import { memo, useState, useRef, useEffect } from 'react'
 import type { FC, ReactNode } from 'react'
 import Modal from 'antd/es/modal/Modal'
 import Cropper from 'cropperjs'

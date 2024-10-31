@@ -1,4 +1,3 @@
-import html2canvas from 'html2canvas'
 import hyRequest from '../../services'
 import { ResponseType } from '../../apis/interface'
 import { uploadFileRes } from './interface'
@@ -60,21 +59,25 @@ const getCanvasBlob = (canvas: HTMLCanvasElement) => {
 
 //html2canvas截图并且上传
 export const takeScreenshotAndUpload = async (el: HTMLElement) => {
-    const canvas = await html2canvas(el, {
-        allowTaint: false,
-        useCORS: true,
-        scrollX: 0,
-        scrollY: 0,
+    //按需导入这个htmlcanvas
+    import('html2canvas').then(async (html2canvas: any) => {
+        console.log(html2canvas)
+        const canvas = await html2canvas(el, {
+            allowTaint: false,
+            useCORS: true,
+            scrollX: 0,
+            scrollY: 0,
+        })
+        const blob = await getCanvasBlob(canvas)
+        if (blob) {
+            const data = await uploadFile<uploadFileRes>(
+                blob,
+                '/utils/uploadImgOSS',
+                'test.png',
+            )
+            return data
+        }
     })
-    const blob = await getCanvasBlob(canvas)
-    if (blob) {
-        const data = await uploadFile<uploadFileRes>(
-            blob,
-            '/utils/uploadImgOSS',
-            'test.png',
-        )
-        return data
-    }
 }
 
 // 下载的原理
