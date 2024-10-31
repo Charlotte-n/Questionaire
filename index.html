@@ -5,6 +5,30 @@
         <link rel="icon" type="image/svg+xml" href="/vite.svg" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Vite + React + TS</title>
+        <script type="module" charset="UTF-8">
+            import sensors from './src/md/sensorsdata.es6.min.js' //JS的位置
+            sensors.init({
+                server_url:
+                    window.location.hostname ==
+                    'http://10.130.14.5:8106/sa?project=EbizDemo', //判断是否为生产环境
+                use_client_time: true,
+                send_type: 'beacon',
+                heatmap: {
+                    scroll_notice_map: 'default', //是否开启点击图，默认 default 表示开启
+                    clickmap: 'default', //是否开启点击图，默认 default 表示开启，可以设置 'not_collect' 表示关闭。
+                    get_vtrack_config: true, //抓取所有div 需要后台打开允许
+                    collect_tags: {
+                        //通过 collect_tags 配置是否开启其他任意元素的全埋点采集（默认不采集）
+                        li: true,
+                        img: true,
+                        svg: true,
+                        // ... 其他标签
+                    },
+                },
+            })
+            sensors.quick('autoTrack') // 设置之后，SDK 就会自动收集页面浏览事件，以及设置初始来源。
+            sensors.registerPage({ product_platform: '抓取的数据所属的项目名' }) //当前上报的项目名字
+        </script>
     </head>
     <body>
         <div id="root"></div>

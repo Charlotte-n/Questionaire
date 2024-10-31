@@ -37,6 +37,7 @@ const SingleTemplate: FC<Props> = (props) => {
                 <img
                     src={coverImage}
                     className="w-[100%] h-[100%] single-template-img"
+                    alt="目前还没有上传封面请快点上传吧"
                 />
                 <div className="hover-item">
                     {type === 'myWork' ? (
