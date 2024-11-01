@@ -557,6 +557,92 @@ document.execCommand('copy')
 
 ## 创建渠道
 
+# 优化
+
+## vite的打包优化
+
+1. 文件太大，开启gzip压缩
+2. 有必要的CDN
+3. 分包处理
+4. 优化结构(目录结构)
+5. Tree Shaking Vite 在生产构建时默认启用 tree shaking，移除未使用的代码。
+6. 图片优化 使用 vite-plugin-imagemin 插件压缩图片
+7. 移除未使用的 CSS 使用 vite-plugin-purge-icons 插件、注释，console、
+8. 按需加载组件库 对于 UI 组件库，使用相应的按需加载插件，如 unplugin-vue-components
+9. 分析打包结果 使用 rollup-plugin-visualizer 插件分析打包结果，找出大文件
+10. 设置 chunk 大小警告限制 在 Vite 配置中设置 chunk 大小警告限制
+11. 拆分thunk
+12. 延迟加载，动态加载
+
+```ts
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import removeConsole from 'vite-plugin-remove-console'
+import { visualizer } from 'rollup-plugin-visualizer'
+import PurgeIcons from 'vite-plugin-purge-icons'
+import viteCompression from 'vite-plugin-compression'
+
+// https://vitejs.dev/config/
+export default defineConfig({
+    base: '/',
+    plugins: [
+        react(),
+        //删除console
+        removeConsole({
+            includes: ['log'],
+        }),
+        //分析哪些文件比较大,会有一个图片来分析哪个文件大
+        visualizer({
+            open: true,
+            gzipSize: true,
+            brotliSize: true,
+        }),
+        //移除未使用的css
+        PurgeIcons(),
+        //压缩图片
+        viteCompression({
+            verbose: true, // 是否在控制台中输出压缩结果
+            disable: false,
+            threshold: 1024 * 500, // 如果体积大于阈值，将被压缩，单位为b，体积过小时请不要压缩，以免适得其反
+            algorithm: 'gzip', // 压缩算法，可选['gzip'，' brotliccompress '，'deflate '，'deflateRaw']
+            ext: '.gz',
+            deleteOriginFile: true, // 源文件压缩后是否删除(我为了看压缩后的效果，先选择了true)
+        }),
+    ],
+    build: {
+        terserOptions: {
+            format: {
+                comments: false,
+            },
+        },
+        chunkSizeWarningLimit: 500, // 单位kb
+        //拆分thunk
+        rollupOptions: {
+            output: {
+                chunkFileNames: 'js/[name]-[hash].js', // 引入文件名的名称
+                entryFileNames: 'js/[name]-[hash].js', // 包的入口文件名称
+                assetFileNames: '[ext]/[name]-[hash].[ext]', // 资源文件像 字体，图片等
+                manualChunks: {
+                    react: [
+                        'react',
+                        'react-dom',
+                        'redux',
+                        'react-router-dom',
+                        'react-redux',
+                    ],
+                    lodash: ['lodash-es'],
+                    antd: ['antd'],
+                    html2canvas: ['html2canvas'],
+                    cropper: ['cropperjs'],
+                },
+            },
+        },
+    },
+})
+```
+
+## http缓存
+
 # 最后的部署
 
 ## 开发环境、测试环境、生产环境
