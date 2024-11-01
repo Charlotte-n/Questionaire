@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react'
 import removeConsole from 'vite-plugin-remove-console'
 import { visualizer } from 'rollup-plugin-visualizer'
 import PurgeIcons from 'vite-plugin-purge-icons'
+import viteCompression from 'vite-plugin-compression'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -21,6 +22,15 @@ export default defineConfig({
         }),
         //移除未使用的css
         PurgeIcons(),
+        //压缩图片
+        viteCompression({
+            verbose: true, // 是否在控制台中输出压缩结果
+            disable: false,
+            threshold: 10240, // 如果体积大于阈值，将被压缩，单位为b，体积过小时请不要压缩，以免适得其反
+            algorithm: 'gzip', // 压缩算法，可选['gzip'，' brotliccompress '，'deflate '，'deflateRaw']
+            ext: '.gz',
+            deleteOriginFile: true, // 源文件压缩后是否删除(我为了看压缩后的效果，先选择了true)
+        }),
     ],
     build: {
         terserOptions: {
@@ -29,17 +39,20 @@ export default defineConfig({
             },
         },
         chunkSizeWarningLimit: 500, // 单位kb
+        //拆分thunk
         rollupOptions: {
             output: {
-                manualChunks: {
-                    react: [
-                        'react',
-                        'react-dom',
-                        'react-router-dom',
-                        'redux',
-                        'react-redux',
-                    ],
-                    rightEdit: [],
+                chunkFileNames: 'js/[name]-[hash].js', // 引入文件名的名称
+                entryFileNames: 'js/[name]-[hash].js', // 包的入口文件名称
+                assetFileNames: '[ext]/[name]-[hash].[ext]', // 资源文件像 字体，图片等
+                manualChunks: (id) => {
+                    // 这个ID，就是所有文件的绝对路径
+                    if (id.includes('node_modules')) {
+                        // 因为 node_modules 中的依赖通常是不会改变的
+                        // 所以直接单独打包出去
+                        // 这个return 的值就是打包的名称
+                        return 'vendor'
+                    }
                 },
             },
         },
