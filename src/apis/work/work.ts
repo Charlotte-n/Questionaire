@@ -167,3 +167,40 @@ export const createEmptyWork = () => {
         opName: 'createEmptyWork',
     })
 }
+
+//删除我的模板
+export const deleteMyWork = (id: string) => {
+    return hyRequest.post<ResponseType<TemplateType>>({
+        url: `/works/delete/${id}`,
+        opName: 'deleteMyWork',
+    })
+}
+
+//获取删除的作品
+export const getDeleteWork = () => {
+    return hyRequest.get<
+        ResponseType<{
+            count: number
+            list: TemplateType[]
+            pageIndex: number
+            pageSize: number
+        }>
+    >({
+        url: '/works/getDeletedWorks',
+        opName: 'getDeleteWork',
+    })
+}
+
+//恢复作品
+export const recoverWork = (
+    id: string,
+    data: {
+        isDeleted: boolean
+    },
+) => {
+    return hyRequest.post({
+        url: `/works/update/${id}`,
+        opName: 'recoverWork',
+        data,
+    })
+}

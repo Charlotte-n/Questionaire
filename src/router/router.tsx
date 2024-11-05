@@ -8,6 +8,7 @@ const Login = lazy(() => import('../pages/login/index.tsx'))
 const Home = lazy(() => import('../pages/home/index.tsx'))
 const MyWorks = lazy(() => import('../pages/my-works/index.tsx'))
 const Template = lazy(() => import('../pages/template/index.tsx'))
+const Profile = lazy(() => import('../pages/profile/index.tsx'))
 const router = createBrowserRouter(
     [
         {
@@ -38,6 +39,10 @@ const router = createBrowserRouter(
                 {
                     path: 'template/:id',
                     element: <Template />,
+                },
+                {
+                    path: 'profile',
+                    element: <Profile />,
                 },
             ],
         },

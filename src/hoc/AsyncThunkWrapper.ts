@@ -27,7 +27,6 @@ export function createAsyncThunkWrapper<Returned, ThunkArg = void>(
             const res = await apiCall(arg)
             return returnedAll ? res : res.data
         } catch (err) {
-            console.log(err)
             return rejectWithValue(err)
         }
     })

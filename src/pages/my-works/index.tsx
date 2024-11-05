@@ -48,6 +48,7 @@ const Work: React.FC<{
                                         title: item.title,
                                         copiedCount: item.copiedCount,
                                     }}
+                                    getMyWorkList={getMyListApi}
                                 ></SingleTemplate>
                             </Col>
                         )

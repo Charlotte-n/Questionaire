@@ -13,6 +13,7 @@ export interface UserStateType {
     updatedAt: string
     createdAt: string
     id: number
+    avatar: string
 }
 
 interface initialStateType {
@@ -30,13 +31,13 @@ const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
-        setToken(state, props) {
+        setToken(_, props) {
             setLocalStorage('token', props.payload)
         },
-        setIsLogin(state, props) {
+        setIsLogin(_, props) {
             setLocalStorage('isLogin', props.payload)
         },
-        loginout(state) {
+        loginout() {
             removeLocalStorage('token')
             removeLocalStorage('userInfo')
             removeLocalStorage('phone')
@@ -57,8 +58,6 @@ export const getUserInfoAsync = createAsyncThunk(
     'user/setUserInfo',
     async (phone: string, { rejectWithValue }) => {
         try {
-            console.log(234)
-
             setLocalStorage('isLogin', true)
             const res = await getUserInfo(
                 phone ? phone : (getLocalStorage('phone') as string),

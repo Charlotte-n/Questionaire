@@ -11,9 +11,10 @@ const Header: FC = () => {
     const navigate = useNavigate()
     const buttonClassName = 'rounded-full mr-[25px]'
 
-    const onMenuClick: MenuProps['onClick'] = (e) => {
-        console.log('click', e)
-        if (e.key === '2') {
+    const onMenuClick = (e: any) => {
+        if (e.key === '1') {
+            navigate('/gxt/profile')
+        } else if (e.key === '2') {
             dispatch(loginout())
             message.success('退出成功')
             setTimeout(() => {
@@ -37,8 +38,6 @@ const Header: FC = () => {
                 onClick={() => navigate('/gxt/home')}
             >
                 <svg
-                    t="1729652009286"
-                    class="icon"
                     viewBox="0 0 1024 1024"
                     version="1.1"
                     xmlns="http://www.w3.org/2000/svg"

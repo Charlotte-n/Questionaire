@@ -10,7 +10,6 @@ import {
     copyWork,
     getMySingleWork,
     updateName,
-    createEmptyWork,
 } from '../apis/work/work'
 import { createAsyncThunkWrapper } from '../hoc/AsyncThunkWrapper'
 import {
@@ -496,7 +495,7 @@ const modifyHistory = (
                 type === 'redo' ? newValue[index] : oldValue[index]
         })
     } else {
-        component!.props[key] = type === 'redo' ? newValue : newValue
+        component!.props[key] = type === 'redo' ? newValue : oldValue
     }
 }
 

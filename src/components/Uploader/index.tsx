@@ -6,20 +6,17 @@ import React, {
     useRef,
     useState,
 } from 'react'
-import type { FC, LegacyRef, ReactNode, Ref, RefObject } from 'react'
-import axios, { AxiosProgressEvent, AxiosResponse } from 'axios'
+import type { FC, LegacyRef, ReactNode } from 'react'
+import axios, { AxiosProgressEvent } from 'axios'
 import { v4 as uuidv4 } from 'uuid'
 import { MergeProps } from '../../stores/commonproperties'
 import { produce } from 'immer'
 import './index.css'
-import {
-    DeleteOutlined,
-    LoadingOutlined,
-    UploadOutlined,
-} from '@ant-design/icons'
+import { DeleteOutlined, LoadingOutlined } from '@ant-design/icons'
 import { last } from 'lodash-es'
 import { Button, Progress } from 'antd'
 import { UploadImgRes } from '../../pages/edit/children/right-edit/cropper'
+import { BaseUploadUrl } from '../../constances'
 
 interface IProps {
     children?: {
@@ -27,7 +24,7 @@ interface IProps {
         loading?: ReactNode
         uploaded?: (props: { url: string }) => ReactNode
     }
-    action: string
+    action?: string
     beforeUpload?: (file: File) => boolean | Promise<File>
     onProgress?: (event: AxiosProgressEvent) => void
     onSuccess?: (data: UploadImgRes) => void
@@ -62,7 +59,7 @@ interface lastFileType {
 }
 
 const defaultProp = {
-    action: 'test',
+    action: BaseUploadUrl,
     draggable: false,
     cover: true,
     showUploadList: false,
