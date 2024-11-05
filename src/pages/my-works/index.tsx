@@ -41,7 +41,7 @@ const Work: React.FC<{
                             <Col key={item._id} span={6}>
                                 <SingleTemplate
                                     type="myWork"
-                                    id={item._id}
+                                    id={item.id}
                                     baseInfo={{
                                         coverImage: item.coverImg,
                                         author: item.author,

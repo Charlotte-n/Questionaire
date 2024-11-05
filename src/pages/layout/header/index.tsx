@@ -32,7 +32,6 @@ const Header: FC = () => {
 
     return (
         <div className="flex justify-between">
-            {/* 这个location.pathname匹配/edit/1,/edit/2 */}
             <h2
                 className="text-white cursor-pointer flex items-center"
                 onClick={() => navigate('/gxt/home')}

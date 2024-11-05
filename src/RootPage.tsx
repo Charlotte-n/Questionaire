@@ -47,7 +47,7 @@ const RootPage: FC = () => {
     return (
         <div>
             {showHeader && (
-                <Layout.Header className="root-header z-[10000] relative">
+                <Layout.Header className="root-header z-[100] relative">
                     <Header></Header>
                 </Layout.Header>
             )}

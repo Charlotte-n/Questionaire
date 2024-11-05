@@ -41,8 +41,7 @@ const SingleTemplate: FC<Props> = (props) => {
     const { id, type } = props
     const navigate = useNavigate()
 
-    const handleGoToTemplate = async (id: string) => {
-        // const res = await copyWork(id)
+    const handleGoToTemplate = async () => {
         navigate(`/gxt/template/${id}`)
     }
 
@@ -106,9 +105,7 @@ const SingleTemplate: FC<Props> = (props) => {
                             type="primary"
                             size="large"
                             className="rounded-full"
-                            onClick={() =>
-                                handleGoToTemplate(JSON.stringify(id))
-                            }
+                            onClick={() => handleGoToTemplate()}
                         >
                             使用此模板创建
                         </Button>

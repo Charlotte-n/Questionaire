@@ -5,7 +5,7 @@ import {
     publishTemplate,
 } from '../../../../apis/work/work'
 import { useParams } from 'react-router-dom'
-import { FC, useEffect, useMemo, useState } from 'react'
+import { FC, useEffect, useMemo, useState, useRef } from 'react'
 import { useAppDispatch, useAppSelector } from '../../../../stores'
 import { getChannelListAsync } from '../../../../stores/editor'
 import QRCode from 'qrcode'
@@ -20,6 +20,7 @@ const TabContent: FC<{
     const { channels, page } = useAppSelector((state) => state.editorSlice)
     const dispatch = useAppDispatch()
     const { opName } = useAppSelector((state) => state.globalSlice)
+    const clipboardRef = useRef<ClipboardJS | null>(null)
 
     const generateQRCode = useMemo(
         () => (isTemplate: boolean, channelId?: string) => {
@@ -82,11 +83,14 @@ const TabContent: FC<{
     }, [channels])
 
     useEffect(() => {
-        const clipboard = new ClipboardJS('.copy-btn')
-        clipboard.on('success', function (e) {
+        clipboardRef.current = new ClipboardJS('.copy-btn')
+        clipboardRef.current?.on('success', function (e) {
             e.clearSelection()
             message.success('复制成功')
         })
+        return () => {
+            clipboardRef.current?.destroy()
+        }
     }, [])
 
     return (
