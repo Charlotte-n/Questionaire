@@ -23,8 +23,6 @@ const Home: FC = () => {
     //获取我的作品
     const getMyWorkListApi = async () => {
         const res = await getMyList({ pageSize, pageIndex: 0, isTemplate: 0 })
-        console.log(res.data.list)
-
         setMyWorkList(res.data.list)
     }
 
@@ -47,9 +45,9 @@ const Home: FC = () => {
             {/* banner */}
             <div className="relative">
                 <img
-                    src="https://oss.imooc-lego.com/editor/img/background.3744875e.png"
+                    src="https://merikle-backend.oss-cn-beijing.aliyuncs.com/test/gruner-tee-7807229_1280.webp"
                     alt=""
-                    className="w-[100%]"
+                    className="w-[100%] h-[50vh]"
                 />
                 <div className="img-content flex flex-col items-center">
                     <h2 className="mb-[15px] text-[35px]">
@@ -204,7 +202,7 @@ const Home: FC = () => {
                                       return (
                                           <Col span={6} key={item.id}>
                                               <SingleTemplate
-                                                  id={item.id}
+                                                  id={String(item.id)}
                                                   type="myWork"
                                                   baseInfo={{
                                                       copiedCount:
@@ -213,6 +211,9 @@ const Home: FC = () => {
                                                       author: item.author,
                                                       title: item.title,
                                                   }}
+                                                  getMyWorkList={
+                                                      getMyWorkListApi
+                                                  }
                                               ></SingleTemplate>
                                           </Col>
                                       )

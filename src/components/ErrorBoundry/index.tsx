@@ -1,5 +1,18 @@
-class ErrorBoundary extends React.Component {
-    constructor(props: any) {
+// 定义Props和State的类型
+import React from 'react'
+interface ErrorBoundaryProps {
+    children: React.ReactNode // 子组件
+    fallback: React.ReactNode // 出错时的后备UI
+}
+
+interface ErrorBoundaryState {
+    hasError: boolean
+}
+class ErrorBoundary extends React.Component<
+    ErrorBoundaryProps,
+    ErrorBoundaryState
+> {
+    constructor(props: ErrorBoundaryProps) {
         super(props)
         this.state = { hasError: false }
     }
@@ -17,14 +30,17 @@ class ErrorBoundary extends React.Component {
         //   在 ErrorBoundary 中（由 APP 创建）
         //   在 div 中（由 APP 创建）
         //   在 App 中
+        console.error(error, info, '出错了')
     }
 
     render() {
         if ((this.state as any).hasError) {
             // 你可以渲染任何自定义后备 UI
-            return (this.state as any).fallback
+            return this.props.fallback
         }
 
-        return (this.state as any).children
+        return this.props.children
     }
 }
+
+export default ErrorBoundary

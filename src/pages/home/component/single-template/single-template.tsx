@@ -1,10 +1,19 @@
-import { Button, Card, Dropdown, Typography, Space, MenuProps } from 'antd'
+import {
+    Button,
+    Card,
+    Dropdown,
+    Typography,
+    Space,
+    MenuProps,
+    message,
+} from 'antd'
 import { DownOutlined } from '@ant-design/icons'
 import { FC } from 'react'
 import Ellipsis from '../../../../components/Ellipsis/ellipsis'
 import './index.css'
 import { useNavigate } from 'react-router-dom'
 import { copyWork, deleteMyWork } from '../../../../apis/work/work'
+import { downloadImage } from '../../../utils/util'
 
 interface Props {
     baseInfo: {
@@ -52,18 +61,27 @@ const SingleTemplate: FC<Props> = (props) => {
 
     // 删除该作品
     const handleDeleteMyWork = async () => {
-        deleteMyWork(id)
-        //重新获取数据
-        props.getMyWorkList && props.getMyWorkList()
+        try {
+            deleteMyWork(id)
+            message.success('删除成功')
+            //重新获取数据
+            props.getMyWorkList && props.getMyWorkList()
+        } catch (e) {}
     }
 
     //复制
     const handleCopyMyWork = async () => {
-        await copyWork(id)
-        props.getMyWorkList && props.getMyWorkList()
+        try {
+            await copyWork(id)
+            message.success('复制成功')
+            props.getMyWorkList && props.getMyWorkList()
+        } catch (e) {}
     }
 
     //下载海报
+    const handleDownloadImage = async (img: string) => {
+        downloadImage(img)
+    }
 
     const handleClickMenu: MenuProps['onClick'] = (e) => {
         switch (e.key) {
@@ -77,6 +95,7 @@ const SingleTemplate: FC<Props> = (props) => {
                 handleCopyMyWork()
                 break
             case 'download':
+                handleDownloadImage(coverImage)
                 break
             default:
                 break

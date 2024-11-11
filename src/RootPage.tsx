@@ -4,6 +4,7 @@ import { Layout, message } from 'antd'
 import Footer from './pages/layout/footer/index.tsx'
 import { Outlet, useLocation } from 'react-router-dom'
 import withProductRoute from './hoc/withProductRoute.tsx'
+import ErrorBoundary from './components/ErrorBoundry/index.tsx'
 import './index.css'
 
 const ProductRoute = [
@@ -45,23 +46,25 @@ const RootPage: FC = () => {
     })
 
     return (
-        <div>
-            {showHeader && (
-                <Layout.Header className="root-header z-[100] relative">
-                    <Header></Header>
-                </Layout.Header>
-            )}
+        <ErrorBoundary fallback={<div>出错了</div>}>
+            <div>
+                {showHeader && (
+                    <Layout.Header className="root-header z-[100] relative">
+                        <Header></Header>
+                    </Layout.Header>
+                )}
 
-            <Layout.Content className="min-h-[75vh]">
-                <Outlet></Outlet>
-            </Layout.Content>
+                <Layout.Content className="min-h-[75vh]">
+                    <Outlet></Outlet>
+                </Layout.Content>
 
-            {showFooter && (
-                <Layout.Footer className="bg-[#333333] w-[100%] px-0 py-[10px]">
-                    <Footer></Footer>
-                </Layout.Footer>
-            )}
-        </div>
+                {showFooter && (
+                    <Layout.Footer className="bg-[#333333] w-[100%] px-0 py-[10px]">
+                        <Footer></Footer>
+                    </Layout.Footer>
+                )}
+            </div>
+        </ErrorBoundary>
     )
 }
 

@@ -93,7 +93,7 @@ const Login: FC = () => {
                 className="flex justify-center items-center w-[50vw] h-[100%] bg-no-repeat bg-cover text-[white]"
                 style={{
                     backgroundImage:
-                        'url("https://oss.imooc-lego.com/editor/img/login.e8146602.png")',
+                        'url("https://merikle-backend.oss-cn-beijing.aliyuncs.com/test/artist-7250697_1280.jpg")',
                 }}
             >
                 <div className="text-center">
