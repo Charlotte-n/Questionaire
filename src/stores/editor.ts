@@ -409,7 +409,7 @@ export const EditorSlice = createSlice({
                                   ...item,
                                   isHidden: false,
                                   isLocked: false,
-                                  layerName: '图层' + index + 1,
+                                  layerName: item.layerName,
                               }
                           },
                       )
@@ -437,7 +437,7 @@ export const EditorSlice = createSlice({
                                   ...item,
                                   isHidden: false,
                                   isLocked: false,
-                                  layerName: '图层' + index + 1,
+                                  layerName: item.layerName,
                               }
                           },
                       )

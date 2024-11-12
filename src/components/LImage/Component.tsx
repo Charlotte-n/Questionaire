@@ -10,11 +10,11 @@ interface Props {
 const defaultProp = { url: 'test.js', width: '100%', height: '100%' }
 const LImageComponent: FC<Props> = (props) => {
     const defaultProps = MergeProps(defaultProp, props)
-    const { url, width, height, onItemClick } = defaultProps as any
+    const { url, width, height, onItemClick, imageSrc } = defaultProps as any
     return (
         <div>
             <img
-                src={url}
+                src={imageSrc}
                 width={width}
                 height={height}
                 style={{ height: height, width: width }}
