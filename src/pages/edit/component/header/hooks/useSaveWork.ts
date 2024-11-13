@@ -3,6 +3,7 @@ import { Modal } from 'antd'
 import { saveTemplateAsync, setIsDirty } from '../../../../../stores/editor'
 import { useNavigate, useParams, useBlocker } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../../../../stores'
+import { takeScreenshot } from '../../../../utils/util'
 
 export const useSaveWork = (sideEffect = false) => {
     const dispatch = useAppDispatch()
@@ -13,7 +14,12 @@ export const useSaveWork = (sideEffect = false) => {
     )
     const blocker = useBlocker(isDirty)
 
-    const saveWorkApi = () => {
+    const saveWorkApi = async () => {
+        //截图
+        const editWrapper = document.querySelector(
+            '.edit-canvas',
+        ) as HTMLElement
+        const imgUrl = await takeScreenshot(editWrapper)
         dispatch(
             saveTemplateAsync({
                 id,
@@ -22,15 +28,13 @@ export const useSaveWork = (sideEffect = false) => {
                         components,
                         props: page.props,
                     },
-                    coverImg: page.coverImg,
+                    coverImg: imgUrl,
                     title: page.title,
                 },
             }),
         )
         dispatch(setIsDirty(false))
     }
-
-    console.log('是否有影响', sideEffect)
 
     if (!sideEffect) {
         //定时保存：TODO:记录这里，useEffect的使用的坑点，要加上isDirty

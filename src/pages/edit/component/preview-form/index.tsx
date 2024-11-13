@@ -15,7 +15,7 @@ import Uploader from '../../../../components/Uploader'
 import './index.css'
 import { produce } from 'immer'
 import { usePublish } from '../header/hooks/usePublish'
-import { updateNameAsync } from '../../../../stores/editor'
+import { clearSelected, updateNameAsync } from '../../../../stores/editor'
 
 interface IProps {
     children?: ReactNode
@@ -69,6 +69,7 @@ const PreviewForm: FC<IProps> = ({ drawerVisible, onClose }) => {
                     }),
                 )
             }
+            dispatch(clearSelected())
             onClose()
         } catch (err) {
             console.error(err)

@@ -8,7 +8,7 @@ import { useSaveWork } from './hooks/useSaveWork'
 import { usePublish } from './hooks/usePublish'
 import PublishModal from '../publish-modal'
 import { InputEdit } from '../../../../components/InputEdit'
-import { updateNameAsync } from '../../../../stores/editor'
+import { clearSelected, updateNameAsync } from '../../../../stores/editor'
 
 interface Props {
     handleOpenPreviewForm: () => void
@@ -47,8 +47,9 @@ const EditHeader: FC<Props> = ({ handleOpenPreviewForm }) => {
     const handelSaveWork = () => {
         //让editInput进行更新
         const res = EditInputRef.current?.handleUpdateName()
-        if (!res) return
         saveWorkApi()
+        dispatch(clearSelected())
+        if (!res) return
     }
 
     const updateName = (

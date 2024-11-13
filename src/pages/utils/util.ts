@@ -77,6 +77,17 @@ export const takeScreenshotAndUpload = async (el: HTMLElement) => {
     }
 }
 
+//截图
+export const takeScreenshot = async (el: HTMLElement) => {
+    const canvas = await html2canvas(el, {
+        allowTaint: false,
+        useCORS: true,
+        scrollX: 0,
+        scrollY: 0,
+    })
+    return canvas.toDataURL('image/png')
+}
+
 // 下载的原理
 
 // 下载图片
