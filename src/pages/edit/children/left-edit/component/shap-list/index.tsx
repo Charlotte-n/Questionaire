@@ -1,5 +1,5 @@
 import { Row } from 'antd'
-import React, { FC } from 'react'
+import { FC } from 'react'
 import LShape from '../../../../../../components/LShape/Component'
 import { defaultShapes } from './config'
 import { useAppDispatch, useAppSelector } from '../../../../../../stores'
@@ -10,7 +10,6 @@ const ShapeList: FC = () => {
     const dispatch = useAppDispatch()
     const { components } = useAppSelector((state) => state.editorSlice)
     const onItemClick = (item: any) => {
-        console.log(item)
         dispatch(
             addComponent({
                 name: 'l-shape',

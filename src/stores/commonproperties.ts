@@ -1,4 +1,4 @@
-import { pad, without } from 'lodash-es'
+import { without } from 'lodash-es'
 import { useMemo } from 'react'
 
 export const CommonProperties = {
@@ -74,6 +74,7 @@ export const MergeProps = <T>(defaultProps: any, props: any): T => {
 }
 
 export const ShapeProperties = {
+    display: 'inline-block',
     backgroundColor: '',
     ...CommonProperties,
 }

@@ -5,9 +5,11 @@ import './index.css'
 import { useDispatch } from 'react-redux'
 import { addComponent } from '../../../../../../stores/editor'
 import { v4 as uuidv4 } from 'uuid'
+import { useAppSelector } from '../../../../../../stores'
 
 const ComponentList: FC<{}> = () => {
     const dispatch = useDispatch()
+    const { components } = useAppSelector((state) => state.editorSlice)
     const onItemClick = (item: any) => {
         console.log(item)
 
@@ -16,6 +18,7 @@ const ComponentList: FC<{}> = () => {
                 name: 'l-text',
                 id: uuidv4(),
                 props: item,
+                layerName: '图层' + (components.length + 1),
             }),
         )
     }

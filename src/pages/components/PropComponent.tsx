@@ -1,6 +1,5 @@
-import { FC, useEffect, useMemo } from 'react'
+import { FC, useEffect } from 'react'
 import { Form, InputNumber, Radio, Select, Slider } from 'antd'
-import { OptionalLTextPropsType } from '../../components/LText'
 import TextArea from 'antd/es/input/TextArea'
 import { MergeProps, TextProperties } from '../../stores/commonproperties'
 import {
@@ -13,7 +12,6 @@ import { sizeOptions } from './config'
 import CropperCom from '../edit/children/right-edit/cropper'
 import { useAppSelector } from '../../stores'
 import { getCurrentElement } from '../../stores/editor'
-import { omit } from 'lodash-es'
 
 const PropsComponent: FC<{
     subName: string
@@ -127,7 +125,16 @@ const PropsComponent: FC<{
 
             {currentElement &&
                 props.subName === 'base' &&
-                currentElement.name === 'l-shape' && <div>样式</div>}
+                currentElement.name === 'l-shape' && (
+                    <div>
+                        <Form.Item label="背景颜色" name="backgroundColor">
+                            <ColorPicker
+                                onItemClick={onChangeBackgroundColor}
+                                color={(mergeProps as any).backgroundColor}
+                            ></ColorPicker>
+                        </Form.Item>
+                    </div>
+                )}
 
             {currentElement && props.subName === 'size' && (
                 <div>

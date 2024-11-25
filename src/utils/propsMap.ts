@@ -29,4 +29,5 @@ type PropsComponentMap = {
 
 export const propsComponentMap: PropsComponentMap = {
     PropsComponentForLText: PropsComponent,
+    PropsComponentForShape: PropsComponent,
 }

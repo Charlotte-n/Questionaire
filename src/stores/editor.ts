@@ -100,10 +100,7 @@ export const EditorSlice = createSlice({
     initialState,
     reducers: {
         addComponent(state, props): void {
-            console.log(props.payload)
-
             state.components.push(props.payload)
-
             //添加添加历史记录
             state.histories.push({
                 id: uuidv4(),
@@ -112,6 +109,7 @@ export const EditorSlice = createSlice({
                 data: cloneDeep(props.payload),
             })
             state.isDirty = true
+            console.log('添加的组建为,', props.payload)
         },
         setActive(state, props) {
             const { id, type } = props.payload

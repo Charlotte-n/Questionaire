@@ -1,5 +1,3 @@
-//组件的声明
-import { FC } from 'react'
 import LTextConf, { LTextPropsType } from './LText'
 import LImageConf, { LImagePropsType } from './LImage'
 import LShapeConf from './LShape'
@@ -23,5 +21,6 @@ const ComponentConfList: ComponentConfType[] = [
 
 //根据组件类型来获取组件配置
 export function getComponentConfByType(name: string) {
+    console.log(ComponentConfList)
     return ComponentConfList.find((item) => item.name === name)
 }

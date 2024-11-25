@@ -7,13 +7,14 @@ import { v4 as uuidv4 } from 'uuid'
 import { imageStylePropName } from '../../../../../../stores/commonproperties'
 import { defaultImage } from './config'
 import LImage from '../../../../../../components/LImage/Component'
-import { useAppDispatch } from '../../../../../../stores'
+import { useAppDispatch, useAppSelector } from '../../../../../../stores'
 import { addComponent } from '../../../../../../stores/editor'
 
 interface IProps {}
 
 const ImageList: FC<IProps> = () => {
     const dispatch = useAppDispatch()
+    const { components } = useAppSelector((state) => state.editorSlice)
     const addImageComponent = useCallback((res: any) => {
         const { url } = res.data
         getImageSize(url).then(({ width }) => {
@@ -28,6 +29,7 @@ const ImageList: FC<IProps> = () => {
                         width: `${width > maxWidth ? maxWidth : width}px`,
                         height: `100%`,
                     },
+                    layerName: '图层' + (components.length + 1),
                 }),
             )
         })
@@ -43,6 +45,7 @@ const ImageList: FC<IProps> = () => {
                     url: item.url,
                     width: item.width,
                     height: item.height,
+                    layerName: '图层' + (components.length + 1),
                 },
             }),
         )

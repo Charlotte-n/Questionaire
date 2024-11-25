@@ -14,7 +14,7 @@ const LImageComponent: FC<Props> = (props) => {
     return (
         <div>
             <img
-                src={imageSrc}
+                src={url ? url : imageSrc}
                 width={width}
                 height={height}
                 style={{ height: height, width: width }}

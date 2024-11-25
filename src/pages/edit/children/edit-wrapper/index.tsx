@@ -201,7 +201,7 @@ const EditWrapper: FC<Props> = (props) => {
 
     return (
         <div
-            className="edit-wrapper relative "
+            className="edit-wrapper relative"
             ref={editWrapperRef}
             onClick={(event: MouseEvent) => {
                 // event.stopPropagation()

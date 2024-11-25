@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react'
+import React, { FC } from 'react'
 import {
     MergeProps,
     ShapeProperties,
@@ -7,18 +7,15 @@ import {
 import useComponentCommon from '../../hooks/useComponentCommon'
 import './index.css'
 
-const LShape: FC<any> = (props: any) => {
+const LShape: FC<any> = (props) => {
     const defaultProps = MergeProps(ShapeProperties, props) as any
-    const { styleProps, handleClick } = useComponentCommon(
-        defaultProps,
-        ShapeStylePropName,
-    )
-    useEffect(() => {
-        console.log(styleProps)
-    }, [])
+    const { styleProps } = useComponentCommon(defaultProps, ShapeStylePropName)
 
     return React.createElement('span', {
-        style: styleProps,
+        style: {
+            ...styleProps,
+            position: 'static',
+        },
         className: 'l-shape-span',
     })
 }

@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import { FC, useEffect } from 'react'
 import {
     ComponentConfType,
     getComponentConfByType,
@@ -25,6 +25,10 @@ const PropsTable: FC<{
     ) as ComponentConfType
     const PropsComponent = propsComponentMap[ChangePropComponent]
 
+    useEffect(() => {
+        console.log(name, currentElement, '当前元素', ChangePropComponent)
+    })
+
     function handleOnChange(item: {
         id: string
         key: string | string[]
@@ -32,11 +36,14 @@ const PropsTable: FC<{
     }) {
         prop.onChange && prop.onChange(item)
     }
+
     return (
-        <PropsComponent
-            onChange={handleOnChange}
-            subName={prop.subName}
-        ></PropsComponent>
+        <div>
+            <PropsComponent
+                onChange={handleOnChange}
+                subName={prop.subName}
+            ></PropsComponent>
+        </div>
     )
 }
 
