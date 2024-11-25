@@ -1,6 +1,6 @@
-import React, { FC } from 'react'
+import { FC } from 'react'
 import Header from './pages/layout/header/index.tsx'
-import { Layout, message } from 'antd'
+import { Layout } from 'antd'
 import Footer from './pages/layout/footer/index.tsx'
 import { Outlet, useLocation } from 'react-router-dom'
 import withProductRoute from './hoc/withProductRoute.tsx'

@@ -631,7 +631,7 @@ export default defineConfig({
                         'react-redux',
                     ],
                     lodash: ['lodash-es'],
-                    antd: ['antd'],
+
                     html2canvas: ['html2canvas'],
                     cropper: ['cropperjs'],
                 },

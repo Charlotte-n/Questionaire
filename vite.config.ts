@@ -33,6 +33,7 @@ export default defineConfig({
         }),
     ],
     build: {
+        cssCodeSplit: true,//css代码分割
         terserOptions: {
             format: {
                 comments: false,
@@ -45,19 +46,12 @@ export default defineConfig({
                 chunkFileNames: 'js/[name]-[hash].js', // 引入文件名的名称
                 entryFileNames: 'js/[name]-[hash].js', // 包的入口文件名称
                 assetFileNames: '[ext]/[name]-[hash].[ext]', // 资源文件像 字体，图片等
-                manualChunks: {
-                    react: [
-                        'react',
-                        'react-dom',
-                        'redux',
-                        'react-router-dom',
-                        'react-redux',
-                    ],
-                    lodash: ['lodash-es'],
-                    antd: ['antd'],
-                    html2canvas: ['html2canvas'],
-                    cropper: ['cropperjs'],
-                },
+                manualChunks(id) {
+                    if (id.includes("node_modules")) {
+                    // 让每个插件都打包成独立的文件
+                    return id.toString().split("node_modules/")[2].split("/")[0].toString();
+                    }
+                }
             },
         },
     },
