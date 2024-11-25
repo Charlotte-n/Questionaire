@@ -63,6 +63,10 @@ const PageSetting: FC<IProps> = () => {
     const handleChange = (value: any) => {
         dispatch(ChangePagePropsAction(value))
     }
+
+    const handleChangeColor = (value: string) => {
+        dispatch(ChangePagePropsAction({ backgroundColor: value }))
+    }
     return (
         <Form
             className="px-[20px]"
@@ -70,7 +74,7 @@ const PageSetting: FC<IProps> = () => {
             onValuesChange={handleChange}
         >
             <Form.Item label="背景颜色" name="backgroundColor">
-                <ColorPicker></ColorPicker>
+                <ColorPicker onItemClick={handleChangeColor}></ColorPicker>
             </Form.Item>
             <Form.Item>
                 {urlProcess ? (
