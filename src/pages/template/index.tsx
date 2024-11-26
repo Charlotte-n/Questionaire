@@ -5,7 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { TemplateType } from '../../apis/work/interface'
 import QRCode from 'qrcode'
 import { BaseH5Url } from '../../constances'
-import { downloadImage } from '../utils/util'
+import { downloadImage } from '../../utils/util'
 
 const Template: FC = () => {
     const { id } = useParams()

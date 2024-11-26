@@ -3,7 +3,7 @@ import { Modal } from 'antd'
 import { saveTemplateAsync, setIsDirty } from '../../../../../stores/editor'
 import { useNavigate, useParams, useBlocker } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../../../../stores'
-import { takeScreenshot } from '../../../../utils/util'
+import { takeScreenshot } from '../../../../../utils/util'
 
 export const useSaveWork = (sideEffect = false) => {
     const dispatch = useAppDispatch()

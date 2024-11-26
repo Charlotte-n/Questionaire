@@ -1,4 +1,4 @@
-import { takeScreenshotAndUpload } from '../../../../utils/util'
+import { takeScreenshotAndUpload } from '../../../../../utils/util'
 import {
     ChangePagePropsAction,
     clearSelected,

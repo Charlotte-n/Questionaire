@@ -1,7 +1,7 @@
 import React, { memo, useEffect, useRef, useState } from 'react'
 import type { FC, ReactNode } from 'react'
 import { MergeProps } from '../../../../../../stores/commonproperties'
-import { getParentElement } from '../../../../../utils/util'
+import { getParentElement } from '../../../../../../utils/util'
 
 export interface ActionItem {
     action: (cid?: string) => void
