@@ -1,5 +1,5 @@
-import hyRequest from '../../services'
-import { ResponseType } from '../../apis/interface'
+import hyRequest from '../services'
+import { ResponseType } from '../apis/interface'
 import { uploadFileRes } from './interface'
 import { saveAs } from 'file-saver'
 import html2canvas from 'html2canvas'

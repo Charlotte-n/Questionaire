@@ -13,7 +13,7 @@ import Ellipsis from '../../../../components/Ellipsis/ellipsis'
 import './index.css'
 import { useNavigate } from 'react-router-dom'
 import { copyWork, deleteMyWork } from '../../../../apis/work/work'
-import { downloadImage } from '../../../utils/util'
+import { downloadImage } from '../../../../utils/util'
 
 interface Props {
     baseInfo: {
