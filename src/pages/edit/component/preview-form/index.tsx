@@ -120,7 +120,6 @@ const PreviewForm: FC<IProps> = ({ drawerVisible, onClose }) => {
                     </div>
                 </div>
             )}
-
             <Drawer
                 title="设置面板"
                 open={drawerVisible}
@@ -219,6 +218,7 @@ const PreviewForm: FC<IProps> = ({ drawerVisible, onClose }) => {
                     </Form.Item>
                 </Form>
             </Drawer>
+            PropsComponentForLShape
         </div>
     )
 }
