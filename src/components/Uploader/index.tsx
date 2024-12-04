@@ -1,7 +1,6 @@
 import React, {
     memo,
     useCallback,
-    useEffect,
     useMemo,
     useRef,
     useState,
@@ -140,7 +139,7 @@ const Uploader: FC<IProps> = (props) => {
                     if (progressEvent.lengthComputable) {
                         const percentCompleted = Math.round(
                             (progressEvent.loaded * 100) /
-                                (progressEvent.total as number),
+                            (progressEvent.total as number),
                         )
                         setUploadedFiles(
                             produce((draft) => {
@@ -317,12 +316,12 @@ const Uploader: FC<IProps> = (props) => {
                                                     percent={item.progress}
                                                     status={
                                                         item.status ===
-                                                        'uploading'
+                                                            'uploading'
                                                             ? 'active'
                                                             : item.status ===
                                                                 'success'
-                                                              ? 'success'
-                                                              : 'exception'
+                                                                ? 'success'
+                                                                : 'exception'
                                                     }
                                                 ></Progress>
                                             </div>

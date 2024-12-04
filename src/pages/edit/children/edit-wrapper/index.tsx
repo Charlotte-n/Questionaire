@@ -15,6 +15,8 @@ interface Props {
     onChange?: (value: any) => void
     props: any
     isActive: boolean
+    onTabChange: (key: string) => void
+    tabActiveKey: string
 }
 type SizeType = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
 interface PositionType {
@@ -26,7 +28,7 @@ interface PositionType {
 
 const EditWrapper: FC<Props> = (props) => {
     const currentElement = useAppSelector(getCurrentElement)
-    const { setActive, id, children, isActive } = props
+    const { setActive, id, children, isActive, onTabChange, tabActiveKey } = props
     const { styleProps } = useComponentCommon(
         {
             ...TextProperties,
@@ -204,8 +206,12 @@ const EditWrapper: FC<Props> = (props) => {
             className="edit-wrapper relative"
             ref={editWrapperRef}
             onClick={(event: MouseEvent) => {
-                // event.stopPropagation()
+                //如果为图层，则不触发点击事件
+                if (tabActiveKey !== '2') {
+                    onTabChange('1')
+                }
                 setActive({ id, type: 'element' }, event)
+                event.stopPropagation()
             }}
             style={styleProps}
             data-id={id}

@@ -6,8 +6,6 @@ const useComponentCommon = <T extends { [key: string]: any }>(
     picks: string[],
 ) => {
     const styleProps = useMemo(() => {
-        console.log(props, 'props')
-
         return pick(props.payload ? props.payload : props, picks)
     }, [props])
 

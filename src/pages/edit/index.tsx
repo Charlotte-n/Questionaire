@@ -1,4 +1,4 @@
-import React, { FC, MouseEvent, useCallback, useEffect, useState } from 'react'
+import React, { FC, MouseEvent, useCallback, useEffect, useState, useRef } from 'react'
 import { useAppDispatch, useAppSelector } from '../../stores'
 import { LTextPropsType } from '../../components/LText'
 import {
@@ -26,6 +26,7 @@ import initContextMenu from './children/edit-wrapper/component/context-menu/init
 import { useParams } from 'react-router-dom'
 import EditHeader from './component/header'
 import PreviewForm from './component/preview-form'
+import { useClickOutside } from '../../hooks/useClickOutside'
 
 function getComponent(c: ComponentData) {
     const { props, name }: { props: LTextPropsType; name: string } = c
@@ -49,6 +50,8 @@ const Editor: FC = () => {
     //获取router的id
     const { id } = useParams<{ id: string }>()
     const [previewFormVisible, setPreviewFormVisible] = useState(false)
+    const areaRef = useRef(null)
+    const { isClickOutSide, setIsClickOutSide } = useClickOutside(areaRef.current)
 
     const handleClosePreviewForm = () => {
         setPreviewFormVisible(false)
@@ -78,6 +81,7 @@ const Editor: FC = () => {
     const handleCancelSelect = () => {
         dispatch(clearSelected())
     }
+
 
     //TODO:debounceHandleChange函数。如果debounceHandleChange的定义每次调用handleChange时都重新创建，那么防抖功能（debounce function）就不会正常工作，因为每次都会产生一个新的debounceHandleChange实例，每个实例都有自己的定时器。
     const debounceHandleChange = useCallback(
@@ -132,7 +136,8 @@ const Editor: FC = () => {
     }
 
     //切换到页面设置tab
-    const handleChangePageTab = () => {
+    const handleChangePageTab = (e: MouseEvent) => {
+        e.stopPropagation()
         setActiveKey('3')
         setActiveClick({ type: 'page' })
     }
@@ -158,12 +163,13 @@ const Editor: FC = () => {
                     {/* 中间画布 */}
                     {/* TODO:这里的样式再进行琢磨一下，涉及定位之类的 */}
                     <div className="flex flex-auto py-[20px]">
-                        <div className="flex flex-col items-center flex-auto relative">
+                        <div className="flex flex-col items-center flex-auto relative" onClick={() => handleCancelSelect()}>
                             <p>画布区域</p>
                             <HistoryArea />
                             <div
+                                ref={areaRef}
                                 className={`canvas-area fixed overflow-hidden mt-[50px] max-h-[80vh] min-w-[375px]  cursor-pointer rounded-md`}
-                                onClick={() => handleChangePageTab()}
+                                onClick={(e: MouseEvent) => handleChangePageTab(e)}
                             >
                                 <div
                                     className={`edit-canvas px-[10px]  py-[10px] bg-[white] shadow-[#0000001f] shadow-md min-h-[200px] overflow-auto  ${currentElementID === 'page' ? 'border-[2px] border-[#1890ff] border-solid' : ''}`}
@@ -178,6 +184,8 @@ const Editor: FC = () => {
                                                     id={item.id}
                                                     props={item.props}
                                                     onChange={handleChange}
+                                                    onTabChange={handleChangeTab}
+                                                    tabActiveKey={activeKey}
                                                     isActive={
                                                         currentElement?.id ===
                                                         item.id
@@ -188,7 +196,7 @@ const Editor: FC = () => {
                                                             <div
                                                                 className={
                                                                     !item.isHidden &&
-                                                                    currentElement?.id ===
+                                                                        currentElement?.id ===
                                                                         item.id
                                                                         ? 'border-[1px] border-[#1890ff] border-solid'
                                                                         : 'hover:border-[1px] hover:border-dashed cursor-pointer'

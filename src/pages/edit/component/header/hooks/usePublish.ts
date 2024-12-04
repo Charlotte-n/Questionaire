@@ -33,8 +33,8 @@ export const usePublish = () => {
 
             //如果没有渠道列表就生成默认的渠道
             if (channels && channels.length === 0) {
-                createChannel({ workId: id as string, name: '' })
-                dispatch(getChannelListAsync(id as string))
+                await createChannel({ workId: id as string, name: '' })
+                await dispatch(getChannelListAsync(id as string))
             }
             handlePublishVisible && handlePublishVisible()
         }

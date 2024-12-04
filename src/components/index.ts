@@ -21,6 +21,5 @@ const ComponentConfList: ComponentConfType[] = [
 
 //根据组件类型来获取组件配置
 export function getComponentConfByType(name: string) {
-    console.log(ComponentConfList)
     return ComponentConfList.find((item) => item.name === name)
 }

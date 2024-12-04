@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 
 export const useClickOutside = (element: any) => {
     const [isClickOutSide, setIsClickOutSide] = useState(false)
-    const handler = (e: any) => {
+    const handler = (e: MouseEvent) => {
         if (element && e.target) {
             if (!element.contains(e.target as HTMLElement)) {
                 setIsClickOutSide(true)

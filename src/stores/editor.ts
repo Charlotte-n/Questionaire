@@ -109,7 +109,6 @@ export const EditorSlice = createSlice({
                 data: cloneDeep(props.payload),
             })
             state.isDirty = true
-            console.log('添加的组建为,', props.payload)
         },
         setActive(state, props) {
             const { id, type } = props.payload
@@ -171,7 +170,6 @@ export const EditorSlice = createSlice({
         },
         ChangePagePropsAction(state, props) {
             const { type } = props.payload
-            console.log(props.payload)
             if (type === 'root') {
                 //不要讲type放进去
                 delete props.payload.type
@@ -179,7 +177,6 @@ export const EditorSlice = createSlice({
                     ...state.page,
                     ...props.payload,
                 }
-                console.log(state.page)
             } else {
                 delete props.payload.type
                 state.page.props = {

@@ -6,19 +6,9 @@ import { produce } from 'immer'
 import Uploader from '../../components/Uploader'
 import { UploadImgRes } from '../edit/children/right-edit/cropper'
 import { updateUserInfo } from '../../apis/user/login'
-import user, { getUserInfoAsync } from '../../stores/user'
+import { getUserInfoAsync } from '../../stores/user'
 import { getDeleteWork, recoverWork } from '../../apis/work/work'
 
-const options = [
-    {
-        label: '男',
-        value: 'male',
-    },
-    {
-        label: '女',
-        value: 'female',
-    },
-]
 
 const MyProfile = () => {
     //获取到用户信息

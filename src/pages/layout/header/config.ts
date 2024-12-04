@@ -39,8 +39,6 @@ export const useMenu = () => {
         }
 
         execute() {
-            console.log(123)
-
             this.navigate('/gxt/profile')
         }
     }

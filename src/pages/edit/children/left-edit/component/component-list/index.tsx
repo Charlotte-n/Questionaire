@@ -11,8 +11,6 @@ const ComponentList: FC<{}> = () => {
     const dispatch = useDispatch()
     const { components } = useAppSelector((state) => state.editorSlice)
     const onItemClick = (item: any) => {
-        console.log(item)
-
         dispatch(
             addComponent({
                 name: 'l-text',
