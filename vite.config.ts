@@ -12,9 +12,9 @@ export default defineConfig({
     plugins: [
         react(),
         //删除console
-        // removeConsole({
-        //     includes: ['log'],
-        // }),
+        removeConsole({
+            includes: ['log'],
+        }),
         //分析哪些文件比较大,会有一个图片来分析哪个文件大
         visualizer({
             open: true,

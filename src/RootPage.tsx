@@ -49,7 +49,7 @@ const RootPage: FC = () => {
         <ErrorBoundary fallback={<div>出错了</div>}>
             <div>
                 {showHeader && (
-                    <Layout.Header className="root-header z-[100] relative">
+                    <Layout.Header className="root-header z-[100] sticky top-[0px]">
                         <Header></Header>
                     </Layout.Header>
                 )}

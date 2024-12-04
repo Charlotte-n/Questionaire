@@ -28,12 +28,12 @@ interface IInputEditProps {
 export const InputEdit: FC<IInputEditProps> = forwardRef(
     (
         {
-            children = { default: null },
+            children = { default: '' },
             value = '',
-            changeValue = () => {},
+            changeValue = () => { },
             id = '',
             currentEditId,
-            setCurrentEditId = () => {},
+            setCurrentEditId = () => { },
             changeType = 'layerName',
         },
         ref,
@@ -47,12 +47,7 @@ export const InputEdit: FC<IInputEditProps> = forwardRef(
 
         //失去焦点并且更新title
         const handleUpdateName = () => {
-            //判断这个值不能为空
-            if (!innerValue) {
-                message.error('文本不能为空')
-                return
-            }
-            changeValue(id, 'layerName', innerValue)
+            changeValue(id, 'layerName', innerValue || value)
             setCurrentEditId(null)
         }
 
@@ -66,7 +61,7 @@ export const InputEdit: FC<IInputEditProps> = forwardRef(
 
         useEffect(() => {
             if (currentEditId === id) {
-                ;(inputRef.current as unknown as HTMLElement)?.focus()
+                ; (inputRef.current as unknown as HTMLElement)?.focus()
             }
         }, [currentEditId])
 
