@@ -5,6 +5,7 @@ import { defaultShapes } from './config'
 import { useAppDispatch, useAppSelector } from '../../../../../../stores'
 import { addComponent } from '../../../../../../stores/editor'
 import { v4 as uuidv4 } from 'uuid'
+import './index.css'
 
 const ShapeList: FC = () => {
     const dispatch = useAppDispatch()

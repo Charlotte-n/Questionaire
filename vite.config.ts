@@ -7,13 +7,14 @@ import viteCompression from 'vite-plugin-compression'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+    //TODO:记录一下为什么？
     base: '/',
     plugins: [
         react(),
         //删除console
-        removeConsole({
-            includes: ['log'],
-        }),
+        // removeConsole({
+        //     includes: ['log'],
+        // }),
         //分析哪些文件比较大,会有一个图片来分析哪个文件大
         visualizer({
             open: true,
@@ -33,7 +34,7 @@ export default defineConfig({
         }),
     ],
     build: {
-        cssCodeSplit: true,//css代码分割
+        cssCodeSplit: true, //css代码分割
         terserOptions: {
             format: {
                 comments: false,
@@ -47,11 +48,15 @@ export default defineConfig({
                 entryFileNames: 'js/[name]-[hash].js', // 包的入口文件名称
                 assetFileNames: '[ext]/[name]-[hash].[ext]', // 资源文件像 字体，图片等
                 manualChunks(id) {
-                    if (id.includes("node_modules")) {
-                    // 让每个插件都打包成独立的文件
-                    return id.toString().split("node_modules/")[2].split("/")[0].toString();
+                    if (id.includes('node_modules')) {
+                        // 让每个插件都打包成独立的文件
+                        return id
+                            .toString()
+                            .split('node_modules/')[2]
+                            .split('/')[0]
+                            .toString()
                     }
-                }
+                },
             },
         },
     },

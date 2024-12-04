@@ -34,6 +34,7 @@
         "immer": "^10.1.1",
         "jest-css-modules": "^2.1.0",
         "lodash-es": "^4.17.21",
+        "merikle-components": "0.2.1",
         "normalize.css": "^8.0.1",
         "qrcode": "^1.5.4",
         "react": "^18.3.1",

@@ -14,7 +14,6 @@ const LShape: FC<any> = (props) => {
     return React.createElement('span', {
         style: {
             ...styleProps,
-            position: 'static',
         },
         className: 'l-shape-span',
     })

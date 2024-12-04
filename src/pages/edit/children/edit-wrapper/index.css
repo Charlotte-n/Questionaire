@@ -1,4 +1,6 @@
-.move-wrapper .l-text {
+.move-wrapper .l-text,
+.move-wrapper .l-shape,
+.move-wrapper .l-image {
     position: static !important;
 }
 .resizes .resize {
@@ -33,4 +35,7 @@
     bottom: -5px;
     right: -5px;
     cursor: nwse-resize;
+}
+.l-shape-span {
+    position: absolute !important;
 }
