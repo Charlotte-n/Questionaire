@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect, useRef, useState } from 'react'
 
 import Hot from './children/hot'
 import { useAppDispatch, useAppSelector } from '../../stores'
@@ -15,9 +15,11 @@ import SingleTemplate from './component/single-template/single-template'
 
 const Home: FC = () => {
     const dispatch = useAppDispatch()
-    const { total } = useAppSelector((state) => state.templateSlice)
     const pageSize = 8
+    const title = useRef('')
+    const { total } = useAppSelector((state) => state.templateSlice)
     const { opName } = useAppSelector((state) => state.globalSlice)
+
     const [myWorkList, setMyWorkList] = useState<TemplateType[] | []>([])
 
     //获取我的作品
@@ -26,11 +28,14 @@ const Home: FC = () => {
         setMyWorkList(res.data.list)
     }
 
+    //搜索模板
+    const searchTemplate = async (title: string) => {
+        dispatch(fetchTemplatesAsync({ pageSize, pageIndex: 0, title }))
+    }
+
     useEffect(() => {
-        // 获取用户信息
         dispatch(getUserInfoAsync(getLocalStorage('phone')))
-        //获取模板数量
-        dispatch(fetchTemplatesAsync({ pageSize, pageIndex: 0 }))
+        dispatch(fetchTemplatesAsync({ pageSize, pageIndex: 0, title: '' }))
         getMyWorkListApi()
     }, [])
 
@@ -58,8 +63,11 @@ const Home: FC = () => {
                             <Input
                                 className="rounded-full w-[25vw]"
                                 placeholder="搜索一下，快速找到模板"
+                                onInput={(e: any) => {
+                                    title.current = e.target.value
+                                }}
                             ></Input>
-                            <Button className="rounded-full" type="primary">
+                            <Button className="rounded-full" type="primary" onClick={() => searchTemplate(title.current)} loading={opName['getTemplateList']}>
                                 搜索
                             </Button>
                         </Space.Compact>
@@ -167,58 +175,58 @@ const Home: FC = () => {
             </div>
 
             {/* 我的作品 */}
-            <div className="flex  flex-col items-center">
-                <div className="max-w-[1200px] w-[1200px]">
-                    <div className="flex justify-between items-center py-[15px]">
-                        <div className="font-bold text-[20px]">我的作品</div>
-                        <Link
-                            to="/gxt/myWorks"
-                            className="text-[#4c81fc] cursor-pointer"
-                        >
-                            查看我的所有作品
-                        </Link>
-                    </div>
-                    <div>
-                        <Row gutter={20}>
-                            {myWorkList.length > 4
-                                ? myWorkList.slice(0, 4).map((item) => {
-                                      return (
-                                          <Col span={6} key={item.id}>
-                                              <SingleTemplate
-                                                  id={item.id}
-                                                  type="myWork"
-                                                  baseInfo={{
-                                                      copiedCount:
-                                                          item.copiedCount,
-                                                      coverImage: item.coverImg,
-                                                      author: item.author,
-                                                      title: item.title,
-                                                  }}
-                                              ></SingleTemplate>
-                                          </Col>
-                                      )
-                                  })
-                                : myWorkList.map((item) => {
-                                      return (
-                                          <Col span={6} key={item.id}>
-                                              <SingleTemplate
-                                                  id={String(item.id)}
-                                                  type="myWork"
-                                                  baseInfo={{
-                                                      copiedCount:
-                                                          item.copiedCount,
-                                                      coverImage: item.coverImg,
-                                                      author: item.author,
-                                                      title: item.title,
-                                                  }}
-                                                  getMyWorkList={
-                                                      getMyWorkListApi
-                                                  }
-                                              ></SingleTemplate>
-                                          </Col>
-                                      )
-                                  })}
-                        </Row>
+            <div className="flex justify-center">
+                <div className="flex flex-col items-center w-[80vw] px-[10px]">
+                    <div className="w-[100%]">
+                        <div className="flex justify-between items-center py-[15px]">
+                            <div className="font-bold text-[20px]">我的作品</div>
+                            <Link
+                                to="/gxt/myWorks"
+                                className="text-[#4c81fc] cursor-pointer"
+                            >
+                                查看我的所有作品
+                            </Link>
+                        </div>
+                        <div>
+                            <Row gutter={20}>
+                                {myWorkList.length > 4
+                                    ? myWorkList.slice(0, 4).map((item) => {
+                                        return (
+                                            <Col span={6} key={item.id}>
+                                                <SingleTemplate
+                                                    id={item.id}
+                                                    type="myWork"
+                                                    baseInfo={{
+                                                        copiedCount:
+                                                            item.copiedCount,
+                                                        coverImage: item.coverImg,
+                                                        author: item.author,
+                                                        title: item.title,
+                                                    }}
+                                                ></SingleTemplate>
+                                            </Col>
+                                        )
+                                    })
+                                    : myWorkList.map((item) => {
+                                        return <Col span={6} key={item.id}>
+                                            <SingleTemplate
+                                                id={String(item.id)}
+                                                type="myWork"
+                                                baseInfo={{
+                                                    copiedCount: item.copiedCount,
+                                                    coverImage: item.coverImg,
+                                                    author: item.author,
+                                                    title: item.title,
+                                                }}
+                                                getMyWorkList={getMyWorkListApi}
+                                            />
+                                        </Col>
+                                    }
+                                    )
+
+                                }
+                            </Row>
+                        </div>
                     </div>
                 </div>
             </div>

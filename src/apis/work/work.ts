@@ -7,9 +7,11 @@ import { TemplateType } from './interface'
 export const getTemplateList = ({
     pageSize,
     pageIndex,
+    title,
 }: {
     pageSize: number
     pageIndex: number
+    title?: string
 }) => {
     return hyRequest.get({
         url: '/works/templateList',
@@ -17,6 +19,7 @@ export const getTemplateList = ({
         params: {
             pageSize,
             pageIndex,
+            title: title,
         },
     })
 }

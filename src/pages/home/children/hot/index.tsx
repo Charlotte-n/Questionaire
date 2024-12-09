@@ -7,7 +7,7 @@ const Hot: FC = () => {
     const { templates } = useAppSelector((state) => state.templateSlice) as any
     return (
         <Row gutter={[20, 20]} className="w-[100%]">
-            {templates.length &&
+            {templates.length ?
                 templates.map((item: any) => {
                     return (
                         <Col key={item._id} span={6}>
@@ -23,7 +23,7 @@ const Hot: FC = () => {
                             ></SingleTemplate>
                         </Col>
                     )
-                })}
+                }) : ''}
         </Row>
     )
 }

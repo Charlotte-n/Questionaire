@@ -36,6 +36,7 @@ export const templatesSlice = createSlice({
                 state.total = props.payload?.count ? props.payload.count : 0
             },
         )
+        // builder.addCase(searTemplateAsync.fulfilled, (state, props) => {})
     },
 })
 
@@ -45,14 +46,16 @@ export const fetchTemplatesAsync = createAsyncThunk(
         {
             pageSize,
             pageIndex,
+            title,
         }: {
             pageSize: number
             pageIndex: number
+            title: string
         },
         { rejectWithValue },
     ) => {
         try {
-            const res = await getTemplateList({ pageSize, pageIndex })
+            const res = await getTemplateList({ pageSize, pageIndex, title })
             return res.data
         } catch (error) {
             return rejectWithValue(error)

@@ -49,7 +49,7 @@ const userSlice = createSlice({
             if (props.meta.arg) {
                 setLocalStorage('phone', props.meta.arg)
             }
-            setLocalStorage('userInfo', props.payload)
+            setLocalStorage('userInfo', props.payload ? props.payload : '')
         })
     },
 })
