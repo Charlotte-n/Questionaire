@@ -21,7 +21,7 @@ const ComponentList: FC<{}> = () => {
         )
     }
     return (
-        <>
+        <div className='overflow-y-auto h-[80vh]'>
             {defaultTemplates.map((item) => {
                 return (
                     <div
@@ -30,14 +30,14 @@ const ComponentList: FC<{}> = () => {
                     >
                         <div
                             onClick={() => onItemClick(item)}
-                            className="text-show w-[100px] relative flex items-center "
+                            className="text-show relative flex items-center "
                         >
                             <LText {...item}></LText>
                         </div>
                     </div>
                 )
             })}
-        </>
+        </div>
     )
 }
 

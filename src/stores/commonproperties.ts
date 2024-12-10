@@ -7,7 +7,7 @@ export const CommonProperties = {
     url: '',
     // //尺寸
     height: '80px',
-    width: '125px',
+    // width: '125px',
     //边框
     borderStyle: 'none',
     borderColor: '#000',
@@ -31,10 +31,10 @@ export const TextProperties = {
     fontWeight: 'normal',
     fontStyle: 'normal',
     textDecoration: 'none',
-    // paddingTop: '15px',
-    // paddingBottom: '15px',
-    // paddingLeft: '15px',
-    // paddingRight: '15px',
+    paddingTop: '15px',
+    paddingBottom: '15px',
+    paddingLeft: '15px',
+    paddingRight: '15px',
     backgroundColor: '',
     color: '#000',
     lineHeight: '1',

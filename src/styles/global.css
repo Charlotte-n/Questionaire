@@ -1,0 +1,49 @@
+/* src/styles/global.css */
+@font-face {
+    font-family: 'Roboto-Bold';
+    src: url('/public/fonts/Roboto-Bold.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'Roboto-Medium';
+    src: url('/public/fonts/Roboto-Medium.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'Roboto-Medium-Italic';
+    src: url('/public/fonts/Roboto-MediumItalic.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'YujiMai';
+    src: url('/public/fonts/YujiMai.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'ZhiMangXing';
+    src: url('/public/fonts/ZhiMangXing.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'ZCOOLXiaoWei';
+    src: url('/public/fonts/ZCOOLXiaoWei.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'ZCOOLQingKeHuangYou';
+    src: url('/public/fonts/ZCOOLQingKeHuangYou.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'DancingScript';
+    src: url('/public/fonts/DancingScript.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'LongCang';
+    src: url('/public/fonts/LongCang.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'MaShanZheng';
+    src: url('/public/fonts/MaShanZheng.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'OpenSans';
+    src: url('/public/fonts/OpenSans.ttf') format('truetype');
+}
+
+/* 其他字体定义类似 */

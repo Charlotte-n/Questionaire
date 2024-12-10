@@ -88,7 +88,7 @@ const PropsComponent: FC<{
                         <Form.Item
                             label="字体"
                             name="fontFamily"
-                            wrapperCol={{ span: 6 }}
+
                         >
                             <Select options={fontFamilyOptions}></Select>
                         </Form.Item>

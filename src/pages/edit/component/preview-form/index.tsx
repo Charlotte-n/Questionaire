@@ -218,7 +218,6 @@ const PreviewForm: FC<IProps> = ({ drawerVisible, onClose }) => {
                     </Form.Item>
                 </Form>
             </Drawer>
-            PropsComponentForLShape
         </div>
     )
 }

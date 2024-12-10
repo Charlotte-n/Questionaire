@@ -182,14 +182,14 @@ const EditWrapper: FC<Props> = (props) => {
                     key: [
                         'width',
                         'height',
-                        size.left ? 'left' : '',
-                        size.top ? 'top' : '',
+                        size?.left ? 'left' : '',
+                        size?.top ? 'top' : '',
                     ],
                     value: [
                         currentElement.style.width,
                         currentElement.style.height,
-                        size.left ? currentElement.style.left : '',
-                        size.top ? currentElement.style.top : '',
+                        size?.left ? currentElement.style.left : '',
+                        size?.top ? currentElement.style.top : '',
                     ],
                 })
 

@@ -4,7 +4,7 @@ import { TabItem } from './config'
 
 const LeftEditor: FC = () => {
     return (
-        <div>
+        <div className=''>
             <Tabs defaultActiveKey="1" items={TabItem} size="large" centered />
         </div>
     )

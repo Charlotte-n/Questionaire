@@ -150,7 +150,7 @@ const Editor: FC = () => {
     }, [])
 
     return (
-        <Layout>
+        <Layout className='h-[100vh] overflow-hidden'>
             <Layout.Header>
                 <EditHeader handleOpenPreviewForm={handleOpenPreviewForm} />
             </Layout.Header>
@@ -266,12 +266,12 @@ const Editor: FC = () => {
                     </div>
                 </div>
             </Layout.Content>
-            (
+
             <PreviewForm
                 drawerVisible={previewFormVisible}
                 onClose={handleClosePreviewForm}
             ></PreviewForm>
-            )
+
         </Layout>
     )
 }
