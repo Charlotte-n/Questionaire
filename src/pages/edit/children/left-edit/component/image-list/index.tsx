@@ -9,8 +9,9 @@ import { defaultImage } from './config'
 import LImage from '../../../../../../components/LImage/Component'
 import { useAppDispatch, useAppSelector } from '../../../../../../stores'
 import { addComponent } from '../../../../../../stores/editor'
+import './index.css'
 
-interface IProps {}
+interface IProps { }
 
 const ImageList: FC<IProps> = () => {
     const dispatch = useAppDispatch()
@@ -51,7 +52,7 @@ const ImageList: FC<IProps> = () => {
         )
     }
     return (
-        <div className="w-[100%] px-[20px]">
+        <div className="w-[100%] px-[20px]  h-[80vh] scroll-hidden">
             <Row className="w-[100%] flex">
                 <Uploader
                     action="https://egg.hk.merikle.top/api/utils/uploadImgOSS"

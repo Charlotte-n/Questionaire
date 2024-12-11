@@ -76,6 +76,7 @@ export const MergeProps = <T>(defaultProps: any, props: any): T => {
 export const ShapeProperties = {
     display: 'inline-block',
     backgroundColor: '',
+    width: '125px',
     ...CommonProperties,
 }
 export const ShapeStylePropName = without(

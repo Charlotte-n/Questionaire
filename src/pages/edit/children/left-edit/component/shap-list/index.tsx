@@ -23,7 +23,7 @@ const ShapeList: FC = () => {
         )
     }
     return (
-        <div>
+        <div className='h-[80vh] overflow-auto scroll-hidden'>
             {defaultShapes.map((item) => {
                 return (
                     <Row

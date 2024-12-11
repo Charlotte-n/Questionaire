@@ -1,8 +1,6 @@
-import React, { FC, memo, MouseEvent, useCallback, useRef } from 'react'
+import React, { FC, forwardRef, memo, MouseEvent, useCallback, useRef, useImperativeHandle } from 'react'
 import useComponentCommon from '../../../../hooks/useComponentCommon'
 import './index.css'
-import { useAppSelector } from '../../../../stores'
-import { getCurrentElement } from '../../../../stores/editor'
 import { TextProperties } from '../../../../stores/commonproperties'
 
 interface Props {
@@ -26,8 +24,7 @@ interface PositionType {
     bottom: number
 }
 
-const EditWrapper: FC<Props> = (props) => {
-    const currentElement = useAppSelector(getCurrentElement)
+const EditWrapper = forwardRef<HTMLDivElement, Props>((props, ref) => {
     const { setActive, id, children, isActive, onTabChange, tabActiveKey } = props
     const { styleProps } = useComponentCommon(
         {
@@ -36,9 +33,10 @@ const EditWrapper: FC<Props> = (props) => {
         },
         ['position', 'top', 'left', 'width', 'height'],
     )
-    const editWrapperRef = useRef(null)
+    const editWrapperRef = useRef<HTMLDivElement>(null)
     const moveWrapperRef = useRef(null)
     const gap = useRef({ x: 0, y: 0 })
+
 
     const caculateMovePosition = (e: MouseEvent) => {
         const container: HTMLElement = document.querySelector('.canvas-area')!
@@ -246,6 +244,6 @@ const EditWrapper: FC<Props> = (props) => {
             )}
         </div>
     )
-}
+})
 
-export default memo(EditWrapper)
+export default EditWrapper

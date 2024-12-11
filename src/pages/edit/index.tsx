@@ -26,7 +26,7 @@ import initContextMenu from './children/edit-wrapper/component/context-menu/init
 import { useParams } from 'react-router-dom'
 import EditHeader from './component/header'
 import PreviewForm from './component/preview-form'
-import { useClickOutside } from '../../hooks/useClickOutside'
+import CanvasScale from './component/canvas-scale'
 
 function getComponent(c: ComponentData) {
     const { props, name }: { props: LTextPropsType; name: string } = c
@@ -50,8 +50,10 @@ const Editor: FC = () => {
     //获取router的id
     const { id } = useParams<{ id: string }>()
     const [previewFormVisible, setPreviewFormVisible] = useState(false)
-    const areaRef = useRef(null)
-    const { isClickOutSide, setIsClickOutSide } = useClickOutside(areaRef.current)
+    const areaRef = useRef<HTMLDivElement>(null)
+    const originalHeight = useRef<number>(0)
+    const originalWidth = useRef<number>(0)
+
 
     const handleClosePreviewForm = () => {
         setPreviewFormVisible(false)
@@ -147,7 +149,44 @@ const Editor: FC = () => {
 
     useEffect(() => {
         dispatch(getMySingleWorkAsync(id as string))
+        // 获取画布初始宽高
+        if (areaRef.current) {
+            originalWidth.current = areaRef.current.offsetWidth
+            originalHeight.current = areaRef.current.offsetHeight
+        }
     }, [])
+
+    //获取scale数据
+    const getScaleNumber = (scale: number) => {
+        const areaHtml = areaRef.current
+        if (!areaHtml) return
+
+        const scaleNumber = scale / 100
+        
+        areaHtml.style.transform = `scale(${scaleNumber})`
+        areaHtml.style.transformOrigin = 'center center'
+
+        if (!originalWidth.current) {
+            originalWidth.current = areaHtml.offsetWidth
+        }
+        if (!originalHeight.current) {
+            originalHeight.current = areaHtml.offsetHeight
+        }
+        const width = originalWidth.current * scaleNumber
+        const height = originalHeight.current * scaleNumber
+        Object.assign(areaHtml.style, {
+            width: `${width}px`,
+            height: `${height}px`
+        })
+        document.querySelectorAll('.edit-wrapper').forEach((item) => {
+            const componentHtml = item as HTMLDivElement
+            if (!componentHtml.dataset.top) {
+                componentHtml.dataset.top = componentHtml.style.top
+            }
+            const topValue = parseInt(componentHtml.dataset.top) || 0
+            componentHtml.style.top = `${topValue * scaleNumber}px`
+        })
+    }
 
     return (
         <Layout className='h-[100vh] overflow-hidden'>
@@ -179,6 +218,7 @@ const Editor: FC = () => {
                                         {components.map((item) => {
                                             return (
                                                 <EditWrapper
+                                                  
                                                     key={item.id}
                                                     setActive={setActiveClick}
                                                     id={item.id}
@@ -214,6 +254,11 @@ const Editor: FC = () => {
                                     </div>
                                 </div>
                             </div>
+                            {/* 放大缩小画布 */}
+                            <div className='absolute bottom-[80px] right-[20px]'>
+                                <CanvasScale getScaleNumber={getScaleNumber} />
+                            </div>
+
                         </div>
                     </div>
                     {/* 右侧设置属性 */}

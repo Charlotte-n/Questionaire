@@ -21,7 +21,7 @@ const ComponentList: FC<{}> = () => {
         )
     }
     return (
-        <div className='overflow-y-auto h-[80vh]'>
+        <div className=' h-[80vh] scroll-hidden'>
             {defaultTemplates.map((item) => {
                 return (
                     <div
