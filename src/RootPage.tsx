@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import Header from './pages/layout/header/index.tsx'
-import { Layout } from 'antd'
+import { Layout ,Button} from 'antd'
 import Footer from './pages/layout/footer/index.tsx'
 import { Outlet, useLocation } from 'react-router-dom'
 import withProductRoute from './hoc/withProductRoute.tsx'
@@ -49,13 +49,12 @@ const RootPage: FC = () => {
         <ErrorBoundary fallback={<div>出错了</div>}>
             <div>
                 {showHeader && (
-                    <Layout.Header className="root-header z-[100] sticky top-[0px]">
+                    <Layout.Header className="root-header z-[100] bg-[white] sticky top-[0px] border-b">
                         <Header></Header>
                     </Layout.Header>
                 )}
-
                 <Layout.Content className="min-h-[75vh]">
-                    <Outlet></Outlet>
+                        <Outlet></Outlet>
                 </Layout.Content>
 
                 {showFooter && (

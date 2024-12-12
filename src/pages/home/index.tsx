@@ -1,5 +1,4 @@
 import React, { FC, useEffect, useRef, useState } from 'react'
-
 import Hot from './children/hot'
 import { useAppDispatch, useAppSelector } from '../../stores'
 import { getUserInfoAsync } from '../../stores/user'

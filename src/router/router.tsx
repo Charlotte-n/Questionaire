@@ -5,23 +5,40 @@ import RootPage from '../RootPage.tsx'
 import { Navigate } from 'react-router-dom'
 
 const Login = lazy(() => import('../pages/login/index.tsx'))
-const Home = lazy(() => import('../pages/home/index.tsx'))
+const Home = lazy(() => import('../pages/home/home.tsx'))
 const MyWorks = lazy(() => import('../pages/my-works/index.tsx'))
 const Template = lazy(() => import('../pages/template/index.tsx'))
 const Profile = lazy(() => import('../pages/profile/index.tsx'))
+const Recomend = lazy(() => import('../pages/home/children/recomend/index.tsx'))
+const CreateDesign = lazy(() => import('../pages/home/children/create-design/index.tsx'))
 const router = createBrowserRouter(
     [
         {
             path: '/',
-            element: <Navigate to="/gxt/home" replace />,
+            element: <Navigate to="/gxt/home/recommend" replace />,
         },
         {
-            path: '/gxt/*',
+            path: '/gxt',
             element: <RootPage></RootPage>,
             children: [
                 {
                     path: 'home',
                     element: <Home />,
+                    //重定向
+                    children: [
+                        {
+                            path: '',
+                            element: <Navigate to="/gxt/home/recomend" replace />,
+                        },
+                        {
+                            path: 'recomend',
+                            element: <Recomend />,
+                        },
+                        {
+                            path: 'create-design',
+                            element: <CreateDesign />,
+                        },
+                    ],
                 },
                 {
                     path: 'login',
