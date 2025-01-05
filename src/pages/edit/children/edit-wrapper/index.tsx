@@ -15,6 +15,7 @@ interface Props {
     isActive: boolean
     onTabChange: (key: string) => void
     tabActiveKey: string
+    borderRadius?: string
 }
 type SizeType = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
 interface PositionType {
@@ -30,8 +31,9 @@ const EditWrapper = forwardRef<HTMLDivElement, Props>((props, ref) => {
         {
             ...TextProperties,
             ...props.props,
+            borderRadius: props.borderRadius || '0px'
         },
-        ['position', 'top', 'left', 'width', 'height'],
+        ['position', 'top', 'left', 'width', 'height', 'borderRadius'],
     )
     const editWrapperRef = useRef<HTMLDivElement>(null)
     const moveWrapperRef = useRef(null)
@@ -201,7 +203,7 @@ const EditWrapper = forwardRef<HTMLDivElement, Props>((props, ref) => {
 
     return (
         <div
-            className="edit-wrapper relative"
+            className={`edit-wrapper relative ${props.borderRadius ? `rounded-[${props.borderRadius}]` : ''}`}
             ref={editWrapperRef}
             onClick={(event: MouseEvent) => {
                 //如果为图层，则不触发点击事件
@@ -211,7 +213,10 @@ const EditWrapper = forwardRef<HTMLDivElement, Props>((props, ref) => {
                 setActive({ id, type: 'element' }, event)
                 event.stopPropagation()
             }}
-            style={styleProps}
+            style={{
+                ...styleProps,
+                borderRadius: props.borderRadius
+            }}
             data-id={id}
         >
             <div
@@ -239,6 +244,34 @@ const EditWrapper = forwardRef<HTMLDivElement, Props>((props, ref) => {
                     <div
                         className="resize bottom-right"
                         onMouseDown={(e) => ResizeStart('bottom-right')}
+                    ></div>
+                    <div
+                        className="resize-radius top-left-radius"
+                        onMouseDown={(e) => {
+                            // 处理左上圆角拖拽
+                            const startX = e.clientX
+                            const startY = e.clientY
+                            const startRadius = parseInt(props.borderRadius || '0')
+                            
+                            const handleMove = (e: MouseEvent) => {
+                                const deltaX = e.clientX - startX
+                                const deltaY = e.clientY - startY
+                                const newRadius = Math.max(0, startRadius + Math.min(deltaX, deltaY))
+                                props.onChange?.({
+                                    id: props.id,
+                                    key: 'borderRadius',
+                                    value: `${newRadius}px`
+                                })
+                            }
+
+                            const handleUp = () => {
+                                document.removeEventListener('mousemove', handleMove)
+                                document.removeEventListener('mouseup', handleUp)
+                            }
+
+                            document.addEventListener('mousemove', handleMove)
+                            document.addEventListener('mouseup', handleUp)
+                        }}
                     ></div>
                 </div>
             )}

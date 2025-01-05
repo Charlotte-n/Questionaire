@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { ImageProperties } from './commonproperties'
+// import { ImageProperties } from './commonproperties'
 import { message } from 'antd'
 import { cloneDeep } from 'lodash-es'
 import { v4 as uuidv4 } from 'uuid'

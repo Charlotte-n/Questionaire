@@ -9,7 +9,7 @@ import { createEmptyWork } from '../../../apis/work/work'
 const Header: FC = () => {
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
-    const buttonClassName = 'rounded-full mr-[25px]'
+    // const buttonClassName = 'rounded-full mr-[25px]'
 
     const onMenuClick = (e: any) => {
         if (e.key === '1') {
@@ -23,13 +23,25 @@ const Header: FC = () => {
         }
     }
 
-    const handleCreateWork = async () => {
-        const res = await createEmptyWork()
-        if (res.code === 0) {
-            navigate(`/gxt/edit/${res.data.id}`)
-        }
+    // const handleCreateWork = async () => {
+    //     const res = await createEmptyWork()
+    //     if (res.code === 0) {
+    //         navigate(`/gxt/edit/${res.data.id}`)
+    //     }
+    // }
+
+    // 跳转到我的工作台
+    const gotoMyWorks = () => {
+        navigate('/gxt/myWorkBatch/haibao')
     }
 
+    const gotoHome = () => {
+        navigate('/gxt/home/recommend')
+    }
+
+    const gotoResource = () => {
+        navigate('/gxt/home/create-design')
+    }
     return (
         // <div className="flex justify-between">
         //     <h2
@@ -81,23 +93,23 @@ const Header: FC = () => {
         //     </div>
         // </div>
         <header className="flex justify-between ">
-        <div className="flex items-center space-x-8">
-          <div className="text-blue-600 font-bold text-xl">海报易创</div>
-          <nav className="flex space-x-6">
-            <a href="#" className="text-gray-900">首页</a>
-            <a href="#" className="text-gray-600">资源社区</a>
-          </nav>
-        </div>
-        <div className="flex items-center space-x-4">
-          <Button className="py-[18px] bg-blue-600 text-[white]">我的工作台</Button>
+            <div className="flex items-center space-x-8">
+                <div className="text-blue-600 font-bold text-xl cursor-pointer" onClick={gotoHome}>海报易创</div>
+                <nav className="flex space-x-6">
+                    <a href="#" className="text-gray-900" onClick={gotoHome}>首页</a>
+                    <a href="#" className="text-gray-600" onClick={gotoResource}>资源社区</a>
+                </nav>
+            </div>
+            <div className="flex items-center space-x-4">
+                <Button className="py-[18px] bg-blue-600 text-[white]" onClick={gotoMyWorks}>我的工作台</Button>
                 <Dropdown.Button
                     className="rounded-full"
                     menu={{ items: menuList, onClick: onMenuClick }}
                 >
                     Merikle
                 </Dropdown.Button>
-        </div>
-      </header>
+            </div>
+        </header>
     )
 }
 

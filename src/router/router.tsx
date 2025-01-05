@@ -11,6 +11,8 @@ const Template = lazy(() => import('../pages/template/index.tsx'))
 const Profile = lazy(() => import('../pages/profile/index.tsx'))
 const Recomend = lazy(() => import('../pages/home/children/recomend/index.tsx'))
 const CreateDesign = lazy(() => import('../pages/home/children/create-design/index.tsx'))
+const MyWorkBatch = lazy(() => import('../pages/myWorkBatch/index.tsx'))
+const HaiBao = lazy(() => import('../pages/myWorkBatch/pages/haibao/index.tsx'))
 const router = createBrowserRouter(
     [
         {
@@ -27,11 +29,11 @@ const router = createBrowserRouter(
                     //重定向
                     children: [
                         {
-                            path: '',
-                            element: <Navigate to="/gxt/home/recomend" replace />,
+                            index: true,
+                            element: <Navigate to="/gxt/home/recommend" replace />,
                         },
                         {
-                            path: 'recomend',
+                            path: 'recommend',
                             element: <Recomend />,
                         },
                         {
@@ -52,6 +54,21 @@ const router = createBrowserRouter(
                 {
                     path: 'myWorks',
                     element: <MyWorks />,
+                },
+                {
+                    path: 'myWorkBatch',
+                    element: <MyWorkBatch />,
+                    children: [
+                        {
+                            path: '',
+                            element: <Navigate to="/gxt/myWorkBatch/haibao" replace />,
+                        },
+                        {
+                            path: 'haibao',
+                            element: <HaiBao />
+                        }
+                    ]
+
                 },
                 {
                     path: 'template/:id',

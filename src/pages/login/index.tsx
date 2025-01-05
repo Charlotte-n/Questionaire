@@ -52,7 +52,7 @@ const Login: FC = () => {
                 draft.current = countDown()
             })
             setDisabled(true)
-        } catch (e) {}
+        } catch (e) { }
     }
 
     //手机登陆
@@ -69,7 +69,7 @@ const Login: FC = () => {
                 setLocalStorage('phone', formData.phoneNumber)
 
                 setTimeout(() => {
-                    navigate('/gxt/home')
+                    navigate('/gxt/home/recommend')
                 }, 1000)
             }
         } catch (e) {

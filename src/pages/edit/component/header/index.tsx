@@ -65,7 +65,7 @@ const EditHeader: FC<Props> = ({ handleOpenPreviewForm }) => {
             <div className="flex items-center">
                 <div
                     onClick={() => {
-                        navigate('/gxt/home', { replace: true })
+                        navigate('/gxt/home/recommend', { replace: true })
                     }}
                     className="cursor-pointer"
                 >

@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import Header from './pages/layout/header/index.tsx'
-import { Layout ,Button} from 'antd'
+import { Layout, Button } from 'antd'
 import Footer from './pages/layout/footer/index.tsx'
 import { Outlet, useLocation } from 'react-router-dom'
 import withProductRoute from './hoc/withProductRoute.tsx'
@@ -54,14 +54,14 @@ const RootPage: FC = () => {
                     </Layout.Header>
                 )}
                 <Layout.Content className="min-h-[75vh]">
-                        <Outlet></Outlet>
+                    <Outlet></Outlet>
                 </Layout.Content>
 
-                {showFooter && (
+                {/* {showFooter && (
                     <Layout.Footer className="bg-[#333333] w-[100%] px-0 py-[10px]">
                         <Footer></Footer>
                     </Layout.Footer>
-                )}
+                )} */}
             </div>
         </ErrorBoundary>
     )

@@ -47,6 +47,7 @@ const ContextMenu: FC<IProps> = (props) => {
             DomElement.style.left = e.pageX + 'px'
         }
     }
+    
     const handleClick = (e: MouseEvent) => {
         e.stopPropagation()
         const DomElement = menuRef.current as unknown as HTMLElement
