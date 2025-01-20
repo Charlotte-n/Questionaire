@@ -245,19 +245,6 @@ export const defaultTemplates = [
         height: '36px',
     },
 
-    {
-        text: '链接内容',
-        color: '#5390ef',
-        textDecoration: 'underline',
-        tag: 'a',
-        id: 21,
-        fontSize: '14px',
-        paddingTop: '0px',
-        paddingBottom: '0px',
-        paddingLeft: '0px',
-        paddingRight: '0px',
-        height: '36px',
-    },
     //一个按钮
     {
         text: '按钮',
@@ -272,7 +259,20 @@ export const defaultTemplates = [
         paddingRight: '20px',
         borderRadius: '4px',
         tag: 'button',
-        id: 10,
+        id: 22,
+        height: '36px',
+    },
+    {
+        text: '链接内容',
+        color: '#5390ef',
+        textDecoration: 'underline',
+        tag: 'a',
+        id: 21,
+        fontSize: '14px',
+        paddingTop: '0px',
+        paddingBottom: '0px',
+        paddingLeft: '0px',
+        paddingRight: '0px',
         height: '36px',
     },
 ]

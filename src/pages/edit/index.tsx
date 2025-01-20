@@ -1,4 +1,4 @@
-import React, { FC, MouseEvent, useCallback, useEffect, useState, useRef } from 'react'
+import { FC, MouseEvent, useCallback, useEffect, useState, useRef } from 'react'
 import { useAppDispatch, useAppSelector } from '../../stores'
 import { LTextPropsType } from '../../components/LText'
 import {
@@ -27,6 +27,7 @@ import { useParams } from 'react-router-dom'
 import EditHeader from './component/header'
 import PreviewForm from './component/preview-form'
 import CanvasScale from './component/canvas-scale'
+import { useDrop } from 'react-dnd'
 
 function getComponent(c: ComponentData) {
     const { props, name }: { props: LTextPropsType; name: string } = c
@@ -66,6 +67,38 @@ const Editor: FC = () => {
     const addItem = (props: any) => {
         dispatch(addComponent(props))
     }
+
+    const [{ canDrop, isOver }, drop] = useDrop(() => ({
+        accept: 'left-editor',
+        collect: (monitor: any) => ({
+            isOver: monitor.isOver(),
+            canDrop: monitor.canDrop()
+        }),
+        drop: (item: any, monitor) => {
+            try {
+                const dropResult = monitor.getClientOffset()
+                const areaRefCurrent = areaRef.current?.getBoundingClientRect()
+                const areaLeft = areaRefCurrent?.left || 0
+                const areaTop = areaRefCurrent?.top || 0
+                const left = (dropResult?.x || 0) - areaLeft
+                const top = (dropResult?.y || 0) - areaTop
+                const newItem = {
+                    ...item,
+                    id: item.id + Date.now(),
+                    props: {
+                        ...item.props,
+                        left: left < 0 ? 0 : left > areaLeft + (areaRefCurrent?.width || 0) ? areaLeft + (areaRefCurrent?.width || 0) - 100 : left,
+                        top: top < 0 ? 0 : top > areaTop + (areaRefCurrent?.height || 0) ? areaTop + (areaRefCurrent?.height || 0) - 100 : top,
+                    }
+                }
+                addItem(newItem)
+                console.log('newItem', newItem)
+            } catch (error) {
+                console.log('error', error)
+            }
+        }
+    }))
+
 
     const setActiveClick = (
         { id, type }: { id?: string; type: string },
@@ -162,7 +195,7 @@ const Editor: FC = () => {
         if (!areaHtml) return
 
         const scaleNumber = scale / 100
-        
+
         areaHtml.style.transform = `scale(${scaleNumber})`
         areaHtml.style.transformOrigin = 'center center'
 
@@ -209,16 +242,20 @@ const Editor: FC = () => {
                                 ref={areaRef}
                                 className={`canvas-area fixed overflow-hidden mt-[50px] max-h-[80vh] min-w-[375px]  cursor-pointer rounded-md`}
                                 onClick={(e: MouseEvent) => handleChangePageTab(e)}
+
                             >
                                 <div
-                                    className={`edit-canvas px-[10px]  py-[10px] bg-[white] shadow-[#0000001f] shadow-md min-h-[200px] overflow-auto  ${currentElementID === 'page' ? 'border-[2px] border-[#1890ff] border-solid' : ''}`}
+                                    className={`edit-canvas px-[10px]  py-[10px] bg-[white] shadow-[#0000001f] shadow-md min-h-[200px] overflow-auto  ${currentElementID === 'page' || isOver ? 'border-[2px] border-[#1890ff] border-solid' : ''}`}
                                     style={page.props}
+                                    ref={drop}
+
                                 >
-                                    <div className="">
+
+                                    <div className="" >
                                         {components.map((item) => {
                                             return (
                                                 <EditWrapper
-                                                  
+
                                                     key={item.id}
                                                     setActive={setActiveClick}
                                                     id={item.id}

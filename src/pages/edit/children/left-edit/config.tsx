@@ -1,4 +1,3 @@
-import Text from './component/text'
 import ComponentList from './component/component-list'
 import ImageList from './component/image-list'
 import ShapeList from './component/shap-list'

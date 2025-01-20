@@ -1,8 +1,7 @@
-import React, { FC, forwardRef, memo, MouseEvent, useCallback, useRef, useImperativeHandle } from 'react'
+import { forwardRef, MouseEvent, useCallback, useRef } from 'react'
 import useComponentCommon from '../../../../hooks/useComponentCommon'
 import './index.css'
 import { TextProperties } from '../../../../stores/commonproperties'
-
 interface Props {
     setActive: (
         { id, type }: { id?: string; type: string },
@@ -38,6 +37,7 @@ const EditWrapper = forwardRef<HTMLDivElement, Props>((props, ref) => {
     const editWrapperRef = useRef<HTMLDivElement>(null)
     const moveWrapperRef = useRef(null)
     const gap = useRef({ x: 0, y: 0 })
+
 
 
     const caculateMovePosition = (e: MouseEvent) => {
@@ -206,7 +206,6 @@ const EditWrapper = forwardRef<HTMLDivElement, Props>((props, ref) => {
             className={`edit-wrapper relative ${props.borderRadius ? `rounded-[${props.borderRadius}]` : ''}`}
             ref={editWrapperRef}
             onClick={(event: MouseEvent) => {
-                //如果为图层，则不触发点击事件
                 if (tabActiveKey !== '2') {
                     onTabChange('1')
                 }
@@ -252,7 +251,7 @@ const EditWrapper = forwardRef<HTMLDivElement, Props>((props, ref) => {
                             const startX = e.clientX
                             const startY = e.clientY
                             const startRadius = parseInt(props.borderRadius || '0')
-                            
+
                             const handleMove = (e: MouseEvent) => {
                                 const deltaX = e.clientX - startX
                                 const deltaY = e.clientY - startY

@@ -77,6 +77,12 @@ importers:
       react:
         specifier: ^18.3.1
         version: 18.3.1
+      react-dnd:
+        specifier: ^16.0.1
+        version: 16.0.1(@types/node@22.7.5)(@types/react@18.3.5)(react@18.3.1)
+      react-dnd-html5-backend:
+        specifier: ^16.0.1
+        version: 16.0.1
       react-dom:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
@@ -1747,6 +1753,15 @@ packages:
       react: '>=16.9.0'
       react-dom: '>=16.9.0'
 
+  '@react-dnd/asap@5.0.2':
+    resolution: {integrity: sha512-WLyfoHvxhs0V9U+GTsGilGgf2QsPl6ZZ44fnv0/b8T3nQyvzxidxsg/ZltbWssbsRDlYW8UKSQMTGotuTotZ6A==}
+
+  '@react-dnd/invariant@4.0.2':
+    resolution: {integrity: sha512-xKCTqAK/FFauOM9Ta2pswIyT3D8AQlfrYdOi/toTPEhqCuAs1v5tcJ3Y08Izh1cJ5Jchwy9SeAXmMg6zrKs2iw==}
+
+  '@react-dnd/shallowequal@4.0.2':
+    resolution: {integrity: sha512-/RVXdLvJxLg4QKvMoM5WlwNR9ViO9z8B/qPcc+C0Sa/teJY7QG7kJ441DwzOjMYEY7GmU4dj5EcGHIkKZiQZCA==}
+
   '@reduxjs/toolkit@2.2.7':
     resolution: {integrity: sha512-faI3cZbSdFb8yv9dhDTmGwclW0vk0z5o1cia+kf7gCbaCwHI5e+7tP57mJUv22pNcNbeA62GSrPpfrUfdXcQ6g==}
     peerDependencies:
@@ -1832,46 +1847,55 @@ packages:
     resolution: {integrity: sha512-ztRJJMiE8nnU1YFcdbd9BcH6bGWG1z+jP+IPW2oDUAPxPjo9dverIOyXz76m6IPA6udEL12reYeLojzW2cYL7w==}
     cpu: [arm]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-arm-musleabihf@4.21.2':
     resolution: {integrity: sha512-flOcGHDZajGKYpLV0JNc0VFH361M7rnV1ee+NTeC/BQQ1/0pllYcFmxpagltANYt8FYf9+kL6RSk80Ziwyhr7w==}
     cpu: [arm]
     os: [linux]
+    libc: [musl]
 
   '@rollup/rollup-linux-arm64-gnu@4.21.2':
     resolution: {integrity: sha512-69CF19Kp3TdMopyteO/LJbWufOzqqXzkrv4L2sP8kfMaAQ6iwky7NoXTp7bD6/irKgknDKM0P9E/1l5XxVQAhw==}
     cpu: [arm64]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-arm64-musl@4.21.2':
     resolution: {integrity: sha512-48pD/fJkTiHAZTnZwR0VzHrao70/4MlzJrq0ZsILjLW/Ab/1XlVUStYyGt7tdyIiVSlGZbnliqmult/QGA2O2w==}
     cpu: [arm64]
     os: [linux]
+    libc: [musl]
 
   '@rollup/rollup-linux-powerpc64le-gnu@4.21.2':
     resolution: {integrity: sha512-cZdyuInj0ofc7mAQpKcPR2a2iu4YM4FQfuUzCVA2u4HI95lCwzjoPtdWjdpDKyHxI0UO82bLDoOaLfpZ/wviyQ==}
     cpu: [ppc64]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-riscv64-gnu@4.21.2':
     resolution: {integrity: sha512-RL56JMT6NwQ0lXIQmMIWr1SW28z4E4pOhRRNqwWZeXpRlykRIlEpSWdsgNWJbYBEWD84eocjSGDu/XxbYeCmwg==}
     cpu: [riscv64]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-s390x-gnu@4.21.2':
     resolution: {integrity: sha512-PMxkrWS9z38bCr3rWvDFVGD6sFeZJw4iQlhrup7ReGmfn7Oukrr/zweLhYX6v2/8J6Cep9IEA/SmjXjCmSbrMQ==}
     cpu: [s390x]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-x64-gnu@4.21.2':
     resolution: {integrity: sha512-B90tYAUoLhU22olrafY3JQCFLnT3NglazdwkHyxNDYF/zAxJt5fJUB/yBoWFoIQ7SQj+KLe3iL4BhOMa9fzgpw==}
     cpu: [x64]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-x64-musl@4.21.2':
     resolution: {integrity: sha512-7twFizNXudESmC9oneLGIUmoHiiLppz/Xs5uJQ4ShvE6234K0VB1/aJYU3f/4g7PhssLGKBVCC37uRkkOi8wjg==}
     cpu: [x64]
     os: [linux]
+    libc: [musl]
 
   '@rollup/rollup-win32-arm64-msvc@4.21.2':
     resolution: {integrity: sha512-9rRero0E7qTeYf6+rFh3AErTNU1VCQg2mn7CQcI44vNUWM9Ze7MSRS/9RFuSsox+vstRt97+x3sOhEey024FRQ==}
@@ -3423,6 +3447,9 @@ packages:
   dlv@1.1.3:
     resolution: {integrity: sha512-+HlytyjlPKnIG8XuRG8WvmBP8xs8P71y+SKKS6ZXWoEgLuePxtDoUEiH7WkdePWrQ5JBpE6aoVqfZfJUQkjXwA==}
 
+  dnd-core@16.0.1:
+    resolution: {integrity: sha512-HK294sl7tbw6F6IeuK16YSBUoorvHpY8RHO+9yFfaJyCDVb6n7PRcezrOEOa2SBCqiYpemh5Jx20ZcjKdFAVng==}
+
   dns-packet@5.6.1:
     resolution: {integrity: sha512-l4gcSouhcgIKRvyy99RNVOgxXiicE+2jZoNmaNmZ6JXiGajBOJAesk1OBlJuM5k2c+eudGdLxDqXuPCKIj6kpw==}
     engines: {node: '>=6'}
@@ -4205,6 +4232,9 @@ packages:
   he@1.2.0:
     resolution: {integrity: sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==}
     hasBin: true
+
+  hoist-non-react-statics@3.3.2:
+    resolution: {integrity: sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==}
 
   hoopy@0.1.4:
     resolution: {integrity: sha512-HRcs+2mr52W0K+x8RzcLzuPPmVIKMSv97RGHy0Ea9y/mpcaK+xTrjICA04KAHi4GRzxliNqNJEFYWHghy3rSfQ==}
@@ -6401,6 +6431,24 @@ packages:
       typescript:
         optional: true
 
+  react-dnd-html5-backend@16.0.1:
+    resolution: {integrity: sha512-Wu3dw5aDJmOGw8WjH1I1/yTH+vlXEL4vmjk5p+MHxP8HuHJS1lAGeIdG/hze1AvNeXWo/JgULV87LyQOr+r5jw==}
+
+  react-dnd@16.0.1:
+    resolution: {integrity: sha512-QeoM/i73HHu2XF9aKksIUuamHPDvRglEwdHL4jsp784BgUuWcg6mzfxT0QDdQz8Wj0qyRKx2eMg8iZtWvU4E2Q==}
+    peerDependencies:
+      '@types/hoist-non-react-statics': '>= 3.3.1'
+      '@types/node': '>= 12'
+      '@types/react': '>= 16'
+      react: '>= 16.14'
+    peerDependenciesMeta:
+      '@types/hoist-non-react-statics':
+        optional: true
+      '@types/node':
+        optional: true
+      '@types/react':
+        optional: true
+
   react-dom@18.3.1:
     resolution: {integrity: sha512-5m4nQKp+rZRb09LNH59GM4BxTh9251/ylbKIbpe7TpGxfJ+9kv6BLkLBXIjjspbgbnIBNqlI23tRnTWT0snUIw==}
     peerDependencies:
@@ -6524,6 +6572,9 @@ packages:
     resolution: {integrity: sha512-NW2r5T6ksUKXCabzhL9z+h206HQw/NJkcLm1GPImRQ8IzfXwRGqjVhKJGauHirT0DAuyy6hjdnMZaRoAcy0Klw==}
     peerDependencies:
       redux: ^5.0.0
+
+  redux@4.2.1:
+    resolution: {integrity: sha512-LAUYz4lc+Do8/g7aeRa8JkyDErK6ekstQaqWQrNRW//MY1TvCEpMtpTWvlQ+FPbWCx+Xixu/6SHt5N0HR+SB4w==}
 
   redux@5.0.1:
     resolution: {integrity: sha512-M9/ELqF6fy8FwmkpnF0S3YKOqMyoWJ4+CS5Efg2ct3oY9daQvd/Pc71FpGZsVsbl3Cpb+IIcjBDUnnyBdQbq4w==}
@@ -9813,6 +9864,12 @@ snapshots:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
+  '@react-dnd/asap@5.0.2': {}
+
+  '@react-dnd/invariant@4.0.2': {}
+
+  '@react-dnd/shallowequal@4.0.2': {}
+
   '@reduxjs/toolkit@2.2.7(react-redux@9.1.2(@types/react@18.3.5)(react@18.3.1)(redux@5.0.1))(react@18.3.1)':
     dependencies:
       immer: 10.1.1
@@ -10366,10 +10423,10 @@ snapshots:
     dependencies:
       '@types/yargs-parser': 21.0.3
 
-  '@typescript-eslint/eslint-plugin@5.62.0(@typescript-eslint/parser@8.4.0(eslint@9.9.1(jiti@1.21.6))(typescript@5.5.4))(eslint@9.9.1(jiti@1.21.6))(typescript@5.5.4)':
+  '@typescript-eslint/eslint-plugin@5.62.0(@typescript-eslint/parser@5.62.0(eslint@9.9.1(jiti@1.21.6))(typescript@5.5.4))(eslint@9.9.1(jiti@1.21.6))(typescript@5.5.4)':
     dependencies:
       '@eslint-community/regexpp': 4.11.0
-      '@typescript-eslint/parser': 8.4.0(eslint@9.9.1(jiti@1.21.6))(typescript@5.5.4)
+      '@typescript-eslint/parser': 5.62.0(eslint@9.9.1(jiti@1.21.6))(typescript@5.5.4)
       '@typescript-eslint/scope-manager': 5.62.0
       '@typescript-eslint/type-utils': 5.62.0(eslint@9.9.1(jiti@1.21.6))(typescript@5.5.4)
       '@typescript-eslint/utils': 5.62.0(eslint@9.9.1(jiti@1.21.6))(typescript@5.5.4)
@@ -11789,6 +11846,12 @@ snapshots:
 
   dlv@1.1.3: {}
 
+  dnd-core@16.0.1:
+    dependencies:
+      '@react-dnd/asap': 5.0.2
+      '@react-dnd/invariant': 4.0.2
+      redux: 4.2.1
+
   dns-packet@5.6.1:
     dependencies:
       '@leichtgewicht/ip-codec': 2.0.5
@@ -12178,7 +12241,7 @@ snapshots:
       '@babel/core': 7.25.2
       '@babel/eslint-parser': 7.25.9(@babel/core@7.25.2)(eslint@9.9.1(jiti@1.21.6))
       '@rushstack/eslint-patch': 1.10.4
-      '@typescript-eslint/eslint-plugin': 5.62.0(@typescript-eslint/parser@8.4.0(eslint@9.9.1(jiti@1.21.6))(typescript@5.5.4))(eslint@9.9.1(jiti@1.21.6))(typescript@5.5.4)
+      '@typescript-eslint/eslint-plugin': 5.62.0(@typescript-eslint/parser@5.62.0(eslint@9.9.1(jiti@1.21.6))(typescript@5.5.4))(eslint@9.9.1(jiti@1.21.6))(typescript@5.5.4)
       '@typescript-eslint/parser': 5.62.0(eslint@9.9.1(jiti@1.21.6))(typescript@5.5.4)
       babel-preset-react-app: 10.0.1
       confusing-browser-globals: 1.0.11
@@ -12260,7 +12323,7 @@ snapshots:
       '@typescript-eslint/experimental-utils': 5.62.0(eslint@9.9.1(jiti@1.21.6))(typescript@5.5.4)
       eslint: 9.9.1(jiti@1.21.6)
     optionalDependencies:
-      '@typescript-eslint/eslint-plugin': 5.62.0(@typescript-eslint/parser@8.4.0(eslint@9.9.1(jiti@1.21.6))(typescript@5.5.4))(eslint@9.9.1(jiti@1.21.6))(typescript@5.5.4)
+      '@typescript-eslint/eslint-plugin': 5.62.0(@typescript-eslint/parser@5.62.0(eslint@9.9.1(jiti@1.21.6))(typescript@5.5.4))(eslint@9.9.1(jiti@1.21.6))(typescript@5.5.4)
       jest: 27.5.1(ts-node@10.9.2(@types/node@22.7.5)(typescript@5.5.4))
     transitivePeerDependencies:
       - supports-color
@@ -12844,6 +12907,10 @@ snapshots:
       function-bind: 1.1.2
 
   he@1.2.0: {}
+
+  hoist-non-react-statics@3.3.2:
+    dependencies:
+      react-is: 16.13.1
 
   hoopy@0.1.4: {}
 
@@ -15615,6 +15682,22 @@ snapshots:
       - supports-color
       - vue-template-compiler
 
+  react-dnd-html5-backend@16.0.1:
+    dependencies:
+      dnd-core: 16.0.1
+
+  react-dnd@16.0.1(@types/node@22.7.5)(@types/react@18.3.5)(react@18.3.1):
+    dependencies:
+      '@react-dnd/invariant': 4.0.2
+      '@react-dnd/shallowequal': 4.0.2
+      dnd-core: 16.0.1
+      fast-deep-equal: 3.1.3
+      hoist-non-react-statics: 3.3.2
+      react: 18.3.1
+    optionalDependencies:
+      '@types/node': 22.7.5
+      '@types/react': 18.3.5
+
   react-dom@18.3.1(react@18.3.1):
     dependencies:
       loose-envify: 1.4.0
@@ -15818,6 +15901,10 @@ snapshots:
   redux-thunk@3.1.0(redux@5.0.1):
     dependencies:
       redux: 5.0.1
+
+  redux@4.2.1:
+    dependencies:
+      '@babel/runtime': 7.25.6
 
   redux@5.0.1: {}
 
