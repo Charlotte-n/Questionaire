@@ -32,6 +32,7 @@ export const useLoadMore = (
     const gotoPage = (page: number) => {
         setPageIndex(page)
     }
+
     useEffect(() => {
         dispatch(api(requestParam) as any)
     }, [pageIndex])
